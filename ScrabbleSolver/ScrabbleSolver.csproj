@@ -46,12 +46,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dictionary\Benchmark.cs" />
     <Compile Include="Dictionary\Dictionary.cs" />
-    <Compile Include="Dictionary\WordSet.cs" />
+    <Compile Include="Dictionary\HashSetDictionary.cs" />
+    <Compile Include="Dictionary\TrieDictionary.cs" />
+    <Compile Include="Encoding\Encoding.cs" />
+    <Compile Include="Encoding\Polish.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+    <Folder Include="Scoring\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

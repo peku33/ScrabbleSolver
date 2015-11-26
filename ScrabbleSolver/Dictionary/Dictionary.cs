@@ -1,32 +1,54 @@
 ﻿using System;
-using System.Text;
-using System.Linq;
 
 namespace ScrabbleSolver.Dictionary
 {
-	
-	class Dictionary
+	/// <summary>
+	/// Klasa dostarzająca słownik wraz z operacjami
+	/// 
+	/// </summary>
+	abstract class Dictionary
 	{
-		private static readonly int MaxWordLength = 15;
+		//Maksymalna długość słowa, słowa dłuższe będą pominięte. Wartość wynika z rozmiaru planszy
+		protected static readonly int MaxWordLength = 15;
+
+		//Rozmiar bufora wczytującego słowa, dla bezpieczeństwa 128
 		private static readonly int MaxInputWordLength = 128;
 
-		WordSet AllWords = null;
+		//Ścieżka do pliku słownika
+		private readonly String DictionaryPath;
 
-		public Dictionary(String DictionaryPath)
+		//Enkoder pozwalający stworzyć tablicę gdzie kluczami są znaki a wartościami dowolne obiekty. Przemapowuje litery na indeksy od 0, bez dziur.
+		protected readonly Encoding.Encoding DictionaryEncoding;
+
+		public Dictionary(String DictionaryPath, Encoding.Encoding DictionaryEncoding)
 		{
-			AllWords = new WordSet();
+			this.DictionaryPath = DictionaryPath;
+			this.DictionaryEncoding = DictionaryEncoding;
+        }
+
+		public Encoding.Encoding GetDictionaryEncoding()
+		{
+			return DictionaryEncoding;
+        }
+
+		/// <summary>
+		/// Przeładowanie słownika z pliku
+		/// </summary>
+		public void Reload()
+		{
+			Clear();
 
 			System.IO.StreamReader DictionaryFileReader = new System.IO.StreamReader(DictionaryPath);
 			System.Text.StringBuilder SB = null;
 
 			while(!DictionaryFileReader.EndOfStream)
 			{
-                char CharacterRead = (char) DictionaryFileReader.Read();
+				char CharacterRead = (char) DictionaryFileReader.Read();
 
 				if(char.IsLetter(CharacterRead))
 				{
 					if(SB == null)
-						SB = new StringBuilder(MaxInputWordLength);
+						SB = new System.Text.StringBuilder(MaxInputWordLength);
 
 					SB.Append((char) CharacterRead);
 				}
@@ -35,7 +57,7 @@ namespace ScrabbleSolver.Dictionary
 					if(SB != null && SB.Length > 0)
 					{
 						if(SB.Length <= MaxWordLength)
-							AllWords.Add(SB.ToString());
+							AddWord(SB.ToString());
 
 						SB = null;
 					}
@@ -43,61 +65,195 @@ namespace ScrabbleSolver.Dictionary
 			}
 
 			DictionaryFileReader.Dispose();
-        }
+		}
 
-		public WordSet FindWordsToBeCreatedWithCharacters(String Characters)
+		/// <summary>
+		/// Dodaj złosowo do słownika
+		/// </summary>
+		/// <param name="Word">Słowo do dodania</param>
+		abstract protected void AddWord(String Word);
+
+		/// <summary>
+		/// Wyczyść słownik, usuń wszystkie wyrazy
+		/// </summary>
+		abstract protected void Clear();
+
+		/// <summary>
+		/// Czy podane słowo istnieje w słowniku?
+		/// </summary>
+		/// <param name="Word">Słowo do wyszukania</param>
+		/// <returns>true jeśli słowo istnieje, false jeśli nie</returns>
+		abstract public bool Exists(string Word);
+
+
+		/// <summary>
+		/// Klasa opisująca układ już istniejących liter.
+		/// 
+		/// Realizuje mapowanie 'Pozycja' => Litera
+		/// </summary>
+		public class AlreadySetLetters
 		{
-			//Create a dictionary of characters we have
-			//Character => occurence count
-			System.Collections.Generic.Dictionary<char, int> CharacterCounts = new System.Collections.Generic.Dictionary<char, int>();
-			foreach(char Character in Characters)
-				if(CharacterCounts.ContainsKey(Character))
-					CharacterCounts[Character]++;
-				else
-					CharacterCounts.Add(Character, 1);
+			private char[] Characters;
 
-
-			WordSet WS = new WordSet();
-
-			foreach(String Word in AllWords)
+			public AlreadySetLetters()
 			{
-				//If word is longer than number of characters we have
-				if(Word.Length > Characters.Length)
-					continue;
+				Characters = new char[MaxWordLength];
+				for(int I = 0; I < MaxWordLength; I++)
+					Characters[I] = (char) 0;
+			}
 
-				bool WordFits = true;
+			/// <summary>
+			/// Zwraca literę na danej pozycji, 0 jeśli pozycja jest pusta
+			/// </summary>
+			/// <param name="Position">Pozycja, gdzie 0 oznacza pierwszą</param>
+			/// <returns>Znak na danej pozycji, 0 jeśli pozycja jest pusta</returns>
+			public char Get(int Position)
+			{
+				return Characters[Position];
+			}
 
-				//Filtering out words containing characters we dont have
-				foreach(char WordChar in Word)
-				{
-					if(!CharacterCounts.ContainsKey(WordChar))
-					{
-						WordFits = false;
-						break;
-                    }
-				}
+			/// <summary>
+			/// Ustawia znak na danej pozycji
+			/// </summary>
+			/// <param name="Position">Pozycja, gdzie 0 oznacza pierwszą</param>
+			/// <param name="Character">Znak na danej pozycji</param>
+			public void Set(int Position, char Character)
+			{
+				if(Characters[Position] != (char) 0)
+					throw new OverflowException("Character at position already set");
 
-				if(!WordFits)
-					continue;
+				Characters[Position] = Character;
+            }
+		}
 
-				//Filtering out words having more occurences of specific character than we have
-				foreach(System.Collections.Generic.KeyValuePair<char, int> CharacterCount in CharacterCounts)
-				{
-					if(Word.Count(WordCharacter => WordCharacter == CharacterCount.Key) > CharacterCount.Value)
-					{
-						WordFits = false;
-						break;
-					}
-				}
+		/// <summary>
+		/// Klasa reprezentująca aktualnie posiadane do wykorzystania litery.
+		/// </summary>
+		public class HeldCharacters
+		{
+			//Encodig.Encoding służący do napełniania tablicy znaków
+			private Encoding.Encoding DictionaryEncoding;
 
-				if(!WordFits)
-					continue;
+			//Tablica zawierająca ilość dostępnych znaków. Kluczem jest kod znaku podany przez Encoding.Encoding a wartością liczba dostępnych elementów. Istnieje dodatkowo jeden element tablicy więcej, na końcu, zawierający ilość dostępnych mydeł
+            private char[] CharactersCount;
 
-				//Everything else is ok
-				WS.Add(Word);
+			//Czy którykolwiek element został użyty?
+			private bool AnythingUsed;
+
+			public HeldCharacters(Encoding.Encoding DictionaryEncoding)
+			{
+				this.DictionaryEncoding = DictionaryEncoding;
+
+				CharactersCount = new char[DictionaryEncoding.GetArraySize() + 1];
+				for(int I = 0; I < CharactersCount.Length; I++)
+					CharactersCount[I] = (char) 0;
+
+				this.AnythingUsed = false;
             }
 
-			return WS;
+			private HeldCharacters(Encoding.Encoding DictionaryEncoding, char[] CharactersCount, bool AnythingUsed)
+			{
+				this.DictionaryEncoding = DictionaryEncoding;
+				this.CharactersCount = CharactersCount;
+				this.AnythingUsed = AnythingUsed;
+			}
+
+			/// <summary>
+			/// Dodaje literę do listy posiadanych. Spacja oznacza mydło / blank.
+			/// </summary>
+			/// <param name="C">Litera do dodania, spacja oznacza mydło</param>
+			public void Add(char C)
+			{
+				if(C == ' ')
+					CharactersCount[DictionaryEncoding.GetArraySize()]++;
+				else
+					CharactersCount[DictionaryEncoding.ToArrayIndex(C)]++;
+            }
+
+			public void Add(String S)
+			{
+				foreach(char C in S)
+					Add(C);
+			}
+
+			/// <summary>
+			/// Sprawdza, czy dowolna z liter została wykorzystana
+			/// </summary>
+			/// <returns>true, jeśli którakolwiek z liter została wykorzystana, w przeciwnym razie false</returns>
+			public bool GetAnythingUsed()
+			{
+				return AnythingUsed;
+			}
+
+			/// <summary>
+			/// Zwraca nowy obiekt tej klasy z usuniętą literą o podanym indeksie.
+			/// 
+			/// W pierwszej kolejności sprawdzane jest, czy podana litera może zostać pobrana (czy istnieje w zbiorze)
+			/// Jeśli nie, sprawdza, czy możemy użyć mydła
+			/// Jeśli nie, zwraca null
+			/// 
+			/// Zwraca zestaw znaków pomniejszony o zabraną literę.
+			/// 
+			/// Wątkowo bezpieczne
+			/// </summary>
+			/// <param name="I">Kod znaku do pobrania</param>
+			/// <returns>Zestaw znaków pomniejszony o zabraną literę lub null jeśli ruch nie jest możliwy</returns>
+			public HeldCharacters GetWithoutCharacterByIndex(int I)
+			{
+				if(CharactersCount[I] <= 0) //Brak bezpośrednio tego znaku
+				{
+					//Jest mydło?
+					I = DictionaryEncoding.GetArraySize();
+					if(CharactersCount[I] <= 0)
+						return null;
+				}
+
+				char[] NewCharactersCount = (char[]) CharactersCount.Clone();
+				NewCharactersCount[I]--;
+				return new HeldCharacters(DictionaryEncoding, NewCharactersCount, true);
+			}
+
+			/// <summary>
+			/// j./w. ale pzyjmuje literę, a nie jej kod
+			/// </summary>
+			/// <param name="C">Litera do pobrania</param>
+			/// <returns>Zestaw znaków pomniejszony o zabraną literę lub null jeśli ruch nie jest możliwy</returns>
+			public HeldCharacters GetWithoutCharacterByCharacter(char C)
+			{
+				return GetWithoutCharacterByIndex(DictionaryEncoding.ToArrayIndex(C));
+            }
 		}
+
+
+		/// <summary>
+		/// Klasa opisująca znalezione słowo oraz litery pozostałe po jego ułożeniu
+		/// </summary>
+		public class WordFound
+		{
+			//Słowo
+			private readonly String Word;
+
+			//Znaki pozostałe po ułożeniu słowa
+			private readonly HeldCharacters RemainingCharacters;
+
+			public WordFound(String Word, HeldCharacters RemainingCharacters)
+			{
+				this.Word = Word;
+				this.RemainingCharacters = RemainingCharacters;
+			}
+
+			public String GetWord()
+			{
+				return Word;
+			}
+			public HeldCharacters GetRemainingCharacters()
+			{
+				return RemainingCharacters;
+			}
+        }
+
+		public class WordsFound : System.Collections.Generic.List<WordFound> { } //
+
+		abstract public WordsFound Find(AlreadySetLetters ASL, HeldCharacters HC);
 	}
 }

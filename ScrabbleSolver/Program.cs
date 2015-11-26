@@ -7,26 +7,13 @@ namespace ScrabbleSolver
 	{
 		static void Main(string[] args)
 		{
-			String FileName = @"..\..\Slowa.txt";
-			Dictionary.Dictionary D = new Dictionary.Dictionary(FileName);
+			String DictionaryFile = @"..\..\Slowa.txt";
+			Encoding.Encoding DictionaryEncoding = new Encoding.Polish();
+			Dictionary.Dictionary D = new Dictionary.TrieDictionary(DictionaryFile, DictionaryEncoding);
 
-			while(true)
-			{
-				Console.Write("Podaj litery do ulozenia: ");
-				String Characters = Console.ReadLine();
-				if(Characters.Length == 0)
-					break;
+			Dictionary.Benchmark.Benchmark1(D);
 
-				Dictionary.WordSet Result = D.FindWordsToBeCreatedWithCharacters(Characters);
-
-				Console.WriteLine();
-				foreach(String S in Result)
-				{
-					Console.WriteLine("\t{0}", S);
-				}
-				Console.WriteLine();
-			}
-
+			Console.Read();
 		}
 	}
 }
