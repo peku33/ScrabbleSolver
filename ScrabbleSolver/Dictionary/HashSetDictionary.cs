@@ -56,7 +56,8 @@ namespace ScrabbleSolver.Dictionary
 
 		private WordFound MatchWord(String Word, AlreadySetLetters ASL, HeldCharacters HC)
 		{
-			for(int I = 0; I < Word.Length; I++)
+			bool AnyLetterUsed = false;
+            for(int I = 0; I < Word.Length; I++)
 			{
 				//Czy na tej pozycji istnieje konkretnie ustalony znak?
 				char CharAtCurrentPosition = ASL.Get(I);
@@ -73,14 +74,26 @@ namespace ScrabbleSolver.Dictionary
 					HC = HC.GetWithoutCharacterByCharacter(Word[I]);
 					if(HC == null) //Nie - przestajemy szukać
 						return null;
-				}
+
+					AnyLetterUsed = true;
+                }
 			}
 
-			if(!HC.GetAnythingUsed())
+			if(!AnyLetterUsed)
 				return null;
 
 			return new WordFound(Word, HC);
 			
 		}
+
+		public int[] GetCharacterOccurenceCount()
+		{
+			int[] CharacterOccurences = new int[DictionaryEncoding.GetArraySize()];
+			foreach(String Word in AllWords)
+				foreach(char Character in Word)
+					CharacterOccurences[DictionaryEncoding.ToArrayIndex(Character)]++;
+
+			return CharacterOccurences;
+        }
 	}
 }

@@ -183,7 +183,7 @@ namespace ScrabbleSolver.Dictionary
 		public override WordsFound Find(AlreadySetLetters ASL, HeldCharacters HC)
 		{
 			NodesFound NF = new NodesFound();
-			FindRecursiveStep(NF, Root, ASL, HC);
+			FindRecursiveStep(NF, Root, ASL, HC, false);
 
 			WordsFound WF = new WordsFound();
 			foreach(var T in NF)
@@ -192,10 +192,10 @@ namespace ScrabbleSolver.Dictionary
 			return WF;
 		}
 
-		private void FindRecursiveStep(NodesFound NF, TrieNode CurrentNode, AlreadySetLetters ASL, HeldCharacters RemainingCharacters)
+		private void FindRecursiveStep(NodesFound NF, TrieNode CurrentNode, AlreadySetLetters ASL, HeldCharacters RemainingCharacters, bool AnyLetterUsed)
 		{
 			//Czy na obecnym znaku możemy poprzestać? Koniec słowa + przynajmniej jedna litera użyta?
-			if(CurrentNode.IsEnding() && RemainingCharacters.GetAnythingUsed())
+			if(CurrentNode.IsEnding() && AnyLetterUsed)
 				NF.Add(new Tuple<TrieNode, HeldCharacters>(CurrentNode, RemainingCharacters));
 
 			//Poszukiwanie kolejnego węzła.
@@ -207,7 +207,7 @@ namespace ScrabbleSolver.Dictionary
 				//Czy istnieją słowa zawierające taką literę na tym miejscu? Jeśli nie - przerywamy, jeśli tak - idziemy dalej
 				TrieNode ChildNode = CurrentNode.GetChildByCharacter(CharacterAtNextPosition);
 				if(ChildNode != null)
-					FindRecursiveStep(NF, ChildNode, ASL, RemainingCharacters);
+					FindRecursiveStep(NF, ChildNode, ASL, RemainingCharacters, AnyLetterUsed);
             }
 			else //Dowolny znak na tej pozycji, próbujemy każdy z posiadanych
 			{
@@ -225,7 +225,7 @@ namespace ScrabbleSolver.Dictionary
 						continue;
 
 					//Możemy wykonać krok na to miejsce - zapuszczamy algorytm dalej
-					FindRecursiveStep(NF, ChildNode, ASL, NextRemainingCharacters);
+					FindRecursiveStep(NF, ChildNode, ASL, NextRemainingCharacters, true);
                 }
 			}
 		}

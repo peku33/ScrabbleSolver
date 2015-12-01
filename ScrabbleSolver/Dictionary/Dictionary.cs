@@ -20,7 +20,7 @@ namespace ScrabbleSolver.Dictionary
 		//Enkoder pozwalający stworzyć tablicę gdzie kluczami są znaki a wartościami dowolne obiekty. Przemapowuje litery na indeksy od 0, bez dziur.
 		protected readonly Encoding.Encoding DictionaryEncoding;
 
-		public Dictionary(String DictionaryPath, Encoding.Encoding DictionaryEncoding)
+		protected Dictionary(String DictionaryPath, Encoding.Encoding DictionaryEncoding)
 		{
 			this.DictionaryPath = DictionaryPath;
 			this.DictionaryEncoding = DictionaryEncoding;
@@ -137,9 +137,6 @@ namespace ScrabbleSolver.Dictionary
 			//Tablica zawierająca ilość dostępnych znaków. Kluczem jest kod znaku podany przez Encoding.Encoding a wartością liczba dostępnych elementów. Istnieje dodatkowo jeden element tablicy więcej, na końcu, zawierający ilość dostępnych mydeł
             private char[] CharactersCount;
 
-			//Czy którykolwiek element został użyty?
-			private bool AnythingUsed;
-
 			public HeldCharacters(Encoding.Encoding DictionaryEncoding)
 			{
 				this.DictionaryEncoding = DictionaryEncoding;
@@ -147,15 +144,12 @@ namespace ScrabbleSolver.Dictionary
 				CharactersCount = new char[DictionaryEncoding.GetArraySize() + 1];
 				for(int I = 0; I < CharactersCount.Length; I++)
 					CharactersCount[I] = (char) 0;
-
-				this.AnythingUsed = false;
             }
 
-			private HeldCharacters(Encoding.Encoding DictionaryEncoding, char[] CharactersCount, bool AnythingUsed)
+			private HeldCharacters(Encoding.Encoding DictionaryEncoding, char[] CharactersCount)
 			{
 				this.DictionaryEncoding = DictionaryEncoding;
 				this.CharactersCount = CharactersCount;
-				this.AnythingUsed = AnythingUsed;
 			}
 
 			/// <summary>
@@ -174,15 +168,6 @@ namespace ScrabbleSolver.Dictionary
 			{
 				foreach(char C in S)
 					Add(C);
-			}
-
-			/// <summary>
-			/// Sprawdza, czy dowolna z liter została wykorzystana
-			/// </summary>
-			/// <returns>true, jeśli którakolwiek z liter została wykorzystana, w przeciwnym razie false</returns>
-			public bool GetAnythingUsed()
-			{
-				return AnythingUsed;
 			}
 
 			/// <summary>
@@ -210,7 +195,7 @@ namespace ScrabbleSolver.Dictionary
 
 				char[] NewCharactersCount = (char[]) CharactersCount.Clone();
 				NewCharactersCount[I]--;
-				return new HeldCharacters(DictionaryEncoding, NewCharactersCount, true);
+				return new HeldCharacters(DictionaryEncoding, NewCharactersCount);
 			}
 
 			/// <summary>

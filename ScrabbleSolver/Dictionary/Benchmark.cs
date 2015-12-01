@@ -49,7 +49,7 @@ namespace ScrabbleSolver.Dictionary
 			///////////////////////////////////////////////////////////
 
 			Dictionary.AlreadySetLetters ASL = new Dictionary.AlreadySetLetters();
-			//ASL.Set(7, 'm');
+			ASL.Set(7, 'm');
 
 			Dictionary.HeldCharacters HC1 = new Dictionary.HeldCharacters(D.GetDictionaryEncoding());
 			HC1.Add("cionyźż");

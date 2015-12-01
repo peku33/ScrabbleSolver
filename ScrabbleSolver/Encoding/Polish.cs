@@ -23,9 +23,29 @@ namespace ScrabbleSolver.Encoding
 				case 'ń': return 30;
 				case 'ó': return 31;
 				case 'ś': return 32;
-				case 'ź': return 33;
-				case 'ż': return 34;
+				case 'ż': return 33;
+				case 'ź': return 34;
 				default: throw new System.ArgumentException("Char " + C + " out of bounds");
+			}
+		}
+
+		public override char FromArrayIndex(int I)
+		{
+			if(I < 26)
+				return (char) (I + 'a');
+
+			switch(I)
+			{
+				case 26: return 'ą';
+				case 27: return 'ć';
+				case 28: return 'ę';
+				case 29: return 'ł';
+				case 30: return 'ń';
+				case 31: return 'ó';
+				case 32: return 'ś';
+				case 33: return 'ż';
+				case 34: return 'ź';
+				default: throw new System.ArgumentException("Index " + I + " out of bounds");
 			}
 		}
 	}

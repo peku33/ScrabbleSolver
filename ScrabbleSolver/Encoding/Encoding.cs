@@ -19,5 +19,7 @@ namespace ScrabbleSolver.Encoding
 		/// <param name="C">Litera</param>
 		/// <returns>Kod litery</returns>
 		abstract public int ToArrayIndex(char C);
+
+		abstract public char FromArrayIndex(int I);
 	}
 }
