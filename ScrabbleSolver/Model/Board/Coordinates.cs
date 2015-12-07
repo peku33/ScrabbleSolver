@@ -1,0 +1,57 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace ScrabbleSolver.Board
+{
+    /// <summary>
+    /// Klasa reprezentująca współrzędne na planszy gry
+    /// 
+    /// </summary>
+    public class Coordinates
+    {
+        //Współrzędna x
+        private int XCoordinate;
+
+        //Współrzędna y
+        private int YCoordinate;
+
+        protected Coordinates(int x, int y)
+        {
+            this.XCoordinate = x;
+            this.YCoordinate = y;
+        }
+
+        public static bool operator ==(Coordinates c1, Coordinates c2)
+        {
+            return (c1.GetXCoordinate() == c2.GetXCoordinate() && 
+                c1.GetYCoordinate() == c2.GetYCoordinate());
+        }
+
+        public static bool operator !=(Coordinates c1, Coordinates c2)
+        {
+            return !(c1 == c2);
+        }
+
+        public bool Equals(Coordinates c)
+        {
+            return c == this;
+        }
+
+        public int GetXCoordinate()
+        {
+            return this.XCoordinate;
+        }
+
+        public int GetYCoordinate()
+        {
+            return this.YCoordinate;
+        }
+
+        public override int GetHashCode()
+        {
+            return GetYCoordinate() ^ GetXCoordinate();
+        }
+    }
+}
