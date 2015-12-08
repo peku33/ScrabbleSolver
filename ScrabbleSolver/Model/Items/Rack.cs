@@ -10,8 +10,10 @@ namespace ScrabbleSolver.Model.Items
     /// </summary>
     public class Rack
     {
+        //Pojemność tabliczki
         private static readonly int MaxLetterNumber = 7;
 
+        //Kostki znajdujące się w tabliczce.
         private List<Tile> Tiles;
 
         protected Rack()

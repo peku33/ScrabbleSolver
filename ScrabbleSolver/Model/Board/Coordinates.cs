@@ -17,7 +17,7 @@ namespace ScrabbleSolver.Board
         //Współrzędna y
         private int YCoordinate;
 
-        protected Coordinates(int x, int y)
+        public Coordinates(int x, int y)
         {
             this.XCoordinate = x;
             this.YCoordinate = y;

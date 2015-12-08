@@ -11,9 +11,10 @@ namespace ScrabbleSolver.Board
     /// </summary>
     public class Column : Container
     {
+        //Numer kolumny
         private readonly int yCoordinate;
 
-        protected Column(int y) :base()
+        public Column(int y) :base()
         {
             this.yCoordinate = y;
         }

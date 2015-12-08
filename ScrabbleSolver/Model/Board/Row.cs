@@ -11,9 +11,10 @@ namespace ScrabbleSolver.Board
     /// </summary>
     public class Row : Container
     {
+        //Numer wiersza
         private readonly int xCoordinate;
 
-        protected Row(int x) : base()
+        public Row(int x) : base()
         {
             this.xCoordinate = x;
         }

@@ -11,26 +11,26 @@ namespace ScrabbleSolver.Board
     public abstract class Container
     {
         //Lista przechowujaca pola gry.
-        private readonly List<Field> Fields;
+        private readonly List<Cell> Cells;
 
-        protected Container()
+        public Container()
         {
-            this.Fields = new List<Field>();
+            this.Cells = new List<Cell>();
         }
 
-        public Field Get(int index)
+        public Cell Get(int index)
         {
-            if (this.Fields.Count > index)
+            if (this.Cells.Count > index)
             {
-                return this.Fields[index];
+                return this.Cells[index];
             }
 
             return null;
         }
 
-        public void Add(Field value)
+        public void Add(Cell value)
         {
-            this.Fields.Add(value);
+            this.Cells.Add(value);
         }
 
     }
