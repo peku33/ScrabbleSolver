@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq.Expressions;
 
 namespace ScrabbleSolver.Board
 {

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace ScrabbleSolver.Model.Items
 {
@@ -16,7 +13,7 @@ namespace ScrabbleSolver.Model.Items
         //Wartość kostki
         private readonly int Value;
 
-        protected Tile(char Letter)
+        public Tile(char Letter)
         {
             this.Letter = Letter;
 

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace ScrabbleSolver.Model.Items
 {
@@ -16,7 +14,7 @@ namespace ScrabbleSolver.Model.Items
         //Kostki znajdujące się w tabliczce.
         private List<Tile> Tiles;
 
-        protected Rack()
+        public Rack()
         {
             Tiles = new List<Tile>();
         }
