@@ -24,12 +24,12 @@ namespace ScrabbleSolver.Dictionary
 		{
 			this.DictionaryPath = DictionaryPath;
 			this.DictionaryEncoding = DictionaryEncoding;
-        }
+		}
 
 		public Encoding.Encoding GetDictionaryEncoding()
 		{
 			return DictionaryEncoding;
-        }
+		}
 
 		/// <summary>
 		/// Przeładowanie słownika z pliku
@@ -123,7 +123,7 @@ namespace ScrabbleSolver.Dictionary
 					throw new OverflowException("Character at position already set");
 
 				Characters[Position] = Character;
-            }
+			}
 		}
 
 		/// <summary>
@@ -135,7 +135,7 @@ namespace ScrabbleSolver.Dictionary
 			private Encoding.Encoding DictionaryEncoding;
 
 			//Tablica zawierająca ilość dostępnych znaków. Kluczem jest kod znaku podany przez Encoding.Encoding a wartością liczba dostępnych elementów. Istnieje dodatkowo jeden element tablicy więcej, na końcu, zawierający ilość dostępnych mydeł
-            private char[] CharactersCount;
+			private char[] CharactersCount;
 
 			public HeldCharacters(Encoding.Encoding DictionaryEncoding)
 			{
@@ -144,7 +144,7 @@ namespace ScrabbleSolver.Dictionary
 				CharactersCount = new char[DictionaryEncoding.GetArraySize() + 1];
 				for(int I = 0; I < CharactersCount.Length; I++)
 					CharactersCount[I] = (char) 0;
-            }
+			}
 
 			private HeldCharacters(Encoding.Encoding DictionaryEncoding, char[] CharactersCount)
 			{
@@ -162,7 +162,7 @@ namespace ScrabbleSolver.Dictionary
 					CharactersCount[DictionaryEncoding.GetArraySize()]++;
 				else
 					CharactersCount[DictionaryEncoding.ToArrayIndex(C)]++;
-            }
+			}
 
 			public void Add(String S)
 			{
@@ -206,7 +206,7 @@ namespace ScrabbleSolver.Dictionary
 			public HeldCharacters GetWithoutCharacterByCharacter(char C)
 			{
 				return GetWithoutCharacterByIndex(DictionaryEncoding.ToArrayIndex(C));
-            }
+			}
 		}
 
 
@@ -235,7 +235,7 @@ namespace ScrabbleSolver.Dictionary
 			{
 				return RemainingCharacters;
 			}
-        }
+		}
 
 		public class WordsFound : System.Collections.Generic.List<WordFound> { } //
 
