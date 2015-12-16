@@ -25,7 +25,7 @@ namespace ScrabbleSolver.Dictionary
 		{
 
 		}
-        protected override void Clear()
+		protected override void Clear()
 		{
 			AllWords = new System.Collections.Generic.HashSet<String>();
 		}
@@ -33,7 +33,7 @@ namespace ScrabbleSolver.Dictionary
 		protected override void AddWord(string Word)
 		{
 			AllWords.Add(Word);
-        }
+		}
 
 		public override bool Exists(string Word)
 		{
@@ -49,7 +49,7 @@ namespace ScrabbleSolver.Dictionary
 				WordFound WF = MatchWord(Word, ASL, HC);
 				if(WF != null)
 					WFs.Add(WF);
-            }
+			}
 
 			return WFs;
 		}
@@ -57,7 +57,8 @@ namespace ScrabbleSolver.Dictionary
 		private WordFound MatchWord(String Word, AlreadySetLetters ASL, HeldCharacters HC)
 		{
 			bool AnyLetterUsed = false;
-            for(int I = 0; I < Word.Length; I++)
+
+			for(int I = 0; I < Word.Length; I++)
 			{
 				//Czy na tej pozycji istnieje konkretnie ustalony znak?
 				char CharAtCurrentPosition = ASL.Get(I);
@@ -76,7 +77,7 @@ namespace ScrabbleSolver.Dictionary
 						return null;
 
 					AnyLetterUsed = true;
-                }
+				}
 			}
 
 			if(!AnyLetterUsed)
@@ -94,6 +95,6 @@ namespace ScrabbleSolver.Dictionary
 					CharacterOccurences[DictionaryEncoding.ToArrayIndex(Character)]++;
 
 			return CharacterOccurences;
-        }
+		}
 	}
 }

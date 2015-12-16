@@ -38,13 +38,14 @@ namespace ScrabbleSolver.Dictionary
 			///////////////////////////////////////////////////////////
 
 			String[] FindWords = new string[] { "ęą", "żyznościach", "żywotopisarstwa", "dwuwiosłowymi", "żżż"};
-            foreach(String FindWord in FindWords)
+
+			foreach(String FindWord in FindWords)
 			{
 				SW.Restart();
 				bool Result = D.Exists(FindWord);
 				SW.Stop();
 				Console.WriteLine("Exists: '{0}': {1}ms ({2})", FindWord, SW.ElapsedMilliseconds, Result);
-            }
+			}
 
 			///////////////////////////////////////////////////////////
 
