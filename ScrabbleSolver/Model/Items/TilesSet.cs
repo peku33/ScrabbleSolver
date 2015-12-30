@@ -104,7 +104,7 @@ namespace ScrabbleSolver.Model.Items
             for (i = 0; i < ZNumber; ++i) Tiles.Add(new Tile('z'));
             for (i = 0; i < _ZNumber; ++i) Tiles.Add(new Tile('ż'));
             for (i = 0; i < __ZNumber; ++i) Tiles.Add(new Tile('ź'));
-            for (i = 0; i < BlankNumber; ++i) Tiles.Add(new Tile('0'));
+            for (i = 0; i < BlankNumber; ++i) Tiles.Add(new Tile(' '));
         }
     }
 }

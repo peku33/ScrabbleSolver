@@ -19,7 +19,7 @@ namespace ScrabbleSolver.Model.Items
 
             switch (Letter)
             {
-                case '0' : //blank
+                case ' ' : //blank
                     Value = 0;
                     break;
                 case 'a':
