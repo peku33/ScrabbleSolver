@@ -51,7 +51,7 @@ namespace ScrabbleSolver.Dictionary
 				this.DictionaryEncoding = DictionaryEncoding;
 
 				Children = null;
-            }
+			}
 
 			public int GetPosition()
 			{
@@ -65,7 +65,7 @@ namespace ScrabbleSolver.Dictionary
 			public bool IsEnding()
 			{
 				return this.Ending;
-            }
+			}
 
 			/// <summary>
 			/// Oznacz węzeł jako kończący słowo
@@ -125,7 +125,7 @@ namespace ScrabbleSolver.Dictionary
 			/// <returns>Węzeł potomka</returns>
 			public TrieNode MakeChildByCharacter(char C)
 			{
-                if(Children == null)
+				if(Children == null)
 					Children = new TrieNode[DictionaryEncoding.GetArraySize()];
 
 				int I = DictionaryEncoding.ToArrayIndex(C);
@@ -169,7 +169,7 @@ namespace ScrabbleSolver.Dictionary
 			}
 
 			return Current.IsEnding();
-        }
+		}
 
 		/// <summary>
 		/// Kolekcja opisująca wszystkie możliwe rozwiązania.
@@ -208,7 +208,7 @@ namespace ScrabbleSolver.Dictionary
 				TrieNode ChildNode = CurrentNode.GetChildByCharacter(CharacterAtNextPosition);
 				if(ChildNode != null)
 					FindRecursiveStep(NF, ChildNode, ASL, RemainingCharacters, AnyLetterUsed);
-            }
+			}
 			else //Dowolny znak na tej pozycji, próbujemy każdy z posiadanych
 			{
 				//Zapuszczamy algorytm dalej dla każdej posiadanej literki
@@ -226,7 +226,7 @@ namespace ScrabbleSolver.Dictionary
 
 					//Możemy wykonać krok na to miejsce - zapuszczamy algorytm dalej
 					FindRecursiveStep(NF, ChildNode, ASL, NextRemainingCharacters, true);
-                }
+				}
 			}
 		}
 	}
