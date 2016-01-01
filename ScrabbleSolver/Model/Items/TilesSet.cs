@@ -27,6 +27,11 @@ namespace ScrabbleSolver.Model.Items
         /// <returns>Losowo wybrana kostka</returns>
         public static Tile GetRandomTile()
         {
+            if(IsEmpty())
+            {
+                return null;
+            }
+
             Tile TempTile = Tiles[rand.Next(Tiles.Count - 1)];
             Tiles.Remove(TempTile);
 

@@ -177,6 +177,11 @@ namespace ScrabbleSolver.Model.Player
         {
             Tile TempTile;
 
+            if(TilesSet.IsEmpty())
+            {
+                return;
+            }
+
             while((TempTile = Rack.GetRandomTile()).GetLetter().Equals(' '))
             {
                 Rack.Add(TempTile);
@@ -420,6 +425,7 @@ namespace ScrabbleSolver.Model.Player
                     }
                 }
             }
+
 
             return MinLength;
         }

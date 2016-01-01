@@ -133,17 +133,16 @@ namespace ScrabbleSolver.Model.Player
                         {
                             NewWord += TempCell.GetTile().GetLetter();
                         }
-                        else if(TempCell.GetXCoordinate() > Index)
+                        else if(TempCell.GetXCoordinate() > Index) //Ulozone zostalo cale slowo
                         {
                             if(NewWord.Length > 1)
                             {
                                 if(!GameDictionary.Exists(NewWord))
+                                {
                                     return false;
+                                }
                             }
-                            else
-                            {
-                                break;
-                            }
+                            break;
                         }
                         else
                         {
@@ -182,12 +181,11 @@ namespace ScrabbleSolver.Model.Player
                             if(NewWord.Length > 1)
                             {
                                 if(!GameDictionary.Exists(NewWord))
+                                {
                                     return false;
+                                }
                             }
-                            else
-                            {
-                                break;
-                            }
+                            break;
                         }
                         else
                         {

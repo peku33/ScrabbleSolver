@@ -17,7 +17,7 @@ namespace ScrabbleSolver
 			//Console.Read();
             D.Reload();
             Model.Model GameModel = new Model.Model(D);
-		    GameModel.TestDisplay();
+
             Controller.Controller GameController = new Controller.Controller(GameModel);
 
             GameController.Start();

@@ -51,11 +51,13 @@ namespace ScrabbleSolver.Model
 
         public void NextTurn()
         {
+            TestDisplay(); //Konsolowe wyswietlanie stanu gry na potrzeby testow
+
             Player.Player P = Players.Dequeue();
             P.MakeMove();
-            Players.Enqueue(P);
+            Console.ReadLine(); //Czekanie na klawisz na potrzeby testow
 
-            TestDisplay(); //TYLKO DO TESTOW
+            Players.Enqueue(P);
         }
 
         public bool isEnd()

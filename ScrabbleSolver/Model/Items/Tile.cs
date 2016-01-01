@@ -31,7 +31,7 @@ namespace ScrabbleSolver.Model.Items
 
         public bool IsBlank()
         {
-            return Letter.Equals(" ");
+            return Letter.Equals(' ');
         }
     }
 
