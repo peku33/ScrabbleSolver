@@ -9,16 +9,16 @@ namespace ScrabbleSolver.Board
     public class Row : Container
     {
         //Numer wiersza
-        private readonly int xCoordinate;
+        private readonly int YCoordinate;
 
-        public Row(int x) : base()
+        public Row(int y) : base()
         {
-            this.xCoordinate = x;
+            this.YCoordinate = y;
         }
 
         public int GetYCoordinate()
         {
-            return this.xCoordinate;
+            return this.YCoordinate;
         }
     }
 }

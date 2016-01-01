@@ -6,30 +6,16 @@ namespace ScrabbleSolver.Board
     /// Klasa reprezentująca rząd (!= wiersz) pól.
     /// 
     /// </summary>
-    public abstract class Container
+    public abstract class Container : System.Collections.Generic.List<Cell>
     {
-        //Lista przechowujaca pola gry.
-        private readonly List<Cell> Cells;
-
-        public Container()
-        {
-            this.Cells = new List<Cell>();
-        }
-
         public Cell Get(int index)
         {
-            if (this.Cells.Count > index)
+            if (this.Count > index && index >= 0)
             {
-                return this.Cells[index];
+                return this[index];
             }
 
             return null;
         }
-
-        public void Add(Cell value)
-        {
-            this.Cells.Add(value);
-        }
-
     }
 }

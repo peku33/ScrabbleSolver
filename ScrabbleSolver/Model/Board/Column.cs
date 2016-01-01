@@ -9,16 +9,16 @@ namespace ScrabbleSolver.Board
     public class Column : Container
     {
         //Numer kolumny
-        private readonly int yCoordinate;
+        private readonly int XCoordinate;
 
-        public Column(int y) :base()
+        public Column(int x) :base()
         {
-            this.yCoordinate = y;
+            this.XCoordinate = x;
         }
 
-        public int GetYCoordinate()
+        public int GetXCoordinate()
         {
-            return this.yCoordinate;
+            return this.XCoordinate;
         }
     }
 }

@@ -6,7 +6,7 @@ namespace ScrabbleSolver.Dictionary
 	/// Klasa dostarzająca słownik wraz z operacjami
 	/// 
 	/// </summary>
-	abstract class Dictionary
+	public abstract class Dictionary
 	{
 		//Maksymalna długość słowa, słowa dłuższe będą pominięte. Wartość wynika z rozmiaru planszy
 		protected static readonly int MaxWordLength = 15;

@@ -6,17 +6,57 @@ namespace ScrabbleSolver.Model.Items
     /// <summary>
     /// Klasa reprezentująca tabliczkę z kostkami.
     /// </summary>
-    public class Rack
+    public class Rack : System.Collections.Generic.List<Tile>
     {
-        //Pojemność tabliczki
-        private static readonly int MaxLetterNumber = 7;
+        //Instancja klasy random używana do losowania kostek z tabliczki
+        private static Random Rand = new Random();
 
-        //Kostki znajdujące się w tabliczce.
-        private List<Tile> Tiles;
-
-        public Rack()
+        public String GetTileString()
         {
-            Tiles = new List<Tile>();
+            String Result = String.Empty;
+
+            foreach(Tile TempTile in this)
+            {
+                Result += TempTile.GetLetter();
+            }
+
+            return Result;
+        }
+
+        public bool Remove(char Letter)
+        {
+            foreach(Tile TempTile in this)
+            {
+                if(TempTile.GetLetter().Equals(Letter))
+                {
+                    return Remove(TempTile);
+                }
+            }
+            foreach(Tile TempTile in this)
+            {
+                if(TempTile.IsBlank())
+                {
+                    return Remove(TempTile);
+                }
+            }
+
+            return false;
+        }
+
+        public bool IsFull()
+        {
+            return this.Count == Configuration.MaxLetterNumber;
+        }
+
+        /// <summary>
+        /// Wyjecie losowej kostki z tabliczki.
+        /// </summary>
+        /// <returns></returns>
+        public Tile GetRandomTile()
+        {
+            Tile TempTile = this[Rand.Next(Count)];
+            Remove(TempTile);
+            return TempTile;
         }
     }
 }

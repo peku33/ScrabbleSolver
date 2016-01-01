@@ -8,12 +8,17 @@ namespace ScrabbleSolver.Model.Player
     class HumanPlayer : Player
     {
 
-        public HumanPlayer(String PlayerName) : base()
+        public HumanPlayer(String PlayerName, Board.Board GameBoard, Dictionary.Dictionary GameDictionary) : base(GameBoard, GameDictionary)
         {
             this.Name = PlayerName;
         }
 
         public override void MakeMove()
+        {
+            
+        }
+
+        public override void ReplaceTile()
         {
             
         }

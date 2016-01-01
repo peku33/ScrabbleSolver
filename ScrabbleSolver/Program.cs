@@ -7,13 +7,20 @@ namespace ScrabbleSolver
 	{
 		static void Main(string[] args)
 		{
-			String DictionaryFile = @"..\..\Slowa.txt";
+            String DictionaryFile = @"..\..\Slowa.txt";
+
 			Encoding.Encoding DictionaryEncoding = new Encoding.Polish();
 			Dictionary.Dictionary D = new Dictionary.TrieDictionary(DictionaryFile, DictionaryEncoding);
 
-			Dictionary.Benchmark.Benchmark1(D);
+			//Dictionary.Benchmark.Benchmark1(D);
 
-			Console.Read();
+			//Console.Read();
+            D.Reload();
+            Model.Model GameModel = new Model.Model(D);
+		    GameModel.TestDisplay();
+            Controller.Controller GameController = new Controller.Controller(GameModel);
+
+            GameController.Start();
 		}
 	}
 }
