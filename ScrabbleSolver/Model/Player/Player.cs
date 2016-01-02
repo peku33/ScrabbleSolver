@@ -38,6 +38,11 @@ namespace ScrabbleSolver.Model.Player
 		public abstract void MakeMove();
 
 		/// <summary>
+		/// Wykonanie pierwszego ruchu
+		/// </summary>
+		public abstract void MakeFirstMove();
+
+		/// <summary>
 		/// Wymiana kostki
 		/// </summary>
 		public abstract void ReplaceTile();
@@ -234,15 +239,17 @@ namespace ScrabbleSolver.Model.Player
 			{
 				int Index = StartCell.GetXCoordinate();
 				Row TempRow;
+				var NewWordParamteres = new Tuple<String, int>(String.Empty, 0);
 
 				for(int i = 0; i < Word.Length; ++i)
 				{
 					TempRow = GameBoard.FindRow(StartCell.GetYCoordinate() + i);
-					String NewWord = String.Empty;
-
+					
 					if(!TempRow.Get(Index).IsVisited())
 					{
-						int StartIndex = CreateWord(TempRow, Index, Word[i], NewWord);
+						NewWordParamteres = CreateWord(TempRow, Index, Word[i]);
+						int StartIndex = NewWordParamteres.Item2;
+						String NewWord = NewWordParamteres.Item1;
 
 						if(NewWord.Length > 1)
 						{
@@ -255,15 +262,17 @@ namespace ScrabbleSolver.Model.Player
 			{
 				int Index = StartCell.GetYCoordinate();
 				Column TempColumn;
+				var NewWordParamteres = new Tuple<String, int>(String.Empty, 0);
 
 				for(int i = 0; i < Word.Length; ++i)
 				{
 					TempColumn = GameBoard.FindColumn(StartCell.GetXCoordinate() + i);
-					String NewWord = String.Empty;
-
+					
 					if(!TempColumn.Get(Index).IsVisited())
 					{
-						int StartIndex = CreateWord(TempColumn, Index, Word[i], NewWord);
+						NewWordParamteres = CreateWord(TempColumn, Index, Word[i]);
+						int StartIndex = NewWordParamteres.Item2;
+						String NewWord = NewWordParamteres.Item1;
 
 						if(NewWord.Length > 1)
 						{
@@ -277,7 +286,7 @@ namespace ScrabbleSolver.Model.Player
 		}
 
 		/// <summary>
-		/// Metoda wstawia kostki w odpowiednie miejsce na planszy i usuwa je z tabliczki gracza
+		/// Metoda wstawia kostki w odpowiednie miejsce na planszy
 		/// </summary>
 		/// <param name="Container"></param>
 		/// <param name="StartCell"></param>
@@ -292,9 +301,64 @@ namespace ScrabbleSolver.Model.Player
 
 				if(!TempCell.IsVisited())
 				{
-					TempCell.SetTile(new Tile(NewWord[i]));
+					if(Rack.Contains(NewWord[i])) //Sprawdzenie, czy tabliczka zawiera kostke z dana litera - jesli nie, to wstawiamy blanka
+					{
+						TempCell.SetTile(new Tile(NewWord[i]));
+					}
+					else
+					{
+						TempCell.SetTile(new Tile(NewWord[i], true));
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// Metoda wstawia kostki w odpowiednie miejsce na planszy i usuwa je z tabliczki gracza
+		/// </summary>
+		/// <param name="Container"></param>
+		/// <param name="StartCell"></param>
+		/// <param name="Word"></param>
+		protected void PutAndRemoveTiles(Container Container, int StartIndex, Dictionary.Dictionary.WordFound Word)
+		{
+			String NewWord = Word.GetWord();
+
+			for(int i = 0; i < NewWord.Length; ++i)
+			{
+				Cell TempCell = Container.Get(StartIndex + i);
+
+				if(!TempCell.IsVisited())
+				{
+					if(Rack.Contains(NewWord[i])) //Sprawdzenie, czy tabliczka zawiera kostke z dana litera - jesli nie, to wstawiamy blanka
+					{
+						TempCell.SetTile(new Tile(NewWord[i]));
+					}
+					else
+					{
+						TempCell.SetTile(new Tile(NewWord[i], true));
+					}
+
 					Rack.Remove(NewWord[i]);
 					TempCell.SetVisited(true);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Metoda wyjmuje okreslona ilosc kostek z planszy
+		/// </summary>
+		/// <param name="Container"></param>
+		/// <param name="StartIndex"></param>
+		/// <param name="Word"></param>
+		protected void RemoveTiles(Container Container, int StartIndex, int Number)
+		{
+			for(int i = 0; i < Number; ++i)
+			{
+				Cell TempCell = Container.Get(StartIndex + i);
+
+				if(!TempCell.IsVisited())
+				{
+					TempCell.SetTile(null);
 				}
 			}
 		}
@@ -317,12 +381,12 @@ namespace ScrabbleSolver.Model.Player
 		/// <param name="Container">Plaszyzna z ktorej odczytujemy slowo</param>
 		/// <param name="EmptyIndex">Indeks, na ktorym nie ma jeszcze ulozonej kostki</param>
 		/// <param name="NewLetter">Symbol, ktory ma zostac wstawiony w pusty indeks</param>
-		/// <param name="NewWord">String do ktorego wpisywane jest ulozone slowo</param>
-		/// <returns>indeks od ktorego zaczyna sie slowo</returns>
-		private int CreateWord(Container Container, int EmptyIndex, char NewLetter, String NewWord)
+		/// <returns>tuple zawierajacy nowe słowo oraz indeks od ktorego slowo sie zaczyna w kontenerze Container</returns>
+		private Tuple<String, int> CreateWord(Container Container, int EmptyIndex, char NewLetter)
 		{
 			Cell TempCell;
 			int StartIndex = 0;
+			String NewWord = String.Empty;
 
 			for(int i = 0; i < Container.Count; ++i)
 			{
@@ -338,7 +402,7 @@ namespace ScrabbleSolver.Model.Player
 				}
 				else if(i > EmptyIndex)
 				{
-					return StartIndex;
+					return Tuple.Create(NewWord, StartIndex);
 				}
 				else
 				{
@@ -347,7 +411,7 @@ namespace ScrabbleSolver.Model.Player
 				}
 			}
 
-			return StartIndex;
+			return Tuple.Create(NewWord, StartIndex);
 		}
 
 		/// <summary>
@@ -367,7 +431,7 @@ namespace ScrabbleSolver.Model.Player
 			{
 				TempCell = Container.Get(StartIndex + i);
 
-				if(TempCell.IsVisited())
+				if(TempCell.IsVisited() && !TempCell.IsBlank())
 				{
 					Points += Configuration.GetLetterValue(Word[i]);
 				}

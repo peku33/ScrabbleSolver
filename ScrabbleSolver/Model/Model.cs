@@ -54,7 +54,15 @@ namespace ScrabbleSolver.Model
 			TestDisplay(); //Konsolowe wyswietlanie stanu gry na potrzeby testow
 
 			Player.Player P = Players.Dequeue();
-			P.MakeMove();
+
+			if (GameBoard.IsEmpty())
+			{
+				P.MakeFirstMove();
+			}
+			else
+			{
+				P.MakeMove();
+			}
 			Console.ReadLine(); //Czekanie na klawisz na potrzeby testow
 
 			Players.Enqueue(P);

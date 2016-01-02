@@ -83,7 +83,7 @@ namespace ScrabbleSolver.Model.Items
 			for(i = 0; i < Configuration.ZNumber; ++i) Tiles.Add(new Tile('z'));
 			for(i = 0; i < Configuration._ZNumber; ++i) Tiles.Add(new Tile('ż'));
 			for(i = 0; i < Configuration.__ZNumber; ++i) Tiles.Add(new Tile('ź'));
-			for(i = 0; i < Configuration.BlankNumber; ++i) Tiles.Add(new Tile(' '));
+			for(i = 0; i < Configuration.BlankNumber; ++i) Tiles.Add(new Tile(' ', true));
 		}
 	}
 }

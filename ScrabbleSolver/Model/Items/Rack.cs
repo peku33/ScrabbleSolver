@@ -58,5 +58,17 @@ namespace ScrabbleSolver.Model.Items
 			Remove(TempTile);
 			return TempTile;
 		}
+
+		public bool Contains(Char Letter)
+		{
+			foreach(Tile TempTile in this)
+			{
+				if(TempTile.GetLetter().Equals(Letter))
+				{
+					return true;
+				}
+			}
+			return false;
+		}
 	}
 }

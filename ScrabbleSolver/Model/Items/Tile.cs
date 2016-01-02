@@ -12,11 +12,21 @@ namespace ScrabbleSolver.Model.Items
 		private readonly char Letter;
 		//Wartość kostki
 		private readonly int Value;
+		//Czy blank
+		private readonly bool Blank;
 
 		public Tile(char Letter)
 		{
 			this.Letter = Letter;
 			this.Value = Configuration.GetLetterValue(Letter);
+			this.Blank = false;
+		}
+
+		public Tile(char Letter, bool Blank)
+		{
+			this.Letter = Letter;
+			this.Value = Configuration.GetLetterValue(Letter);
+			this.Blank = Blank;
 		}
 
 		public int GetValue()

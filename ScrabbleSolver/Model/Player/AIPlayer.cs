@@ -23,12 +23,6 @@ namespace ScrabbleSolver.Model.Player
 		/// </summary>
 		public override void MakeMove()
 		{
-			if(GameBoard.IsEmpty())
-			{
-				MakeFirstMove();
-				return;
-			}
-
 			int BestResult = 0;
 			int BestStartIndex = 0;
 			Dictionary.Dictionary.WordFound BestWord = null;
@@ -119,12 +113,12 @@ namespace ScrabbleSolver.Model.Player
 
 			this.PointsNumber += BestResult;
 
-			PutTiles(BestContainer, BestStartIndex, BestWord);
+			PutAndRemoveTiles(BestContainer, BestStartIndex, BestWord);
 
 			GetNewTiles();
 		}
 
-		public void MakeFirstMove()
+		public override void MakeFirstMove()
 		{
 			int BestResult = 0;
 			int BestStartIndex = 0;
@@ -164,7 +158,7 @@ namespace ScrabbleSolver.Model.Player
 
 			this.PointsNumber += BestResult;
 
-			PutTiles(CenterRow, BestStartIndex, BestWord);
+			PutAndRemoveTiles(CenterRow, BestStartIndex, BestWord);
 
 			GameBoard.SetEmpty(false);
 			GetNewTiles();
@@ -299,6 +293,7 @@ namespace ScrabbleSolver.Model.Player
 		private int GetMinLength(Cell StartCell, bool Vertical)
 		{
 			int MinLength = 0;
+			int ActualMinLength = GameBoard.GetBoardSide() + 1;
 
 			Container ConsideredContainer;
 			Container LeftNeighbour;
@@ -342,7 +337,8 @@ namespace ScrabbleSolver.Model.Player
 				{
 					if(FirstLetter)
 					{
-						return MinLength;
+						ActualMinLength = MinLength;
+						break;
 					}
 				}
 
@@ -358,7 +354,8 @@ namespace ScrabbleSolver.Model.Player
 
 					if(TempCell == null || !TempCell.IsVisited())
 					{
-						return MinLength;
+						ActualMinLength = ActualMinLength > MinLength ? MinLength : ActualMinLength;
+						break;
 					}
 					++MinLength;
 				}
@@ -367,7 +364,7 @@ namespace ScrabbleSolver.Model.Player
 			{
 				if(FirstLetter)
 				{
-					return MinLength;
+					ActualMinLength = ActualMinLength > MinLength ? MinLength : ActualMinLength;
 				}
 			}
 
@@ -386,12 +383,10 @@ namespace ScrabbleSolver.Model.Player
 
 					if(TempCell.IsVisited())
 					{
-						return MinLength;
+						ActualMinLength = ActualMinLength > MinLength ? MinLength : ActualMinLength;
+						break;
 					}
-					else
-					{
-						++MinLength;
-					}
+					++MinLength;
 				}
 			}
 
@@ -410,15 +405,13 @@ namespace ScrabbleSolver.Model.Player
 
 					if(TempCell.IsVisited())
 					{
-						return MinLength;
+						ActualMinLength = ActualMinLength > MinLength ? MinLength : ActualMinLength;
+						break;
 					}
-					else
-					{
-						++MinLength;
-					}
+					++MinLength;
 				}
 			}
-			return MinLength;
+			return ActualMinLength > MinLength ? MinLength : ActualMinLength;
 		}
 
 		/// <summary>

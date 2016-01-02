@@ -53,6 +53,19 @@ namespace ScrabbleSolver.Board
 			return this.Visited;
 		}
 
+		/// <summary>
+		/// Sprawdzenie czy na podanym polu jest ustawiony blank
+		/// </summary>
+		/// <returns></returns>
+		public bool IsBlank()
+		{
+			if (IsVisited())
+			{
+				return Tile.IsBlank();
+			}
+			return false;
+		}
+
 		public void SetVisited(bool Visited)
 		{
 			this.Visited = Visited;

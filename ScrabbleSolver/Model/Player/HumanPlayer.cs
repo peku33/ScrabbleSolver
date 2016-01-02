@@ -18,6 +18,11 @@ namespace ScrabbleSolver.Model.Player
 
 		}
 
+		public override void MakeFirstMove()
+		{
+
+		}
+
 		public override void ReplaceTile()
 		{
 
