@@ -84,7 +84,7 @@ namespace ScrabbleSolver.Dictionary
 				return null;
 
 			return new WordFound(Word, HC);
-			
+
 		}
 
 		public int[] GetCharacterOccurenceCount()

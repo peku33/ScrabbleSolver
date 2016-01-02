@@ -5,87 +5,87 @@ using ScrabbleSolver.Model.Player;
 
 namespace ScrabbleSolver.Model
 {
-    /// <summary>
-    /// Klasa modelu gry.
-    /// </summary>
-    public class Model
-    {
-        private readonly Queue<Player.Player> Players;
-        private readonly Board.Board GameBoard;
-        private readonly Dictionary.Dictionary GameDictionary;
+	/// <summary>
+	/// Klasa modelu gry.
+	/// </summary>
+	public class Model
+	{
+		private readonly Queue<Player.Player> Players;
+		private readonly Board.Board GameBoard;
+		private readonly Dictionary.Dictionary GameDictionary;
 
-        public Model(Dictionary.Dictionary GameDictionary)
-        {
-            this.Players = new Queue<Player.Player>();
-            this.GameBoard = new Board.Board(Configuration.BoardFile);
-            this.GameDictionary = GameDictionary;
+		public Model(Dictionary.Dictionary GameDictionary)
+		{
+			this.Players = new Queue<Player.Player>();
+			this.GameBoard = new Board.Board(Configuration.BoardFile);
+			this.GameDictionary = GameDictionary;
 
-            TilesSet.Init();
-        }
+			TilesSet.Init();
+		}
 
-        public void InitPlayers(int HumanPlayers, int CPUPlayers) //TODO przerobic funkcje tak, aby dalo sie inicjalizowac graczy z wybranymi nickami
-        {
-            if(HumanPlayers + CPUPlayers > Configuration.MaxPlayersNumber)
-            {
-                throw new SystemException("too much players!");
-            }
-            for(int i = 0; i < HumanPlayers; ++i)
-            {
-                Players.Enqueue(new HumanPlayer("Gracz" + i, GameBoard, GameDictionary)); 
-            }
-            for(int i = 0; i < CPUPlayers; ++i)
-            {
-                Players.Enqueue(new AIPlayer(GameBoard, GameDictionary));
-            }
+		public void InitPlayers(int HumanPlayers, int CPUPlayers) //TODO przerobic funkcje tak, aby dalo sie inicjalizowac graczy z wybranymi nickami
+		{
+			if(HumanPlayers + CPUPlayers > Configuration.MaxPlayersNumber)
+			{
+				throw new SystemException("too much players!");
+			}
+			for(int i = 0; i < HumanPlayers; ++i)
+			{
+				Players.Enqueue(new HumanPlayer("Gracz" + i, GameBoard, GameDictionary));
+			}
+			for(int i = 0; i < CPUPlayers; ++i)
+			{
+				Players.Enqueue(new AIPlayer(GameBoard, GameDictionary));
+			}
 
-            foreach(Player.Player Player in Players)
-            {
-                Player.GetNewTiles();
-            }
-        }
+			foreach(Player.Player Player in Players)
+			{
+				Player.GetNewTiles();
+			}
+		}
 
-        public Dictionary.Dictionary GetDictionary()
-        {
-            return this.GameDictionary;
-        }
+		public Dictionary.Dictionary GetDictionary()
+		{
+			return this.GameDictionary;
+		}
 
-        public void NextTurn()
-        {
-            TestDisplay(); //Konsolowe wyswietlanie stanu gry na potrzeby testow
+		public void NextTurn()
+		{
+			TestDisplay(); //Konsolowe wyswietlanie stanu gry na potrzeby testow
 
-            Player.Player P = Players.Dequeue();
-            P.MakeMove();
-            Console.ReadLine(); //Czekanie na klawisz na potrzeby testow
+			Player.Player P = Players.Dequeue();
+			P.MakeMove();
+			Console.ReadLine(); //Czekanie na klawisz na potrzeby testow
 
-            Players.Enqueue(P);
-        }
+			Players.Enqueue(P);
+		}
 
-        public bool isEnd()
-        {
-            foreach (Player.Player Player in Players)
-            {
-                if(Player.HasFinished())
-                {
-                    return true;
-                }
-            }
+		public bool isEnd()
+		{
+			foreach(Player.Player Player in Players)
+			{
+				if(Player.HasFinished())
+				{
+					return true;
+				}
+			}
 
-            return false;
-        }
+			return false;
+		}
 
-        /// <summary>
-        /// Konsolowe wysiwetlanie planszy do testow
-        /// </summary>
-        public void TestDisplay()
-        {
-            GameBoard.ConsoleDisplay();
+		/// <summary>
+		/// Konsolowe wysiwetlanie planszy do testow
+		/// </summary>
+		public void TestDisplay()
+		{
+			GameBoard.ConsoleDisplay();
 
-            foreach (Player.Player TempPlayer in Players)
-            {
-                System.Console.WriteLine(TempPlayer.GetName() + ": " + TempPlayer.GetPointsNumber() + " Rack: " + TempPlayer.GetLettersString());
-            }
+			foreach(Player.Player TempPlayer in Players)
+			{
+				System.Console.WriteLine(TempPlayer.GetName() + ": " + TempPlayer.GetPointsNumber() + " Rack: " + TempPlayer.GetLettersString());
+			}
 
-            System.Console.WriteLine();
-        }
-    }
+			System.Console.WriteLine();
+		}
+	}
 }

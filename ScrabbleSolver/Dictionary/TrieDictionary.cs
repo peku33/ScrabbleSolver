@@ -32,7 +32,7 @@ namespace ScrabbleSolver.Dictionary
 
 			//Znak zawarty w węźle, dla korzenia 0
 			private readonly char Character;
-			
+
 			//Czy węzeł kończy słowo?
 			private bool Ending;
 
@@ -144,7 +144,7 @@ namespace ScrabbleSolver.Dictionary
 
 		protected override void Clear()
 		{
-			Root = new TrieNode(null, -1, (char) 0, DictionaryEncoding);
+			Root = new TrieNode(null, -1, (char)0, DictionaryEncoding);
 		}
 
 		protected override void AddWord(string Word)
@@ -178,7 +178,9 @@ namespace ScrabbleSolver.Dictionary
 		///		- ostatni węzeł słowa (idąc w górę po drzewie można uzyskać pełne słowo)
 		///		- lista liter pozostałych u gracza po stworzeniu tej kombinacji
 		/// </summary>
-		private class NodesFound : System.Collections.Generic.List<Tuple<TrieNode, HeldCharacters>> { }
+		private class NodesFound : System.Collections.Generic.List<Tuple<TrieNode, HeldCharacters>>
+		{
+		}
 
 		public override WordsFound Find(AlreadySetLetters ASL, HeldCharacters HC)
 		{

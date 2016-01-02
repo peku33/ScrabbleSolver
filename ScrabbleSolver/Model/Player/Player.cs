@@ -4,390 +4,390 @@ using ScrabbleSolver.Model.Items;
 
 namespace ScrabbleSolver.Model.Player
 {
-    /// <summary>
-    /// Klasa reprezentująca gracza
-    /// </summary>
-    abstract class Player
-    {
-        // Ilość punktów zgromadzonych przez gracza
-        protected int PointsNumber;
+	/// <summary>
+	/// Klasa reprezentująca gracza
+	/// </summary>
+	abstract class Player
+	{
+		// Ilość punktów zgromadzonych przez gracza
+		protected int PointsNumber;
 
-        // Nazwa gracza
-        protected String Name;
+		// Nazwa gracza
+		protected String Name;
 
-        // Tabliczka z kostkami
-        protected readonly Rack Rack;
+		// Tabliczka z kostkami
+		protected readonly Rack Rack;
 
-        //Plansza gry
-        protected readonly Board.Board GameBoard;
+		//Plansza gry
+		protected readonly Board.Board GameBoard;
 
-        //Słownik gry
-        protected readonly Dictionary.Dictionary GameDictionary;
+		//Słownik gry
+		protected readonly Dictionary.Dictionary GameDictionary;
 
-        protected Player(Board.Board GameBoard, Dictionary.Dictionary GameDictionary)
-        {
-            Rack = new Rack();
-            this.GameBoard = GameBoard;
-            this.GameDictionary = GameDictionary;
-            PointsNumber = 0;
-        }
+		protected Player(Board.Board GameBoard, Dictionary.Dictionary GameDictionary)
+		{
+			Rack = new Rack();
+			this.GameBoard = GameBoard;
+			this.GameDictionary = GameDictionary;
+			PointsNumber = 0;
+		}
 
-        /// <summary>
-        /// Wykonanie ruchu
-        /// </summary>
-        public abstract void MakeMove();
+		/// <summary>
+		/// Wykonanie ruchu
+		/// </summary>
+		public abstract void MakeMove();
 
-        /// <summary>
-        /// Wymiana kostki
-        /// </summary>
-        public abstract void ReplaceTile();
+		/// <summary>
+		/// Wymiana kostki
+		/// </summary>
+		public abstract void ReplaceTile();
 
-        public int GetPointsNumber()
-        {
-            return this.PointsNumber;
-        }
+		public int GetPointsNumber()
+		{
+			return this.PointsNumber;
+		}
 
-        public String GetName()
-        {
-            return this.Name;
-        }
+		public String GetName()
+		{
+			return this.Name;
+		}
 
-        public bool HasFinished()
-        {
-            return Rack.Count == 0;
-        }
+		public bool HasFinished()
+		{
+			return Rack.Count == 0;
+		}
 
-        /// <summary>
-        /// Metoda sprawdzajaca czy wlozenie slowa nie sprawi ze na planszy znajda sie ciagi znakow nie bedace slowami
-        /// </summary>
-        /// <param name="Word"></param>
-        /// <param name="StartCell"></param>
-        /// <param name="Vertical"></param>
-        /// <returns></returns>
-        protected bool IsMoveCorrect(String Word, Cell StartCell, bool Vertical)
-        {
-            int Index;
+		/// <summary>
+		/// Metoda sprawdzajaca czy wlozenie slowa nie sprawi ze na planszy znajda sie ciagi znakow nie bedace slowami
+		/// </summary>
+		/// <param name="Word"></param>
+		/// <param name="StartCell"></param>
+		/// <param name="Vertical"></param>
+		/// <returns></returns>
+		protected bool IsMoveCorrect(String Word, Cell StartCell, bool Vertical)
+		{
+			int Index;
 
-            if(Vertical)//Sprawdzenie czy wstawienie slowa nie spowodowalo polaczenia ze soba dwoch slow na planszy tworzac tym samym niepoprawne slowo
-            {
-                Column TempColumn = GameBoard.FindColumn(StartCell.GetXCoordinate());
-                String NewWord = String.Copy(Word);
-                Index = StartCell.GetYCoordinate() + Word.Length; //Indeks pola bezposrednio za slowem.
+			if(Vertical)//Sprawdzenie czy wstawienie slowa nie spowodowalo polaczenia ze soba dwoch slow na planszy tworzac tym samym niepoprawne slowo
+			{
+				Column TempColumn = GameBoard.FindColumn(StartCell.GetXCoordinate());
+				String NewWord = String.Copy(Word);
+				Index = StartCell.GetYCoordinate() + Word.Length; //Indeks pola bezposrednio za slowem.
 
-                if(Index < GameBoard.GetBoardSide())
-                {
-                    Cell TempCell = TempColumn.Get(Index);
+				if(Index < GameBoard.GetBoardSide())
+				{
+					Cell TempCell = TempColumn.Get(Index);
 
-                    while(TempCell != null && TempCell.IsVisited())
-                    {
-                        NewWord += TempCell.GetTile().GetLetter();
-                        TempCell = TempColumn.Get(++Index);
-                    }
-                }
+					while(TempCell != null && TempCell.IsVisited())
+					{
+						NewWord += TempCell.GetTile().GetLetter();
+						TempCell = TempColumn.Get(++Index);
+					}
+				}
 
-                if(!GameDictionary.Exists(NewWord))
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                Row TempRow = GameBoard.FindRow(StartCell.GetYCoordinate());
-                String NewWord = String.Copy(Word);
-                Index = StartCell.GetXCoordinate() + Word.Length; //Indeks pola bezposrednio za slowem.
+				if(!GameDictionary.Exists(NewWord))
+				{
+					return false;
+				}
+			}
+			else
+			{
+				Row TempRow = GameBoard.FindRow(StartCell.GetYCoordinate());
+				String NewWord = String.Copy(Word);
+				Index = StartCell.GetXCoordinate() + Word.Length; //Indeks pola bezposrednio za slowem.
 
-                if(Index < GameBoard.GetBoardSide())
-                {
-                    Cell TempCell = TempRow.Get(Index);
+				if(Index < GameBoard.GetBoardSide())
+				{
+					Cell TempCell = TempRow.Get(Index);
 
-                    while(TempCell != null && TempCell.IsVisited())
-                    {
-                        NewWord += TempCell.GetTile().GetLetter();
-                        TempCell = TempRow.Get(++Index);
-                    }
-                }
+					while(TempCell != null && TempCell.IsVisited())
+					{
+						NewWord += TempCell.GetTile().GetLetter();
+						TempCell = TempRow.Get(++Index);
+					}
+				}
 
-                if(!GameDictionary.Exists(NewWord))
-                {
-                    return false;
-                }
-            }
+				if(!GameDictionary.Exists(NewWord))
+				{
+					return false;
+				}
+			}
 
-            if(Vertical)//Sprawdzenie czy wstawienie slowa nie spowodowalo utworzenia niepoprawnych slow prostopadle do kierunku wstawiania slowa
-            {
-                Index = StartCell.GetXCoordinate();
-                Row TempRow;
+			if(Vertical)//Sprawdzenie czy wstawienie slowa nie spowodowalo utworzenia niepoprawnych slow prostopadle do kierunku wstawiania slowa
+			{
+				Index = StartCell.GetXCoordinate();
+				Row TempRow;
 
-                for(int i = 0; i < Word.Length; ++i)
-                {
-                    TempRow = GameBoard.FindRow(StartCell.GetYCoordinate() + i);
-                    String NewWord = String.Empty;
+				for(int i = 0; i < Word.Length; ++i)
+				{
+					TempRow = GameBoard.FindRow(StartCell.GetYCoordinate() + i);
+					String NewWord = String.Empty;
 
-                    foreach(Cell TempCell in TempRow)
-                    {
-                        if(TempCell.GetXCoordinate() == Index)
-                        {
-                            NewWord += Word[i];
-                        }
-                        else if(TempCell.IsVisited())
-                        {
-                            NewWord += TempCell.GetTile().GetLetter();
-                        }
-                        else if(TempCell.GetXCoordinate() > Index) //Ulozone zostalo cale slowo
-                        {
-                            if(NewWord.Length > 1)
-                            {
-                                if(!GameDictionary.Exists(NewWord))
-                                {
-                                    return false;
-                                }
-                            }
-                            break;
-                        }
-                        else
-                        {
-                            NewWord = String.Empty;
-                        }
-                    }
-                    if(NewWord.Length > 1)//Jesli slowo konczy sie przy krawedzi planszy
-                    {
-                        if(!GameDictionary.Exists(NewWord))
-                            return false;
-                    }
-                }
-            }
-            else
-            {
-                Index = StartCell.GetYCoordinate();
-                Column TempColumn;
+					foreach(Cell TempCell in TempRow)
+					{
+						if(TempCell.GetXCoordinate() == Index)
+						{
+							NewWord += Word[i];
+						}
+						else if(TempCell.IsVisited())
+						{
+							NewWord += TempCell.GetTile().GetLetter();
+						}
+						else if(TempCell.GetXCoordinate() > Index) //Ulozone zostalo cale slowo
+						{
+							if(NewWord.Length > 1)
+							{
+								if(!GameDictionary.Exists(NewWord))
+								{
+									return false;
+								}
+							}
+							break;
+						}
+						else
+						{
+							NewWord = String.Empty;
+						}
+					}
+					if(NewWord.Length > 1)//Jesli slowo konczy sie przy krawedzi planszy
+					{
+						if(!GameDictionary.Exists(NewWord))
+							return false;
+					}
+				}
+			}
+			else
+			{
+				Index = StartCell.GetYCoordinate();
+				Column TempColumn;
 
-                for(int i = 0; i < Word.Length; ++i)
-                {
-                    TempColumn = GameBoard.FindColumn(StartCell.GetXCoordinate() + i);
-                    String NewWord = String.Empty;
+				for(int i = 0; i < Word.Length; ++i)
+				{
+					TempColumn = GameBoard.FindColumn(StartCell.GetXCoordinate() + i);
+					String NewWord = String.Empty;
 
-                    foreach(Cell TempCell in TempColumn)
-                    {
-                        if(TempCell.GetYCoordinate() == Index)
-                        {
-                            NewWord += Word[i];
-                        }
-                        else if(TempCell.IsVisited())
-                        {
-                            NewWord += TempCell.GetTile().GetLetter();
-                        }
-                        else if(TempCell.GetYCoordinate() > Index)
-                        {
-                            if(NewWord.Length > 1)
-                            {
-                                if(!GameDictionary.Exists(NewWord))
-                                {
-                                    return false;
-                                }
-                            }
-                            break;
-                        }
-                        else
-                        {
-                            NewWord = String.Empty;
-                        }
-                    }
-                    if(NewWord.Length > 1)//Jesli slowo konczy sie przy krawedzi planszy
-                    {
-                        if(!GameDictionary.Exists(NewWord))
-                            return false;
-                    }
-                }
-            }
+					foreach(Cell TempCell in TempColumn)
+					{
+						if(TempCell.GetYCoordinate() == Index)
+						{
+							NewWord += Word[i];
+						}
+						else if(TempCell.IsVisited())
+						{
+							NewWord += TempCell.GetTile().GetLetter();
+						}
+						else if(TempCell.GetYCoordinate() > Index)
+						{
+							if(NewWord.Length > 1)
+							{
+								if(!GameDictionary.Exists(NewWord))
+								{
+									return false;
+								}
+							}
+							break;
+						}
+						else
+						{
+							NewWord = String.Empty;
+						}
+					}
+					if(NewWord.Length > 1)//Jesli slowo konczy sie przy krawedzi planszy
+					{
+						if(!GameDictionary.Exists(NewWord))
+							return false;
+					}
+				}
+			}
 
-            return true;
-        }
+			return true;
+		}
 
-        /// <summary>
-        /// Metoda zliczajaca punkty ktore otrzyma gracz za ulozenie okreslonego slowa w okreslone miejsce
-        /// </summary>
-        /// <param name="Word"></param>
-        /// <param name="StartCell"></param>
-        /// <param name="Vertical"></param>
-        /// <returns></returns>
-        protected int CountPoints(String Word, Cell StartCell, bool Vertical)
-        {
-            int Points = 0;
+		/// <summary>
+		/// Metoda zliczajaca punkty ktore otrzyma gracz za ulozenie okreslonego slowa w okreslone miejsce
+		/// </summary>
+		/// <param name="Word"></param>
+		/// <param name="StartCell"></param>
+		/// <param name="Vertical"></param>
+		/// <returns></returns>
+		protected int CountPoints(String Word, Cell StartCell, bool Vertical)
+		{
+			int Points = 0;
 
-            Container ConsideredContainer;
-            int CellIndex;
+			Container ConsideredContainer;
+			int CellIndex;
 
-            if(Vertical)
-            {
-                ConsideredContainer = GameBoard.FindColumn(StartCell);
-                CellIndex = StartCell.GetYCoordinate();
-            }
-            else
-            {
-                ConsideredContainer = GameBoard.FindRow(StartCell);
-                CellIndex = StartCell.GetXCoordinate();
-            }
+			if(Vertical)
+			{
+				ConsideredContainer = GameBoard.FindColumn(StartCell);
+				CellIndex = StartCell.GetYCoordinate();
+			}
+			else
+			{
+				ConsideredContainer = GameBoard.FindRow(StartCell);
+				CellIndex = StartCell.GetXCoordinate();
+			}
 
-            Points += CountWord(ConsideredContainer, Word, CellIndex);
+			Points += CountWord(ConsideredContainer, Word, CellIndex);
 
-            if(Vertical)
-            {
-                int Index = StartCell.GetXCoordinate();
-                Row TempRow;
+			if(Vertical)
+			{
+				int Index = StartCell.GetXCoordinate();
+				Row TempRow;
 
-                for(int i = 0; i < Word.Length; ++i)
-                {
-                    TempRow = GameBoard.FindRow(StartCell.GetYCoordinate() + i);
-                    String NewWord = String.Empty;
+				for(int i = 0; i < Word.Length; ++i)
+				{
+					TempRow = GameBoard.FindRow(StartCell.GetYCoordinate() + i);
+					String NewWord = String.Empty;
 
-                    if(!TempRow.Get(Index).IsVisited())
-                    {
-                        int StartIndex = CreateWord(TempRow, Index, Word[i], NewWord);
+					if(!TempRow.Get(Index).IsVisited())
+					{
+						int StartIndex = CreateWord(TempRow, Index, Word[i], NewWord);
 
-                        if(NewWord.Length > 1)
-                        {
-                            Points += CountWord(TempRow, NewWord, StartIndex);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                int Index = StartCell.GetYCoordinate();
-                Column TempColumn;
+						if(NewWord.Length > 1)
+						{
+							Points += CountWord(TempRow, NewWord, StartIndex);
+						}
+					}
+				}
+			}
+			else
+			{
+				int Index = StartCell.GetYCoordinate();
+				Column TempColumn;
 
-                for(int i = 0; i < Word.Length; ++i)
-                {
-                    TempColumn = GameBoard.FindColumn(StartCell.GetXCoordinate() + i);
-                    String NewWord = String.Empty;
+				for(int i = 0; i < Word.Length; ++i)
+				{
+					TempColumn = GameBoard.FindColumn(StartCell.GetXCoordinate() + i);
+					String NewWord = String.Empty;
 
-                    if(!TempColumn.Get(Index).IsVisited())
-                    {
-                        int StartIndex = CreateWord(TempColumn, Index, Word[i], NewWord);
+					if(!TempColumn.Get(Index).IsVisited())
+					{
+						int StartIndex = CreateWord(TempColumn, Index, Word[i], NewWord);
 
-                        if(NewWord.Length > 1)
-                        {
-                            Points += CountWord(TempColumn, NewWord, StartIndex);
-                        }
-                    }
-                }
-            }
+						if(NewWord.Length > 1)
+						{
+							Points += CountWord(TempColumn, NewWord, StartIndex);
+						}
+					}
+				}
+			}
 
-            return Points;
-        }
+			return Points;
+		}
 
-        /// <summary>
-        /// Metoda wstawia kostki w odpowiednie miejsce na planszy i usuwa je z tabliczki gracza
-        /// </summary>
-        /// <param name="Container"></param>
-        /// <param name="StartCell"></param>
-        /// <param name="Word"></param>
-        protected void PutTiles(Container Container, int StartIndex, Dictionary.Dictionary.WordFound Word)
-        {
-            String NewWord = Word.GetWord();
+		/// <summary>
+		/// Metoda wstawia kostki w odpowiednie miejsce na planszy i usuwa je z tabliczki gracza
+		/// </summary>
+		/// <param name="Container"></param>
+		/// <param name="StartCell"></param>
+		/// <param name="Word"></param>
+		protected void PutTiles(Container Container, int StartIndex, Dictionary.Dictionary.WordFound Word)
+		{
+			String NewWord = Word.GetWord();
 
-            for(int i = 0; i < NewWord.Length; ++i)
-            {
-                Cell TempCell = Container.Get(StartIndex + i);
+			for(int i = 0; i < NewWord.Length; ++i)
+			{
+				Cell TempCell = Container.Get(StartIndex + i);
 
-                if(!TempCell.IsVisited())
-                {
-                    TempCell.SetTile(new Tile(NewWord[i]));
-                    Rack.Remove(NewWord[i]);
-                    TempCell.SetVisited(true);
-                }
-            }
-        }
+				if(!TempCell.IsVisited())
+				{
+					TempCell.SetTile(new Tile(NewWord[i]));
+					Rack.Remove(NewWord[i]);
+					TempCell.SetVisited(true);
+				}
+			}
+		}
 
-        /// <summary>
-        /// Losowanie nowych kostek
-        /// </summary>
-        public void GetNewTiles()
-        {
-            while(!TilesSet.IsEmpty() && !Rack.IsFull())
-            {
-                Rack.Add(TilesSet.GetRandomTile());
-            }
-        }
+		/// <summary>
+		/// Losowanie nowych kostek
+		/// </summary>
+		public void GetNewTiles()
+		{
+			while(!TilesSet.IsEmpty() && !Rack.IsFull())
+			{
+				Rack.Add(TilesSet.GetRandomTile());
+			}
+		}
 
-        /// <summary>
-        /// Metoda ukladajaca slowo, ktore przechodzi przez pole o indeksie EmptyIndex w kontenerze podanym 
-        /// w argumencie wywolania.
-        /// </summary>
-        /// <param name="Container">Plaszyzna z ktorej odczytujemy slowo</param>
-        /// <param name="EmptyIndex">Indeks, na ktorym nie ma jeszcze ulozonej kostki</param>
-        /// <param name="NewLetter">Symbol, ktory ma zostac wstawiony w pusty indeks</param>
-        /// <param name="NewWord">String do ktorego wpisywane jest ulozone slowo</param>
-        /// <returns>indeks od ktorego zaczyna sie slowo</returns>
-        private int CreateWord(Container Container, int EmptyIndex, char NewLetter, String NewWord)
-        {
-            Cell TempCell;
-            int StartIndex = 0;
+		/// <summary>
+		/// Metoda ukladajaca slowo, ktore przechodzi przez pole o indeksie EmptyIndex w kontenerze podanym 
+		/// w argumencie wywolania.
+		/// </summary>
+		/// <param name="Container">Plaszyzna z ktorej odczytujemy slowo</param>
+		/// <param name="EmptyIndex">Indeks, na ktorym nie ma jeszcze ulozonej kostki</param>
+		/// <param name="NewLetter">Symbol, ktory ma zostac wstawiony w pusty indeks</param>
+		/// <param name="NewWord">String do ktorego wpisywane jest ulozone slowo</param>
+		/// <returns>indeks od ktorego zaczyna sie slowo</returns>
+		private int CreateWord(Container Container, int EmptyIndex, char NewLetter, String NewWord)
+		{
+			Cell TempCell;
+			int StartIndex = 0;
 
-            for(int i = 0; i < Container.Count; ++i)
-            {
-                TempCell = Container.Get(i);
+			for(int i = 0; i < Container.Count; ++i)
+			{
+				TempCell = Container.Get(i);
 
-                if(i == EmptyIndex)
-                {
-                    NewWord += NewLetter;
-                }
-                else if(TempCell.IsVisited())
-                {
-                    NewWord += TempCell.GetTile().GetLetter();
-                }
-                else if(i > EmptyIndex)
-                {
-                    return StartIndex;
-                }
-                else
-                {
-                    NewWord = String.Empty;
-                    StartIndex = i + 1;
-                }
-            }
+				if(i == EmptyIndex)
+				{
+					NewWord += NewLetter;
+				}
+				else if(TempCell.IsVisited())
+				{
+					NewWord += TempCell.GetTile().GetLetter();
+				}
+				else if(i > EmptyIndex)
+				{
+					return StartIndex;
+				}
+				else
+				{
+					NewWord = String.Empty;
+					StartIndex = i + 1;
+				}
+			}
 
-            return StartIndex;
-        }
+			return StartIndex;
+		}
 
-        /// <summary>
-        /// Metoda zliczajaca ile punktow warte jest slowo
-        /// </summary>
-        /// <param name="Container"></param>
-        /// <param name="Word"></param>
-        /// <param name="StartIndex"></param>
-        /// <returns></returns>
-        protected int CountWord(Container Container, String Word, int StartIndex)
-        {
-            int Points = 0;
-            int WordMultiplier = 1;
-            Cell TempCell;
+		/// <summary>
+		/// Metoda zliczajaca ile punktow warte jest slowo
+		/// </summary>
+		/// <param name="Container"></param>
+		/// <param name="Word"></param>
+		/// <param name="StartIndex"></param>
+		/// <returns></returns>
+		protected int CountWord(Container Container, String Word, int StartIndex)
+		{
+			int Points = 0;
+			int WordMultiplier = 1;
+			Cell TempCell;
 
-            for(int i = 0; i < Word.Length; ++i)
-            {
-                TempCell = Container.Get(StartIndex + i);
+			for(int i = 0; i < Word.Length; ++i)
+			{
+				TempCell = Container.Get(StartIndex + i);
 
-                if(TempCell.IsVisited())
-                {
-                    Points += Configuration.GetLetterValue(Word[i]);
-                }
-                else
-                {
-                    WordMultiplier *= TempCell.GetWordMultiplier();
-                    Points += Configuration.GetLetterValue(Word[i]) * TempCell.GetLetterMultiplier();
-                }
-            }
+				if(TempCell.IsVisited())
+				{
+					Points += Configuration.GetLetterValue(Word[i]);
+				}
+				else
+				{
+					WordMultiplier *= TempCell.GetWordMultiplier();
+					Points += Configuration.GetLetterValue(Word[i]) * TempCell.GetLetterMultiplier();
+				}
+			}
 
-            return Points * WordMultiplier;
-        }
+			return Points * WordMultiplier;
+		}
 
-        /// <summary>
-        /// TYLKO DO TESTOW
-        /// </summary>
-        /// <returns></returns>
-        public String GetLettersString()
-        {
-            return Rack.GetTileString();
-        }
-    }
+		/// <summary>
+		/// TYLKO DO TESTOW
+		/// </summary>
+		/// <returns></returns>
+		public String GetLettersString()
+		{
+			return Rack.GetTileString();
+		}
+	}
 }

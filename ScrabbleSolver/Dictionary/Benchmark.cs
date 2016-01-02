@@ -37,7 +37,7 @@ namespace ScrabbleSolver.Dictionary
 
 			///////////////////////////////////////////////////////////
 
-			String[] FindWords = new string[] { "ęą", "żyznościach", "żywotopisarstwa", "dwuwiosłowymi", "żżż"};
+			String[] FindWords = new string[] { "ęą", "żyznościach", "żywotopisarstwa", "dwuwiosłowymi", "żżż" };
 
 			foreach(String FindWord in FindWords)
 			{

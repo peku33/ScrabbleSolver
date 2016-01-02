@@ -7,7 +7,7 @@ namespace ScrabbleSolver
 	{
 		static void Main(string[] args)
 		{
-            String DictionaryFile = @"..\..\Slowa.txt";
+			String DictionaryFile = @"..\..\Slowa.txt";
 
 			Encoding.Encoding DictionaryEncoding = new Encoding.Polish();
 			Dictionary.Dictionary D = new Dictionary.TrieDictionary(DictionaryFile, DictionaryEncoding);
@@ -15,12 +15,12 @@ namespace ScrabbleSolver
 			//Dictionary.Benchmark.Benchmark1(D);
 
 			//Console.Read();
-            D.Reload();
-            Model.Model GameModel = new Model.Model(D);
+			D.Reload();
+			Model.Model GameModel = new Model.Model(D);
 
-            Controller.Controller GameController = new Controller.Controller(GameModel);
+			Controller.Controller GameController = new Controller.Controller(GameModel);
 
-            GameController.Start();
+			GameController.Start();
 		}
 	}
 }

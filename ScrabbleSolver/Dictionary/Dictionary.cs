@@ -43,14 +43,14 @@ namespace ScrabbleSolver.Dictionary
 
 			while(!DictionaryFileReader.EndOfStream)
 			{
-				char CharacterRead = (char) DictionaryFileReader.Read();
+				char CharacterRead = (char)DictionaryFileReader.Read();
 
 				if(char.IsLetter(CharacterRead))
 				{
 					if(SB == null)
 						SB = new System.Text.StringBuilder(MaxInputWordLength);
 
-					SB.Append((char) CharacterRead);
+					SB.Append((char)CharacterRead);
 				}
 				else
 				{
@@ -99,7 +99,7 @@ namespace ScrabbleSolver.Dictionary
 			{
 				Characters = new char[MaxWordLength];
 				for(int I = 0; I < MaxWordLength; I++)
-					Characters[I] = (char) 0;
+					Characters[I] = (char)0;
 			}
 
 			/// <summary>
@@ -119,7 +119,7 @@ namespace ScrabbleSolver.Dictionary
 			/// <param name="Character">Znak na danej pozycji</param>
 			public void Set(int Position, char Character)
 			{
-				if(Characters[Position] != (char) 0)
+				if(Characters[Position] != (char)0)
 					throw new OverflowException("Character at position already set");
 
 				Characters[Position] = Character;
@@ -143,7 +143,7 @@ namespace ScrabbleSolver.Dictionary
 
 				CharactersCount = new char[DictionaryEncoding.GetArraySize() + 1];
 				for(int I = 0; I < CharactersCount.Length; I++)
-					CharactersCount[I] = (char) 0;
+					CharactersCount[I] = (char)0;
 			}
 
 			private HeldCharacters(Encoding.Encoding DictionaryEncoding, char[] CharactersCount)
@@ -193,7 +193,7 @@ namespace ScrabbleSolver.Dictionary
 						return null;
 				}
 
-				char[] NewCharactersCount = (char[]) CharactersCount.Clone();
+				char[] NewCharactersCount = (char[])CharactersCount.Clone();
 				NewCharactersCount[I]--;
 				return new HeldCharacters(DictionaryEncoding, NewCharactersCount);
 			}
@@ -237,7 +237,9 @@ namespace ScrabbleSolver.Dictionary
 			}
 		}
 
-		public class WordsFound : System.Collections.Generic.List<WordFound> { } //
+		public class WordsFound : System.Collections.Generic.List<WordFound>
+		{
+		} //
 
 		abstract public WordsFound Find(AlreadySetLetters ASL, HeldCharacters HC);
 	}
