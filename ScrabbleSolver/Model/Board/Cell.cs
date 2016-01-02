@@ -59,7 +59,7 @@ namespace ScrabbleSolver.Board
 		/// <returns></returns>
 		public bool IsBlank()
 		{
-			if (IsVisited())
+			if(IsVisited())
 			{
 				return Tile.IsBlank();
 			}

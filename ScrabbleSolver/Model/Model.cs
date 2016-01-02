@@ -77,7 +77,6 @@ namespace ScrabbleSolver.Model
 					return true;
 				}
 			}
-
 			return false;
 		}
 
@@ -94,6 +93,32 @@ namespace ScrabbleSolver.Model
 			}
 
 			System.Console.WriteLine();
+		}
+
+		/// <summary>
+		/// Zwraca gracza z największa ilością punktów. W przypadku gdy kilku graczy ma tą samą ilośc punktów, zwraca gracza z mniejszą ilością kostek. W przypadku, gdy gracze mają taką samą ilość punktów 
+		/// i taką samą ilość kostek, zwraca gracza, który jest bliżej w kolejce.
+		/// </summary>
+		/// <returns></returns>
+		public Player.Player GetBestPlayer()
+		{
+			Player.Player BestPlayer = null;
+
+			foreach(Player.Player TempPlayer in Players)
+			{
+				if(BestPlayer == null || BestPlayer.GetPointsNumber() < TempPlayer.GetPointsNumber())
+				{
+					BestPlayer = TempPlayer;
+				}
+				else if(BestPlayer.GetPointsNumber() == TempPlayer.GetPointsNumber())
+				{
+					if(BestPlayer.GetLettersNumber() > TempPlayer.GetLettersNumber())
+					{
+						BestPlayer = TempPlayer;
+					}	
+				}
+			}
+			return BestPlayer;
 		}
 	}
 }

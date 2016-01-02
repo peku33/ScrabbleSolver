@@ -56,6 +56,8 @@ namespace ScrabbleSolver.Model.Player
 						{
 							if(IsMoveCorrect(TempWord.GetWord(), TempCell, false)) //Czy ustawienie tego slowa nie spowoduje kolizji w drugiej plaszczyznie
 							{
+								PutTiles(TempRow, TempCell.GetXCoordinate(), TempWord);
+
 								int Result = CountPoints(TempWord.GetWord(), TempCell, false);
 								if(Result > BestResult)
 								{
@@ -64,6 +66,8 @@ namespace ScrabbleSolver.Model.Player
 									BestWord = TempWord;
 									BestContainer = TempRow;
 								}
+
+								RemoveTiles(TempRow, TempCell.GetXCoordinate(), TempWord.GetWord().Length);
 							}
 						}
 					}
@@ -91,6 +95,8 @@ namespace ScrabbleSolver.Model.Player
 						{
 							if(IsMoveCorrect(TempWord.GetWord(), TempCell, true))
 							{
+								PutTiles(TempColumn, TempCell.GetYCoordinate(), TempWord);
+
 								int Result = CountPoints(TempWord.GetWord(), TempCell, true);
 								if(Result > BestResult)
 								{
@@ -99,6 +105,8 @@ namespace ScrabbleSolver.Model.Player
 									BestWord = TempWord;
 									BestContainer = TempColumn;
 								}
+
+								RemoveTiles(TempColumn, TempCell.GetYCoordinate(), TempWord.GetWord().Length);
 							}
 						}
 					}
@@ -113,7 +121,8 @@ namespace ScrabbleSolver.Model.Player
 
 			this.PointsNumber += BestResult;
 
-			PutAndRemoveTiles(BestContainer, BestStartIndex, BestWord);
+
+			PutAndSetTiles(BestContainer, BestStartIndex, BestWord);
 
 			GetNewTiles();
 		}
@@ -139,13 +148,17 @@ namespace ScrabbleSolver.Model.Player
 				{
 					if(TempWord.GetWord().Length > CenterIndex - i)
 					{
-						int Result = CountWord(CenterRow, TempWord.GetWord(), TempCell.GetXCoordinate());
+						PutTiles(CenterRow, TempCell.GetXCoordinate(), TempWord);
+
+						int Result = CountWord(CenterRow, TempCell.GetXCoordinate());
 						if(Result > BestResult)
 						{
 							BestResult = Result;
 							BestStartIndex = TempCell.GetXCoordinate();
 							BestWord = TempWord;
 						}
+
+						RemoveTiles(CenterRow, TempCell.GetXCoordinate(), TempWord.GetWord().Length);
 					}
 				}
 			}
@@ -158,7 +171,7 @@ namespace ScrabbleSolver.Model.Player
 
 			this.PointsNumber += BestResult;
 
-			PutAndRemoveTiles(CenterRow, BestStartIndex, BestWord);
+			PutAndSetTiles(CenterRow, BestStartIndex, BestWord);
 
 			GameBoard.SetEmpty(false);
 			GetNewTiles();
@@ -411,7 +424,7 @@ namespace ScrabbleSolver.Model.Player
 					++MinLength;
 				}
 			}
-			return ActualMinLength > MinLength ? MinLength : ActualMinLength;
+			return ActualMinLength;
 		}
 
 		/// <summary>

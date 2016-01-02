@@ -7,7 +7,7 @@ namespace ScrabbleSolver.Model.Player
 	/// <summary>
 	/// Klasa reprezentująca gracza
 	/// </summary>
-	abstract class Player
+	public abstract class Player
 	{
 		// Ilość punktów zgromadzonych przez gracza
 		protected int PointsNumber;
@@ -233,27 +233,26 @@ namespace ScrabbleSolver.Model.Player
 				CellIndex = StartCell.GetXCoordinate();
 			}
 
-			Points += CountWord(ConsideredContainer, Word, CellIndex);
+			Points += CountWord(ConsideredContainer, CellIndex);
 
 			if(Vertical)
 			{
 				int Index = StartCell.GetXCoordinate();
 				Row TempRow;
-				var NewWordParamteres = new Tuple<String, int>(String.Empty, 0);
+				var NewWordParamteres = new Tuple<int, int>(0, 0);
 
 				for(int i = 0; i < Word.Length; ++i)
 				{
 					TempRow = GameBoard.FindRow(StartCell.GetYCoordinate() + i);
-					
+
 					if(!TempRow.Get(Index).IsVisited())
 					{
-						NewWordParamteres = CreateWord(TempRow, Index, Word[i]);
+						NewWordParamteres = GetWordInfo(TempRow, Index);
 						int StartIndex = NewWordParamteres.Item2;
-						String NewWord = NewWordParamteres.Item1;
 
-						if(NewWord.Length > 1)
+						if(NewWordParamteres.Item1 > 1)
 						{
-							Points += CountWord(TempRow, NewWord, StartIndex);
+							Points += CountWord(TempRow, StartIndex);
 						}
 					}
 				}
@@ -262,21 +261,20 @@ namespace ScrabbleSolver.Model.Player
 			{
 				int Index = StartCell.GetYCoordinate();
 				Column TempColumn;
-				var NewWordParamteres = new Tuple<String, int>(String.Empty, 0);
+				var NewWordParamteres = new Tuple<int, int>(0, 0);
 
 				for(int i = 0; i < Word.Length; ++i)
 				{
 					TempColumn = GameBoard.FindColumn(StartCell.GetXCoordinate() + i);
-					
+
 					if(!TempColumn.Get(Index).IsVisited())
 					{
-						NewWordParamteres = CreateWord(TempColumn, Index, Word[i]);
+						NewWordParamteres = GetWordInfo(TempColumn, Index);
 						int StartIndex = NewWordParamteres.Item2;
-						String NewWord = NewWordParamteres.Item1;
 
-						if(NewWord.Length > 1)
+						if(NewWordParamteres.Item1 > 1)
 						{
-							Points += CountWord(TempColumn, NewWord, StartIndex);
+							Points += CountWord(TempColumn, StartIndex);
 						}
 					}
 				}
@@ -286,7 +284,7 @@ namespace ScrabbleSolver.Model.Player
 		}
 
 		/// <summary>
-		/// Metoda wstawia kostki w odpowiednie miejsce na planszy
+		/// Metoda wstawia kostki w odpowiednie miejsce na planszy i usuwa je z tabliczki gracza
 		/// </summary>
 		/// <param name="Container"></param>
 		/// <param name="StartCell"></param>
@@ -301,25 +299,20 @@ namespace ScrabbleSolver.Model.Player
 
 				if(!TempCell.IsVisited())
 				{
-					if(Rack.Contains(NewWord[i])) //Sprawdzenie, czy tabliczka zawiera kostke z dana litera - jesli nie, to wstawiamy blanka
-					{
-						TempCell.SetTile(new Tile(NewWord[i]));
-					}
-					else
-					{
-						TempCell.SetTile(new Tile(NewWord[i], true));
-					}
+					TempCell.SetTile(Rack.Contains(NewWord[i]) ? new Tile(NewWord[i]) : new Tile(NewWord[i], true));
+
+					Rack.Remove(NewWord[i]);
 				}
 			}
 		}
 
 		/// <summary>
-		/// Metoda wstawia kostki w odpowiednie miejsce na planszy i usuwa je z tabliczki gracza
+		/// Metoda wstawia kostki w odpowiednie miejsce na planszy, usuwa je z tabliczki i oznacza pola jako odwiedzone - wykorzystywana przy ostatecznym wstawianiu kostek na plansze
 		/// </summary>
 		/// <param name="Container"></param>
 		/// <param name="StartCell"></param>
 		/// <param name="Word"></param>
-		protected void PutAndRemoveTiles(Container Container, int StartIndex, Dictionary.Dictionary.WordFound Word)
+		protected void PutAndSetTiles(Container Container, int StartIndex, Dictionary.Dictionary.WordFound Word)
 		{
 			String NewWord = Word.GetWord();
 
@@ -329,14 +322,7 @@ namespace ScrabbleSolver.Model.Player
 
 				if(!TempCell.IsVisited())
 				{
-					if(Rack.Contains(NewWord[i])) //Sprawdzenie, czy tabliczka zawiera kostke z dana litera - jesli nie, to wstawiamy blanka
-					{
-						TempCell.SetTile(new Tile(NewWord[i]));
-					}
-					else
-					{
-						TempCell.SetTile(new Tile(NewWord[i], true));
-					}
+					TempCell.SetTile(Rack.Contains(NewWord[i]) ? new Tile(NewWord[i]) : new Tile(NewWord[i], true));
 
 					Rack.Remove(NewWord[i]);
 					TempCell.SetVisited(true);
@@ -345,7 +331,7 @@ namespace ScrabbleSolver.Model.Player
 		}
 
 		/// <summary>
-		/// Metoda wyjmuje okreslona ilosc kostek z planszy
+		/// Metoda wyjmuje okreslona ilosc kostek z planszy i dodaje je to tabliczki
 		/// </summary>
 		/// <param name="Container"></param>
 		/// <param name="StartIndex"></param>
@@ -358,6 +344,18 @@ namespace ScrabbleSolver.Model.Player
 
 				if(!TempCell.IsVisited())
 				{
+					Tile TempTile = TempCell.GetTile();
+					if(TempTile != null)
+					{
+						if(TempTile.IsBlank())
+						{
+							Rack.Add(new Tile(' ', true));
+						}
+						else
+						{
+							Rack.Add(TempTile);
+						}
+					}
 					TempCell.SetTile(null);
 				}
 			}
@@ -375,78 +373,89 @@ namespace ScrabbleSolver.Model.Player
 		}
 
 		/// <summary>
-		/// Metoda ukladajaca slowo, ktore przechodzi przez pole o indeksie EmptyIndex w kontenerze podanym 
+		/// Metoda ukladajaca slowo, ktore przechodzi przez pole o indeksie Index w kontenerze podanym 
 		/// w argumencie wywolania.
 		/// </summary>
 		/// <param name="Container">Plaszyzna z ktorej odczytujemy slowo</param>
-		/// <param name="EmptyIndex">Indeks, na ktorym nie ma jeszcze ulozonej kostki</param>
-		/// <param name="NewLetter">Symbol, ktory ma zostac wstawiony w pusty indeks</param>
-		/// <returns>tuple zawierajacy nowe słowo oraz indeks od ktorego slowo sie zaczyna w kontenerze Container</returns>
-		private Tuple<String, int> CreateWord(Container Container, int EmptyIndex, char NewLetter)
+		/// <param name="Index">Indeks, na ktorym nie ma jeszcze ulozonej kostki</param>
+		/// <returns>tuple zawierajacy dlugosc slowa oraz indeks od ktorego slowo sie zaczyna w kontenerze Container</returns>
+		private Tuple<int, int> GetWordInfo(Container Container, int Index)
 		{
 			Cell TempCell;
 			int StartIndex = 0;
-			String NewWord = String.Empty;
+			int NewWordLength = 0;
 
 			for(int i = 0; i < Container.Count; ++i)
 			{
 				TempCell = Container.Get(i);
 
-				if(i == EmptyIndex)
+				if(TempCell.IsVisited() || i == Index)
 				{
-					NewWord += NewLetter;
+					++NewWordLength;
 				}
-				else if(TempCell.IsVisited())
+				else if(i > Index)
 				{
-					NewWord += TempCell.GetTile().GetLetter();
-				}
-				else if(i > EmptyIndex)
-				{
-					return Tuple.Create(NewWord, StartIndex);
+					return Tuple.Create(NewWordLength, StartIndex);
 				}
 				else
 				{
-					NewWord = String.Empty;
+					NewWordLength = 0;
 					StartIndex = i + 1;
 				}
 			}
 
-			return Tuple.Create(NewWord, StartIndex);
+			return Tuple.Create(NewWordLength, StartIndex);
 		}
 
 		/// <summary>
 		/// Metoda zliczajaca ile punktow warte jest slowo
 		/// </summary>
 		/// <param name="Container"></param>
-		/// <param name="Word"></param>
 		/// <param name="StartIndex"></param>
 		/// <returns></returns>
-		protected int CountWord(Container Container, String Word, int StartIndex)
+		protected int CountWord(Container Container, int StartIndex)
 		{
 			int Points = 0;
 			int WordMultiplier = 1;
 			Cell TempCell;
+			int i = 0;
+			int LettersUsed = 0; //Licznik dolozonych w tej turze kostek
 
-			for(int i = 0; i < Word.Length; ++i)
+			while((TempCell = Container.Get(StartIndex + i++)) != null)
 			{
-				TempCell = Container.Get(StartIndex + i);
+				Tile TempTile = TempCell.GetTile();
 
-				if(TempCell.IsVisited() && !TempCell.IsBlank())
+				if(TempTile == null)
 				{
-					Points += Configuration.GetLetterValue(Word[i]);
+					break;
+				}
+
+				if(TempCell.IsVisited())
+				{
+					Points += TempTile.GetValue();
 				}
 				else
 				{
+					++LettersUsed;
 					WordMultiplier *= TempCell.GetWordMultiplier();
-					Points += Configuration.GetLetterValue(Word[i]) * TempCell.GetLetterMultiplier();
+					Points += TempTile.GetValue() * TempCell.GetLetterMultiplier();
 				}
 			}
 
+			if(LettersUsed == Configuration.MaxLetterNumber)
+			{
+				return Points * WordMultiplier + Configuration.SpecialBonus;
+			}
 			return Points * WordMultiplier;
 		}
 
+		public int GetLettersNumber()
+		{
+			return Rack.Count;
+		}
+
 		/// <summary>
-		/// TYLKO DO TESTOW
+		/// TYLKO DO TESTOW - zwraca String z literami znajdujacymi sie w tabliczce
 		/// </summary>
 		/// <returns></returns>
 		public String GetLettersString()

@@ -32,7 +32,7 @@ namespace ScrabbleSolver.Model.Items
 				return null;
 			}
 
-			Tile TempTile = Tiles[rand.Next(Tiles.Count - 1)];
+			Tile TempTile = Tiles[rand.Next(Tiles.Count)];
 			Tiles.Remove(TempTile);
 
 			return TempTile;

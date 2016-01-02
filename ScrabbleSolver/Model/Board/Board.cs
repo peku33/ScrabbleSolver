@@ -35,6 +35,116 @@ namespace ScrabbleSolver.Board
 			Init(BoardPath);
 		}
 
+		public void Clear()
+		{
+			foreach(Row TempRow in Rows)
+			{
+				foreach(Cell TempCell in TempRow)
+				{
+					TempCell.SetVisited(false);
+					TempCell.SetTile(null);
+					Empty = true;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Wyswietlanie aktualnego stanu planszy na konsoli na potrzeby testowania
+		/// </summary>
+		public void ConsoleDisplay()
+		{
+			System.Console.Write("  ");
+
+			for(int i = 0; i < BoardSide; ++i)
+			{
+				if(i > 9)
+					System.Console.Write(i);
+				else
+					System.Console.Write(i + " ");
+			}
+
+			System.Console.WriteLine();
+
+			foreach(Row TempRow in Rows)
+			{
+				if(TempRow.GetYCoordinate() > 9)
+				{
+					System.Console.Write(TempRow.GetYCoordinate());
+				}
+				else
+				{
+					System.Console.Write(TempRow.GetYCoordinate() + " ");
+				}
+
+				foreach(Cell TempCell in TempRow)
+				{
+					if(TempCell.IsVisited())
+					{
+						if(TempCell.IsBlank())
+						{
+							System.Console.Write("#");
+						}
+						else
+						{
+							System.Console.Write(TempCell.GetTile().GetLetter());
+						}
+						System.Console.Write(" ");
+					}
+					else
+					{
+						System.Console.Write("*");
+						System.Console.Write(" ");
+					}
+				}
+				System.Console.Write("\n");
+			}
+		}
+
+		public bool IsEmpty()
+		{
+			return Empty;
+		}
+
+		public void SetEmpty(bool Empty)
+		{
+			this.Empty = Empty;
+		}
+
+		public int GetBoardSide()
+		{
+			return this.BoardSide;
+		}
+
+		public List<Row> GetRows()
+		{
+			return this.Rows;
+		}
+
+		public List<Column> GetColumns()
+		{
+			return this.Columns;
+		}
+
+		public Row FindRow(Cell Cell)
+		{
+			return Rows.FirstOrDefault(TempRow => TempRow.Contains(Cell));
+		}
+
+		public Row FindRow(int Index)
+		{
+			return Rows.FirstOrDefault(TempRow => TempRow.GetYCoordinate() == Index);
+		}
+
+		public Column FindColumn(Cell Cell)
+		{
+			return Columns.FirstOrDefault(TempColumn => TempColumn.Contains(Cell));
+		}
+
+		public Column FindColumn(int Index)
+		{
+			return Columns.FirstOrDefault(TempColumn => TempColumn.GetXCoordinate() == Index);
+		}
+
 		/// <summary>
 		/// Wczytanie mapy gry z pliku 
 		/// </summary>
@@ -100,96 +210,6 @@ namespace ScrabbleSolver.Board
 			}
 
 			BoardSide = Int32.Parse(Values[0]);
-		}
-
-		/// <summary>
-		/// Wyswietlanie aktualnego stanu planszy na konsoli na potrzeby testowania
-		/// </summary>
-		public void ConsoleDisplay()
-		{
-			System.Console.Write("  ");
-
-			for(int i = 0; i < BoardSide; ++i)
-			{
-				if(i > 9)
-					System.Console.Write(i);
-				else
-					System.Console.Write(i + " ");
-			}
-
-			System.Console.WriteLine();
-
-			foreach(Row TempRow in Rows)
-			{
-				if(TempRow.GetYCoordinate() > 9)
-				{
-					System.Console.Write(TempRow.GetYCoordinate());
-				}
-				else
-				{
-					System.Console.Write(TempRow.GetYCoordinate() + " ");
-				}
-
-				foreach (Cell TempCell in TempRow)
-				{
-					if (TempCell.IsVisited())
-					{
-						System.Console.Write(TempCell.GetTile().GetLetter());
-						System.Console.Write(" ");
-					}
-					else
-					{
-						System.Console.Write("*");
-						System.Console.Write(" ");
-					}
-				}
-				System.Console.Write("\n");
-			}
-		}
-
-		public bool IsEmpty()
-		{
-			return Empty;
-		}
-
-		public void SetEmpty(bool Empty)
-		{
-			this.Empty = Empty;
-		}
-
-		public int GetBoardSide()
-		{
-			return this.BoardSide;
-		}
-
-		public List<Row> GetRows()
-		{
-			return this.Rows;
-		}
-
-		public List<Column> GetColumns()
-		{
-			return this.Columns;
-		}
-
-		public Row FindRow(Cell Cell)
-		{
-			return Rows.FirstOrDefault(TempRow => TempRow.Contains(Cell));
-		}
-
-		public Row FindRow(int Index)
-		{
-			return Rows.FirstOrDefault(TempRow => TempRow.GetYCoordinate() == Index);
-		}
-
-		public Column FindColumn(Cell Cell)
-		{
-			return Columns.FirstOrDefault(TempColumn => TempColumn.Contains(Cell));
-		}
-
-		public Column FindColumn(int Index)
-		{
-			return Columns.FirstOrDefault(TempColumn => TempColumn.GetXCoordinate() == Index);
 		}
 	}
 }

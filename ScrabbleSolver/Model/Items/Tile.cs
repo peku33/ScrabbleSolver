@@ -19,13 +19,20 @@ namespace ScrabbleSolver.Model.Items
 		{
 			this.Letter = Letter;
 			this.Value = Configuration.GetLetterValue(Letter);
-			this.Blank = false;
+			if(this.Letter.Equals(' '))
+			{
+				this.Blank = true;
+			}
+			else
+			{
+				this.Blank = false;
+			}
 		}
 
 		public Tile(char Letter, bool Blank)
 		{
 			this.Letter = Letter;
-			this.Value = Configuration.GetLetterValue(Letter);
+			this.Value = Blank ? 0 : Configuration.GetLetterValue(Letter);
 			this.Blank = Blank;
 		}
 
@@ -41,7 +48,7 @@ namespace ScrabbleSolver.Model.Items
 
 		public bool IsBlank()
 		{
-			return Letter.Equals(' ');
+			return Blank;
 		}
 	}
 
