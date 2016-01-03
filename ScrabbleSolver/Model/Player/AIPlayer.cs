@@ -41,7 +41,7 @@ namespace ScrabbleSolver.Model.Player
 				{
 					Cell TempCell = TempRow.Get(i);
 
-					if(isPositionCorrect(TempCell, false)) //Czy da sie ustawic slowo zaczynajac od tego pola tak, aby bylo to zgodne z regulami gry
+					if(IsPositionCorrect(TempCell, false)) //Czy da sie ustawic slowo zaczynajac od tego pola tak, aby bylo to zgodne z regulami gry
 					{
 						MaxLength = GameBoard.GetBoardSide() - TempCell.GetXCoordinate();
 						MinLength = GetMinLength(TempCell, false);
@@ -73,14 +73,13 @@ namespace ScrabbleSolver.Model.Player
 					}
 				}
 			}
-
 			foreach(Column TempColumn in GameBoard.GetColumns())
 			{
 				for(int i = 0; i < GameBoard.GetBoardSide() - 1; ++i)
 				{
 					Cell TempCell = TempColumn.Get(i);
 
-					if(isPositionCorrect(TempCell, true))
+					if(IsPositionCorrect(TempCell, true))
 					{
 						MaxLength = GameBoard.GetBoardSide() - TempCell.GetYCoordinate();
 						MinLength = GetMinLength(TempCell, true);
@@ -203,7 +202,7 @@ namespace ScrabbleSolver.Model.Player
 		/// <param name="StartCell"></param>
 		/// <param name="Vertical">Flaga informujaca czy sprawdzamy czy slowo da sie ulozyc w pionie czy poziomie</param>
 		/// <returns></returns>
-		private bool isPositionCorrect(Cell StartCell, bool Vertical)
+		private bool IsPositionCorrect(Cell StartCell, bool Vertical)
 		{
 			Container ConsideredContainer;
 			Container LeftNeighbour;
@@ -247,52 +246,17 @@ namespace ScrabbleSolver.Model.Player
 				return false;
 			}
 
-			for(int i = 0; i < Configuration.MaxLetterNumber; ++i)
+			if(GetFirstLetterDistance(ConsideredContainer, CellIndex + 1) <= Configuration.MaxLetterNumber) //plus jeden bo zaczynamy od pierwszego zajetego pola
 			{
-				TempCell = ConsideredContainer.Get(CellIndex + i + 1); //+ 1 bo zaczynamy od pola pod pierwszym polem
-
-				if(TempCell == null)
-				{
-					break;
-				}
-				else if(TempCell.IsVisited())
-				{
-					return true;
-				}
+				return true;
 			}
-
-			if(LeftNeighbour != null)
+			if(GetFirstLetterDistance(LeftNeighbour, CellIndex) <= Configuration.MaxLetterNumber)
 			{
-				for(int i = 0; i < Configuration.MaxLetterNumber; ++i)
-				{
-					TempCell = LeftNeighbour.Get(CellIndex + i);
-
-					if(TempCell == null)
-					{
-						break;
-					}
-					else if(TempCell.IsVisited())
-					{
-						return true;
-					}
-				}
+				return true;
 			}
-
-			if(RightNeighbour != null)
+			if(GetFirstLetterDistance(RightNeighbour, CellIndex) <= Configuration.MaxLetterNumber)
 			{
-				for(int i = 0; i < Configuration.MaxLetterNumber; ++i)
-				{
-					TempCell = RightNeighbour.Get(CellIndex + i);
-
-					if(TempCell == null)
-					{
-						break;
-					}
-					else if(TempCell.IsVisited())
-					{
-						return true;
-					}
-				}
+				return true;
 			}
 			return false;
 		}
@@ -354,7 +318,6 @@ namespace ScrabbleSolver.Model.Player
 						break;
 					}
 				}
-
 				++MinLength;
 			}
 
@@ -381,50 +344,44 @@ namespace ScrabbleSolver.Model.Player
 				}
 			}
 
-			MinLength = 1;
+			MinLength = GetFirstLetterDistance(LeftNeighbour, CellIndex);
+			ActualMinLength = ActualMinLength > MinLength ? MinLength : ActualMinLength;
 
-			if(LeftNeighbour != null)
-			{
-				for(int i = 0; i < Configuration.MaxLetterNumber; ++i)
-				{
-					TempCell = LeftNeighbour.Get(CellIndex + i);
+			MinLength = GetFirstLetterDistance(RightNeighbour, CellIndex);
+			ActualMinLength = ActualMinLength > MinLength ? MinLength : ActualMinLength;
 
-					if(TempCell == null)
-					{
-						break;
-					}
-
-					if(TempCell.IsVisited())
-					{
-						ActualMinLength = ActualMinLength > MinLength ? MinLength : ActualMinLength;
-						break;
-					}
-					++MinLength;
-				}
-			}
-
-			MinLength = 1;
-
-			if(RightNeighbour != null)
-			{
-				for(int i = 0; i < Configuration.MaxLetterNumber; ++i)
-				{
-					TempCell = RightNeighbour.Get(CellIndex + i);
-
-					if(TempCell == null)
-					{
-						break;
-					}
-
-					if(TempCell.IsVisited())
-					{
-						ActualMinLength = ActualMinLength > MinLength ? MinLength : ActualMinLength;
-						break;
-					}
-					++MinLength;
-				}
-			}
 			return ActualMinLength;
+		}
+
+		/// <summary>
+		/// Zliczanie odleglosci od wskazanego indeksu w kontenerze do pierwszego indeksu na ktorym znajduje sie kostka. 
+		/// </summary>
+		/// <param name="Container"></param>
+		/// <param name="Index"></param>
+		/// <returns>Odleglosc do pierwszego zajetego pola lub rozmiar boku planszy + 1 jesli takie pole nie istnieje</returns>
+		private int GetFirstLetterDistance(Container Container, int Index)
+		{
+			int Distance = 1;
+
+			if(Container != null)
+			{
+				for(int i = 0; i < Configuration.MaxLetterNumber; ++i)
+				{
+					Cell TempCell = Container.Get(Index + i);
+
+					if(TempCell == null)
+					{
+						break;
+					}
+
+					if(TempCell.IsVisited())
+					{
+						return Distance;
+					}
+					++Distance;
+				}
+			}
+			return GameBoard.GetBoardSide() + 1;
 		}
 
 		/// <summary>
