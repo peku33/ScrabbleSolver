@@ -51,8 +51,6 @@ namespace ScrabbleSolver.Model
 
 		public void NextTurn()
 		{
-			TestDisplay(); //Konsolowe wyswietlanie stanu gry na potrzeby testow
-
 			Player.Player P = Players.Dequeue();
 
 			if (GameBoard.IsEmpty())
@@ -68,14 +66,29 @@ namespace ScrabbleSolver.Model
 			Players.Enqueue(P);
 		}
 
+		/// <summary>
+		/// Gra konczy sie gdy dowolnemu graczowi zabraknie kostek lub gdy zaden z graczy nie ma ruchu
+		/// </summary>
+		/// <returns></returns>
 		public bool isEnd()
 		{
+			bool Blocked = true;
+
 			foreach(Player.Player Player in Players)
 			{
 				if(Player.HasFinished())
 				{
 					return true;
 				}
+				if(!Player.IsBlocked())
+				{
+					Blocked = false;
+				}
+			}
+
+			if(Blocked)
+			{
+				return true;
 			}
 			return false;
 		}

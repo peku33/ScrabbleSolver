@@ -5,7 +5,6 @@ namespace ScrabbleSolver.Model.Items
 {
 	/// <summary>
 	/// Klasa reprezentująca zestaw kostek dostępnych w grze
-	/// 
 	/// </summary>
 	public static class TilesSet
 	{
@@ -22,7 +21,6 @@ namespace ScrabbleSolver.Model.Items
 
 		/// <summary>
 		/// Losowanie kostki z zestawu. Kostka jest usuwana z zestawu po wylosowaniu.
-		///
 		/// </summary>
 		/// <returns>Losowo wybrana kostka</returns>
 		public static Tile GetRandomTile()

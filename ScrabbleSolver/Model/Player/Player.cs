@@ -24,12 +24,16 @@ namespace ScrabbleSolver.Model.Player
 		//Słownik gry
 		protected readonly Dictionary.Dictionary GameDictionary;
 
+		//Czy gracz ma jeszcze mozliwosc ruchu
+		protected bool Blocked;
+
 		protected Player(Board.Board GameBoard, Dictionary.Dictionary GameDictionary)
 		{
 			Rack = new Rack();
 			this.GameBoard = GameBoard;
 			this.GameDictionary = GameDictionary;
 			PointsNumber = 0;
+			Blocked = false;
 		}
 
 		/// <summary>
@@ -60,6 +64,41 @@ namespace ScrabbleSolver.Model.Player
 		public bool HasFinished()
 		{
 			return Rack.Count == 0;
+		}
+
+		public bool IsBlocked()
+		{
+			return Blocked;
+		}
+
+		public void SetBlocked(bool Blocked)
+		{
+			this.Blocked = Blocked;
+		}
+
+		/// <summary>
+		/// Losowanie nowych kostek
+		/// </summary>
+		public void GetNewTiles()
+		{
+			while(!TilesSet.IsEmpty() && !Rack.IsFull())
+			{
+				Rack.Add(TilesSet.GetRandomTile());
+			}
+		}
+
+		public int GetLettersNumber()
+		{
+			return Rack.Count;
+		}
+
+		/// <summary>
+		/// TYLKO DO TESTOW - zwraca String z literami znajdujacymi sie w tabliczce
+		/// </summary>
+		/// <returns></returns>
+		public String GetLettersString()
+		{
+			return Rack.GetTileString();
 		}
 
 		/// <summary>
@@ -204,7 +243,6 @@ namespace ScrabbleSolver.Model.Player
 					}
 				}
 			}
-
 			return true;
 		}
 
@@ -279,7 +317,6 @@ namespace ScrabbleSolver.Model.Player
 					}
 				}
 			}
-
 			return Points;
 		}
 
@@ -331,7 +368,7 @@ namespace ScrabbleSolver.Model.Player
 		}
 
 		/// <summary>
-		/// Metoda wyjmuje okreslona ilosc kostek z planszy i dodaje je to tabliczki
+		/// Metoda wyjmuje okreslona ilosc kostek z planszy i dodaje je do tabliczki
 		/// </summary>
 		/// <param name="Container"></param>
 		/// <param name="StartIndex"></param>
@@ -359,52 +396,6 @@ namespace ScrabbleSolver.Model.Player
 					TempCell.SetTile(null);
 				}
 			}
-		}
-
-		/// <summary>
-		/// Losowanie nowych kostek
-		/// </summary>
-		public void GetNewTiles()
-		{
-			while(!TilesSet.IsEmpty() && !Rack.IsFull())
-			{
-				Rack.Add(TilesSet.GetRandomTile());
-			}
-		}
-
-		/// <summary>
-		/// Metoda ukladajaca slowo, ktore przechodzi przez pole o indeksie Index w kontenerze podanym 
-		/// w argumencie wywolania.
-		/// </summary>
-		/// <param name="Container">Plaszyzna z ktorej odczytujemy slowo</param>
-		/// <param name="Index">Indeks, na ktorym nie ma jeszcze ulozonej kostki</param>
-		/// <returns>tuple zawierajacy dlugosc slowa oraz indeks od ktorego slowo sie zaczyna w kontenerze Container</returns>
-		private Tuple<int, int> GetWordInfo(Container Container, int Index)
-		{
-			Cell TempCell;
-			int StartIndex = 0;
-			int NewWordLength = 0;
-
-			for(int i = 0; i < Container.Count; ++i)
-			{
-				TempCell = Container.Get(i);
-
-				if(TempCell.IsVisited() || i == Index)
-				{
-					++NewWordLength;
-				}
-				else if(i > Index)
-				{
-					return Tuple.Create(NewWordLength, StartIndex);
-				}
-				else
-				{
-					NewWordLength = 0;
-					StartIndex = i + 1;
-				}
-			}
-
-			return Tuple.Create(NewWordLength, StartIndex);
 		}
 
 		/// <summary>
@@ -449,18 +440,38 @@ namespace ScrabbleSolver.Model.Player
 			return Points * WordMultiplier;
 		}
 
-		public int GetLettersNumber()
-		{
-			return Rack.Count;
-		}
-
 		/// <summary>
-		/// TYLKO DO TESTOW - zwraca String z literami znajdujacymi sie w tabliczce
+		/// Metoda zwracajaca informacje o slowie, ktore przechodzi przez pole o indeksie Index w kontenerze podanym 
+		/// w argumencie wywolania.
 		/// </summary>
-		/// <returns></returns>
-		public String GetLettersString()
+		/// <param name="Container">Plaszyzna z ktorej odczytujemy slowo</param>
+		/// <param name="Index">Indeks, na ktorym nie ma jeszcze ulozonej kostki</param>
+		/// <returns>tuple zawierajacy dlugosc slowa oraz indeks od ktorego slowo sie zaczyna w kontenerze Container</returns>
+		private Tuple<int, int> GetWordInfo(Container Container, int Index)
 		{
-			return Rack.GetTileString();
+			Cell TempCell;
+			int StartIndex = 0;
+			int NewWordLength = 0;
+
+			for(int i = 0; i < Container.Count; ++i)
+			{
+				TempCell = Container.Get(i);
+
+				if(TempCell.IsVisited() || i == Index)
+				{
+					++NewWordLength;
+				}
+				else if(i > Index)
+				{
+					return Tuple.Create(NewWordLength, StartIndex);
+				}
+				else
+				{
+					NewWordLength = 0;
+					StartIndex = i + 1;
+				}
+			}
+			return Tuple.Create(NewWordLength, StartIndex);
 		}
 	}
 }

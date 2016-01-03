@@ -19,7 +19,8 @@ namespace ScrabbleSolver.Model.Player
 		/// <summary>
 		/// Procedura wykonywania ruchu przez algorytm gracza komputerowego. Dla kazdego pola, algorytm sprawdza czy można zgodnie z zasadami gry wstawić słowo w taki sposób, że pierwsza jego litera
 		/// znajdować będzie się na rozpatrywanym polu. Następnie algorytm wyszukuje najlepiej punktowane słowo i zapisuje je (a także zapisuje informacje o tym, gdzie słowo powinno zostać
-		/// umieszczone). Po wykonaniu procedury dla wszystkich pól, algorytm wstawia najlepsze znalezione słowo. Jeśli gracz nie ma możliwości wstawienia słowa w żadne miejsce, wymienia losową kostkę.
+		/// umieszczone). Po wykonaniu procedury dla wszystkich pól, algorytm wstawia najlepsze znalezione słowo. Jeśli gracz nie ma możliwości wstawienia słowa w żadne miejsce, wymienia losową kostkę lub 
+		/// ustawia flage informujaca ze nie jest w stanie wykonac juz ruchu jesli zestaw kostek jest pusty.
 		/// </summary>
 		public override void MakeMove()
 		{
@@ -29,7 +30,6 @@ namespace ScrabbleSolver.Model.Player
 			Container BestContainer = null;
 
 			Dictionary.Dictionary.HeldCharacters HC = new Dictionary.Dictionary.HeldCharacters(GameDictionary.GetDictionaryEncoding());
-
 			HC.Add(Rack.GetTileString());
 
 			int MinLength = 0;
@@ -115,15 +115,18 @@ namespace ScrabbleSolver.Model.Player
 
 			if(BestWord == null || BestWord.GetWord().Length < 2) //Jesli nie da sie ulozyc zadnego slowa
 			{
-				ReplaceTile();
+				if(TilesSet.IsEmpty()) //Jesli nie ma juz z czego dobierac
+				{
+					SetBlocked(true);
+				}
+				else
+				{
+					ReplaceTile();
+				}
 				return;
 			}
-
 			this.PointsNumber += BestResult;
-
-
 			PutAndSetTiles(BestContainer, BestStartIndex, BestWord);
-
 			GetNewTiles();
 		}
 
@@ -170,9 +173,7 @@ namespace ScrabbleSolver.Model.Player
 			}
 
 			this.PointsNumber += BestResult;
-
 			PutAndSetTiles(CenterRow, BestStartIndex, BestWord);
-
 			GameBoard.SetEmpty(false);
 			GetNewTiles();
 		}
@@ -188,7 +189,6 @@ namespace ScrabbleSolver.Model.Player
 			{
 				return;
 			}
-
 			while((TempTile = Rack.GetRandomTile()).GetLetter().Equals(' '))
 			{
 				Rack.Add(TempTile);
@@ -298,7 +298,7 @@ namespace ScrabbleSolver.Model.Player
 		}
 
 		/// <summary>
-		/// Metoda sprawdzajaca, jaka musi byc najmniejsza dlugosc slowa, ktore zaczynac sie bedzie od pola przekazanego w argumencie wywolania.
+		/// Metoda sprawdzajaca, jaka musi byc najmniejsza dlugosc slowa, ktore zaczynac sie bedzie od pola przekazanego w argumencie wywolania, aby ulozenie go moglo byc zgodne z zasadami gry.
 		/// </summary>
 		/// <param name="StartCell">Pole, od ktorego zaczynamy ulozenie slowa</param>
 		/// <param name="Vertical">true jeśli układamy slowo w pionie, false w przeciwnym razie</param>
@@ -329,7 +329,7 @@ namespace ScrabbleSolver.Model.Player
 				RightNeighbour = GameBoard.FindRow(StartCell.GetYCoordinate() + 1);
 			}
 
-			bool FirstLetter = false; //Zmienna informujaca czy napotkalismy juz jakas litere
+			bool FirstLetter = false; //czy napotkalismy juz jakas litere
 			for(int i = 0; i < Configuration.MaxLetterNumber; ++i)
 			{
 				TempCell = ConsideredContainer.Get(CellIndex + i);

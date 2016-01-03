@@ -4,7 +4,6 @@ namespace ScrabbleSolver.Board
 {
 	/// <summary>
 	/// Klasa reprezentująca wiersz planszy gry
-	/// 
 	/// </summary>
 	public class Row : Container
 	{

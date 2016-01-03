@@ -1,11 +1,9 @@
-﻿using System;
-using ScrabbleSolver.Model.Items;
+﻿using ScrabbleSolver.Model.Items;
 
 namespace ScrabbleSolver.Board
 {
 	/// <summary>
-	/// Klasa reprezentująca pole gry
-	/// 
+	/// Klasa reprezentująca pole gry 
 	/// </summary>
 	public class Cell
 	{
@@ -13,10 +11,10 @@ namespace ScrabbleSolver.Board
 		private readonly Coordinates CellCoordinates;
 
 		//Premia słowna
-		private readonly int WordMultiplier;
+		private int WordMultiplier;
 
 		//Premia literowa
-		private readonly int LetterMultiplier;
+		private int LetterMultiplier;
 
 		//Kostka znajdujaca sie na polu
 		private Tile Tile;
@@ -86,7 +84,6 @@ namespace ScrabbleSolver.Board
 			{
 				return LetterMultiplier * Tile.GetValue();
 			}
-
 			return Tile.GetValue();
 		}
 
@@ -98,6 +95,16 @@ namespace ScrabbleSolver.Board
 		public int GetWordMultiplier()
 		{
 			return this.WordMultiplier;
+		}
+
+		public void SetLetterMultiplier(int Multiplier)
+		{
+			this.LetterMultiplier = Multiplier;
+		}
+
+		public void SetWordMultiplier(int Multiplier)
+		{
+			this.WordMultiplier = Multiplier;
 		}
 	}
 }

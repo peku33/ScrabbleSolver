@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.Remoting.Metadata.W3cXsd2001;
 
 namespace ScrabbleSolver.Board
 {
@@ -12,7 +10,7 @@ namespace ScrabbleSolver.Board
 	public class Board
 	{
 		//Liczba kostek mieszczących się w jednym rzędzie planszy
-		private int BoardSide;
+		private static readonly int BoardSide = 15;
 
 		//Ścieżka do pliku mapy
 		private readonly String BoardPath;
@@ -32,7 +30,7 @@ namespace ScrabbleSolver.Board
 			Columns = new List<Column>();
 			Empty = true;
 
-			Init(BoardPath);
+			Init();
 		}
 
 		public void Clear()
@@ -112,7 +110,7 @@ namespace ScrabbleSolver.Board
 
 		public int GetBoardSide()
 		{
-			return this.BoardSide;
+			return Board.BoardSide;
 		}
 
 		public List<Row> GetRows()
@@ -146,70 +144,108 @@ namespace ScrabbleSolver.Board
 		}
 
 		/// <summary>
-		/// Wczytanie mapy gry z pliku 
+		/// Inicjalizacja planszy gry.
 		/// </summary>
-		/// <param name="BoardPath"> Ścieżka do pliku z mapą gry</param>
-		private void Init(String BoardPath)
+		private void Init()
 		{
-			StreamReader BoardFileReader = new System.IO.StreamReader(BoardPath);
-			String Line;
-			String[] Values;
-			int xCoordinate = 0;
-			int yCoordinate = 0;
-
-			ReadBoardSize(BoardFileReader);
-
 			for(int i = 0; i < BoardSide; ++i)
 			{
 				Rows.Add(new Row(i));
 				Columns.Add(new Column(i));
 			}
 
-			while(!BoardFileReader.EndOfStream)
+			for(int i = 0; i < BoardSide; ++i)
 			{
-				if(xCoordinate > BoardSide)
+				for(int j = 0; j < BoardSide; ++j)
 				{
-					throw new SystemException("Board file format exception: too long file");
-				}
-
-				Line = BoardFileReader.ReadLine();
-
-				Values = Line.Split(' ');
-
-				if(Values.Length < 2)
-				{
-					throw new SystemException("Board file format error");
-				}
-
-				Cell tempCell = new Cell(new Coordinates(xCoordinate, yCoordinate),
-					Int32.Parse(Values[0]), Int32.Parse(Values[1]));
-
-				Rows[yCoordinate].Add(tempCell);
-				Columns[xCoordinate].Add(tempCell);
-
-				if(++xCoordinate == BoardSide)
-				{
-					xCoordinate = 0;
-					++yCoordinate;
+					Cell TempCell = new Cell(new Coordinates(j, i), 1, 1);
+					Rows[i].Add(TempCell);
+					Columns[j].Add(TempCell);
 				}
 			}
+
+			InitMultipliers();
 		}
 
 		/// <summary>
-		/// Wczytanie z pliku rozmiaru planszy (pierwsza linijka w pliku konfiguracyjnym)
+		/// Inicjalizacja premii słownych i literowych
 		/// </summary>
-		/// <param name="BoardFileReader"></param>
-		private void ReadBoardSize(StreamReader BoardFileReader)
+		private void InitMultipliers()
 		{
-			String Line = BoardFileReader.ReadLine();
-			String[] Values = Line.Split(' ');
+			int TripleMultiplier = 3;
+			int DoubleMultiplier = 2;
 
-			if(Values.Length != 1)
+			int CenterIndex = BoardSide / 2;
+			int LastIndex = BoardSide - 1;
+
+			//potrojne premie slowne
+			Rows[0].Get(0).SetWordMultiplier(TripleMultiplier);
+			Rows[0].Get(CenterIndex).SetWordMultiplier(TripleMultiplier);
+			Rows[0].Get(LastIndex).SetWordMultiplier(TripleMultiplier);
+			Rows[LastIndex].Get(0).SetWordMultiplier(TripleMultiplier);
+			Rows[LastIndex].Get(CenterIndex).SetWordMultiplier(TripleMultiplier);
+			Rows[LastIndex].Get(LastIndex).SetWordMultiplier(TripleMultiplier);
+			Rows[CenterIndex].Get(0).SetWordMultiplier(TripleMultiplier);
+			Rows[CenterIndex].Get(LastIndex).SetWordMultiplier(TripleMultiplier);
+
+			//podwojne premie slowne
+			Rows[CenterIndex].Get(CenterIndex).SetWordMultiplier(DoubleMultiplier);
+			for(int i = 1; i < 5; ++i)
 			{
-				throw new SystemException("Board file format error: Board size not found");
+				Row TempRow = Rows[i];
+				TempRow.Get(i).SetWordMultiplier(DoubleMultiplier);
+				TempRow.Get(LastIndex - i).SetWordMultiplier(DoubleMultiplier);
+				TempRow = Rows[LastIndex - i];
+				TempRow.Get(i).SetWordMultiplier(DoubleMultiplier);
+				TempRow.Get(LastIndex - i).SetWordMultiplier(DoubleMultiplier);
 			}
 
-			BoardSide = Int32.Parse(Values[0]);
+			//potrojne premie literowe
+			Rows[1].Get(CenterIndex - 2).SetLetterMultiplier(TripleMultiplier);
+			Rows[1].Get(CenterIndex + 2).SetLetterMultiplier(TripleMultiplier);
+			Rows[LastIndex - 1].Get(CenterIndex - 2).SetLetterMultiplier(TripleMultiplier);
+			Rows[LastIndex - 1].Get(CenterIndex + 2).SetLetterMultiplier(TripleMultiplier);
+			Rows[CenterIndex - 2].Get(CenterIndex - 2).SetLetterMultiplier(TripleMultiplier);
+			Rows[CenterIndex - 2].Get(CenterIndex + 2).SetLetterMultiplier(TripleMultiplier);
+			Rows[CenterIndex + 2].Get(CenterIndex - 2).SetLetterMultiplier(TripleMultiplier);
+			Rows[CenterIndex + 2].Get(CenterIndex + 2).SetLetterMultiplier(TripleMultiplier);
+
+			Rows[CenterIndex - 2].Get(1).SetLetterMultiplier(TripleMultiplier);
+			Rows[CenterIndex - 2].Get(LastIndex - 1).SetLetterMultiplier(TripleMultiplier);
+			Rows[CenterIndex + 2].Get(1).SetLetterMultiplier(TripleMultiplier);
+			Rows[CenterIndex + 2].Get(LastIndex - 1).SetLetterMultiplier(TripleMultiplier);
+
+			//podwojne premie literowe
+			for(int i = 0; i < 2; ++i)
+			{
+				int StartIndex = 3;
+
+				Row TempRow = Rows[StartIndex - i];
+				Column TempColumn = Columns[StartIndex - i];
+				TempRow.Get(CenterIndex - i).SetLetterMultiplier(DoubleMultiplier);
+				TempRow.Get(CenterIndex + i).SetLetterMultiplier(DoubleMultiplier);
+				TempColumn.Get(CenterIndex - i).SetLetterMultiplier(DoubleMultiplier);
+				TempColumn.Get(CenterIndex + i).SetLetterMultiplier(DoubleMultiplier);
+
+				TempRow = Rows[LastIndex - (StartIndex - i)];
+				TempColumn = Columns[LastIndex - (StartIndex - i)];
+				TempRow.Get(CenterIndex - i).SetLetterMultiplier(DoubleMultiplier);
+				TempRow.Get(CenterIndex + i).SetLetterMultiplier(DoubleMultiplier);
+				TempColumn.Get(CenterIndex - i).SetLetterMultiplier(DoubleMultiplier);
+				TempColumn.Get(CenterIndex + i).SetLetterMultiplier(DoubleMultiplier);
+			}
+			Rows[0].Get(3).SetLetterMultiplier(DoubleMultiplier);
+			Rows[0].Get(LastIndex - 3).SetLetterMultiplier(DoubleMultiplier);
+			Rows[LastIndex].Get(3).SetLetterMultiplier(DoubleMultiplier);
+			Rows[LastIndex].Get(LastIndex - 3).SetLetterMultiplier(DoubleMultiplier);
+			Columns[0].Get(3).SetLetterMultiplier(DoubleMultiplier);
+			Columns[0].Get(LastIndex - 3).SetLetterMultiplier(DoubleMultiplier);
+			Columns[LastIndex].Get(3).SetLetterMultiplier(DoubleMultiplier);
+			Columns[LastIndex].Get(LastIndex - 3).SetLetterMultiplier(DoubleMultiplier);
+			Rows[CenterIndex - 1].Get(CenterIndex - 1).SetLetterMultiplier(DoubleMultiplier);
+			Rows[CenterIndex - 1].Get(CenterIndex + 1).SetLetterMultiplier(DoubleMultiplier);
+			Rows[CenterIndex + 1].Get(CenterIndex - 1).SetLetterMultiplier(DoubleMultiplier);
+			Rows[CenterIndex + 1].Get(CenterIndex + 1).SetLetterMultiplier(DoubleMultiplier);
 		}
 	}
 }
