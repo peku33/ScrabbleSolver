@@ -1,11 +1,19 @@
 ﻿using System;
-using System.Text;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using WindowsFormsApplication1;
 
 namespace ScrabbleSolver
 {
-	class Program
+	static class Program
 	{
-		static void Main(string[] args)
+		/// <summary>
+		/// The main entry point for the application.
+		/// </summary>
+		[STAThread]
+		static void Main()
 		{
 			String DictionaryFile = @"..\..\Slowa.txt";
 
@@ -21,6 +29,10 @@ namespace ScrabbleSolver
 			Controller.Controller GameController = new Controller.Controller(GameModel);
 
 			GameController.Start();
+
+			Application.EnableVisualStyles();
+			Application.SetCompatibleTextRenderingDefault(false);
+			Application.Run(new Form1());
 		}
 	}
 }
