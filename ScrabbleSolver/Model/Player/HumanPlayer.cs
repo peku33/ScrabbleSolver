@@ -8,7 +8,7 @@ namespace ScrabbleSolver.Model.Player
 	class HumanPlayer : Player
 	{
 
-		public HumanPlayer(String PlayerName, Board.Board GameBoard, Dictionary.Dictionary GameDictionary) : base(GameBoard, GameDictionary)
+		public HumanPlayer(String PlayerName, Model Model) : base(Model)
 		{
 			this.Name = PlayerName;
 		}

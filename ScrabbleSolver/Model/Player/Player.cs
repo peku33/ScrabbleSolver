@@ -18,22 +18,20 @@ namespace ScrabbleSolver.Model.Player
 		// Tabliczka z kostkami
 		protected readonly Rack Rack;
 
-		//Plansza gry
+		/*//Plansza gry
 		protected readonly Board.Board GameBoard;
-
-		//Słownik gry
-		protected readonly Dictionary.Dictionary GameDictionary;
+*/
+		protected readonly Model GameModel;
 
 		//Czy gracz ma jeszcze mozliwosc ruchu
 		protected bool Blocked;
 
-		protected Player(Board.Board GameBoard, Dictionary.Dictionary GameDictionary)
+		protected Player(Model GameModel)
 		{
 			Rack = new Rack();
-			this.GameBoard = GameBoard;
-			this.GameDictionary = GameDictionary;
 			PointsNumber = 0;
 			Blocked = false;
+			this.GameModel = GameModel;
 		}
 
 		/// <summary>
@@ -81,7 +79,9 @@ namespace ScrabbleSolver.Model.Player
 		/// </summary>
 		public void GetNewTiles()
 		{
-			while(!TilesSet.IsEmpty() && !Rack.IsFull())
+			TilesSet TilesSet = GameModel.GetTilesSet();
+
+            while(!TilesSet.IsEmpty() && !Rack.IsFull())
 			{
 				Rack.Add(TilesSet.GetRandomTile());
 			}
@@ -111,6 +111,8 @@ namespace ScrabbleSolver.Model.Player
 		protected bool IsMoveCorrect(String Word, Cell StartCell, bool Vertical)
 		{
 			int Index;
+			Dictionary.Dictionary GameDictionary = GameModel.GetDictionary();
+			Board.Board GameBoard = GameModel.GetBoard();
 
 			if(Vertical)//Sprawdzenie czy wstawienie slowa nie spowodowalo polaczenia ze soba dwoch slow na planszy tworzac tym samym niepoprawne slowo
 			{
@@ -256,7 +258,7 @@ namespace ScrabbleSolver.Model.Player
 		protected int CountPoints(String Word, Cell StartCell, bool Vertical)
 		{
 			int Points = 0;
-
+			Board.Board GameBoard = GameModel.GetBoard();
 			Container ConsideredContainer;
 			int CellIndex;
 

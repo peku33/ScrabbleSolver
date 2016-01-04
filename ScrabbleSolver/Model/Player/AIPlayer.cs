@@ -11,7 +11,7 @@ namespace ScrabbleSolver.Model.Player
 	class AIPlayer : Player
 	{
 
-		public AIPlayer(Board.Board GameBoard, Dictionary.Dictionary GameDictionary) : base(GameBoard, GameDictionary)
+		public AIPlayer(Model GameModel) : base(GameModel)
 		{
 			this.Name = "CPU";
 		}
@@ -29,6 +29,8 @@ namespace ScrabbleSolver.Model.Player
 			Dictionary.Dictionary.WordFound BestWord = null;
 			Container BestContainer = null;
 
+			Board.Board GameBoard = GameModel.GetBoard();
+			Dictionary.Dictionary GameDictionary = GameModel.GetDictionary();
 			Dictionary.Dictionary.HeldCharacters HC = new Dictionary.Dictionary.HeldCharacters(GameDictionary.GetDictionaryEncoding());
 			HC.Add(Rack.GetTileString());
 
@@ -114,7 +116,7 @@ namespace ScrabbleSolver.Model.Player
 
 			if(BestWord == null || BestWord.GetWord().Length < 2) //Jesli nie da sie ulozyc zadnego slowa
 			{
-				if(TilesSet.IsEmpty()) //Jesli nie ma juz z czego dobierac
+				if(GameModel.GetTilesSet().IsEmpty()) //Jesli nie ma juz z czego dobierac
 				{
 					SetBlocked(true);
 				}
@@ -134,6 +136,9 @@ namespace ScrabbleSolver.Model.Player
 			int BestResult = 0;
 			int BestStartIndex = 0;
 			Dictionary.Dictionary.WordFound BestWord = null;
+			Board.Board GameBoard = GameModel.GetBoard();
+			Dictionary.Dictionary GameDictionary = GameModel.GetDictionary();
+
 			int CenterIndex = GameBoard.GetBoardSide() % 2 == 0 ? GameBoard.GetBoardSide() / 2 : GameBoard.GetBoardSide() / 2;
 			Container CenterRow = GameBoard.FindRow(CenterIndex);
 
@@ -184,7 +189,7 @@ namespace ScrabbleSolver.Model.Player
 		{
 			Tile TempTile;
 
-			if(TilesSet.IsEmpty())
+			if(GameModel.GetTilesSet().IsEmpty())
 			{
 				return;
 			}
@@ -193,7 +198,7 @@ namespace ScrabbleSolver.Model.Player
 				Rack.Add(TempTile);
 			}
 
-			Rack.Add(TilesSet.GetRandomTile());
+			Rack.Add(GameModel.GetTilesSet().GetRandomTile());
 		}
 
 		/// <summary>
@@ -209,6 +214,7 @@ namespace ScrabbleSolver.Model.Player
 			Container RightNeighbour;
 			int CellIndex;
 			Cell TempCell;
+			Board.Board GameBoard = GameModel.GetBoard();
 
 			if(Vertical) //jesli sprawdzamy czy da sie ulozyc slowo pionowo
 			{
@@ -269,14 +275,15 @@ namespace ScrabbleSolver.Model.Player
 		/// <returns></returns>
 		private int GetMinLength(Cell StartCell, bool Vertical)
 		{
-			int MinLength = 0;
-			int ActualMinLength = GameBoard.GetBoardSide() + 1;
-
+			Board.Board GameBoard = GameModel.GetBoard();
 			Container ConsideredContainer;
 			Container LeftNeighbour;
 			Container RightNeighbour;
 			int CellIndex;
 			Cell TempCell;
+
+			int MinLength = 0;
+			int ActualMinLength = GameBoard.GetBoardSide() + 1;
 
 			if(Vertical) //jesli sprawdzamy czy da sie ulozyc slowo pionowo
 			{
@@ -381,7 +388,7 @@ namespace ScrabbleSolver.Model.Player
 					++Distance;
 				}
 			}
-			return GameBoard.GetBoardSide() + 1;
+			return GameModel.GetBoard().GetBoardSide() + 1;
 		}
 
 		/// <summary>

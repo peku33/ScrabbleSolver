@@ -10,33 +10,29 @@ namespace ScrabbleSolver.Model
 	/// </summary>
 	public class Model
 	{
-		private readonly Queue<Player.Player> Players;
+		private readonly List<Player.Player> Players;
 		private readonly Board.Board GameBoard;
 		private readonly Dictionary.Dictionary GameDictionary;
+		private readonly TilesSet TilesSet;
 
 		public Model(Dictionary.Dictionary GameDictionary)
 		{
-			this.Players = new Queue<Player.Player>();
+			TilesSet = new TilesSet();
+			this.Players = new List<Player.Player>();
 			this.GameBoard = new Board.Board(Configuration.BoardFile);
 			this.GameDictionary = GameDictionary;
-
-			TilesSet.Init();
 		}
 
-		public void InitPlayers(int HumanPlayers, int CPUPlayers) //TODO przerobic funkcje tak, aby dalo sie inicjalizowac graczy z wybranymi nickami
+		public void InitPlayers(Player.Player Player1, Player.Player Player2, Player.Player Player3, Player.Player Player4) //TODO przerobic funkcje tak, aby dalo sie inicjalizowac graczy z wybranymi nickami
 		{
-			if(HumanPlayers + CPUPlayers > Configuration.MaxPlayersNumber)
-			{
-				throw new SystemException("too much players!");
-			}
-			for(int i = 0; i < HumanPlayers; ++i)
-			{
-				Players.Enqueue(new HumanPlayer("Gracz" + i, GameBoard, GameDictionary));
-			}
-			for(int i = 0; i < CPUPlayers; ++i)
-			{
-				Players.Enqueue(new AIPlayer(GameBoard, GameDictionary));
-			}
+			if(Player1 != null)
+				Players.Add(Player1);
+			if(Player2 != null)
+				Players.Add(Player2);
+			if(Player3 != null)
+				Players.Add(Player3);
+			if(Player4 != null)
+				Players.Add(Player4);
 
 			foreach(Player.Player Player in Players)
 			{
@@ -49,11 +45,26 @@ namespace ScrabbleSolver.Model
 			return this.GameDictionary;
 		}
 
-		public void NextTurn()
+		public Board.Board GetBoard()
 		{
-			Player.Player P = Players.Dequeue();
+			return this.GameBoard;
+		}
 
-			if (GameBoard.IsEmpty())
+		public TilesSet GetTilesSet()
+		{
+			return TilesSet;
+		}
+
+		public int GetPlayersNumber()
+		{
+			return Players.Count;
+		}
+
+		public void NextTurn(int Index)
+		{
+			Player.Player P = Players[Index];
+
+			if(GameBoard.IsEmpty() && P != null)
 			{
 				P.MakeFirstMove();
 			}
@@ -62,8 +73,6 @@ namespace ScrabbleSolver.Model
 				P.MakeMove();
 			}
 			Console.ReadLine(); //Czekanie na klawisz na potrzeby testow
-
-			Players.Enqueue(P);
 		}
 
 		/// <summary>
@@ -128,7 +137,7 @@ namespace ScrabbleSolver.Model
 					if(BestPlayer.GetLettersNumber() > TempPlayer.GetLettersNumber())
 					{
 						BestPlayer = TempPlayer;
-					}	
+					}
 				}
 			}
 			return BestPlayer;

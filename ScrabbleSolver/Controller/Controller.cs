@@ -1,4 +1,6 @@
 ﻿using System;
+using ScrabbleSolver.Model;
+using ScrabbleSolver.Model.Player;
 
 namespace ScrabbleSolver.Controller
 {
@@ -13,13 +15,16 @@ namespace ScrabbleSolver.Controller
 
 		public void Start()
 		{
-			GameModel.InitPlayers(0, 2);
+			GameModel.InitPlayers(new AIPlayer(GameModel), new AIPlayer(GameModel), null, null);
 			GameModel.TestDisplay();
 
+			int i = 0;
 			while(!GameModel.isEnd())
 			{
-				GameModel.NextTurn();
+				GameModel.NextTurn(i);
 				GameModel.TestDisplay(); //Konsolowe wyswietlanie stanu gry na potrzeby testow
+				++i;
+				i %= GameModel.GetPlayersNumber();
 			}
 
 			Console.ReadLine(); //oczekiwanie na enter, zeby gra nie zamykala sie automatycznie - na potrzeby testow
