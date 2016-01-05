@@ -19,7 +19,7 @@ namespace ScrabbleSolver.Controller
 			GameModel.TestDisplay();
 
 			int i = 0;
-			while(!GameModel.isEnd())
+			while(!GameModel.IsEnd())
 			{
 				GameModel.NextTurn(i);
 				GameModel.TestDisplay(); //Konsolowe wyswietlanie stanu gry na potrzeby testow

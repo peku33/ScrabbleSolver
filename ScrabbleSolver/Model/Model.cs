@@ -30,7 +30,7 @@ namespace ScrabbleSolver.Model
 			this.PassCounter = 0;
 		}
 
-		public void InitPlayers(Player.Player Player1, Player.Player Player2, Player.Player Player3, Player.Player Player4) //TODO przerobic funkcje tak, aby dalo sie inicjalizowac graczy z wybranymi nickami
+		public void InitPlayers(Player.Player Player1, Player.Player Player2, Player.Player Player3, Player.Player Player4)
 		{
 			if(Player1 != null)
 				Players.Add(Player1);
@@ -96,7 +96,7 @@ namespace ScrabbleSolver.Model
 		/// Gra konczy sie gdy dowolnemu graczowi zabraknie kostek lub gdy zaden z graczy nie ma ruchu
 		/// </summary>
 		/// <returns></returns>
-		public bool isEnd()
+		public bool IsEnd()
 		{
 			if(PassCounter == GetPlayersNumber() * 2) //Koniec gry nastepuje gdy kazdy z graczy bedzie pasowac przez dwie kolejki
 			{
