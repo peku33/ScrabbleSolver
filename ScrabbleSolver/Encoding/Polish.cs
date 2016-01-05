@@ -48,5 +48,18 @@ namespace ScrabbleSolver.Encoding
 				default: throw new System.ArgumentException("Index " + I + " out of bounds");
 			}
 		}
+
+		public override bool IsLetterValid(char C)
+		{
+			try
+			{
+				ToArrayIndex(C);
+				return true;
+			}
+			catch
+			{
+				return false;
+			}
+		}
 	}
 }

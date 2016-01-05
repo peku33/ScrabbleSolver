@@ -27,5 +27,10 @@ namespace ScrabbleSolver.Model.Player
 		{
 
 		}
+
+		public override void Pass()
+		{
+			GameModel.PlayerPassed();
+		}
 	}
 }

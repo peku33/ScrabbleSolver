@@ -47,6 +47,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ScrabbleSolver\Controller\Controller.cs" />
+    <Compile Include="ScrabbleSolver\Language\Language.cs" />
+    <Compile Include="ScrabbleSolver\Language\Polish.cs" />
     <Compile Include="ScrabbleSolver\Model\Board\Board.cs" />
     <Compile Include="ScrabbleSolver\Model\Board\Column.cs" />
     <Compile Include="ScrabbleSolver\Model\Board\Container.cs" />
@@ -64,6 +66,7 @@
     <Compile Include="ScrabbleSolver\Model\Items\Tile.cs" />
     <Compile Include="ScrabbleSolver\Model\Items\TilesSet.cs" />
     <Compile Include="ScrabbleSolver\Model\Model.cs" />
+    <Compile Include="ScrabbleSolver\Model\Move.cs" />
     <Compile Include="ScrabbleSolver\Model\Player\AIPlayer.cs" />
     <Compile Include="ScrabbleSolver\Model\Player\HumanPlayer.cs" />
     <Compile Include="ScrabbleSolver\Model\Player\Player.cs" />
