@@ -52,14 +52,14 @@
     <Compile Include="Dictionary\TrieDictionary.cs" />
     <Compile Include="Encoding\Encoding.cs" />
     <Compile Include="Encoding\Polish.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="View\Form1.cs">
       <SubType>Form</SubType>
       <CustomToolNamespace>ScrabbleSolver</CustomToolNamespace>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
+    <Compile Include="View\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormModelHelper.cs" />
+    <Compile Include="View\FormModelHelper.cs" />
     <Compile Include="Model\Board\Board.cs" />
     <Compile Include="Model\Board\Cell.cs" />
     <Compile Include="Model\Board\Column.cs" />
