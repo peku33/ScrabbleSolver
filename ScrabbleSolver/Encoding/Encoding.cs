@@ -21,5 +21,7 @@ namespace ScrabbleSolver.Encoding
 		abstract public int ToArrayIndex(char C);
 
 		abstract public char FromArrayIndex(int I);
+
+		abstract public bool IsLetterValid(char C);
 	}
 }

@@ -10,15 +10,13 @@ namespace ScrabbleSolver.Model.Items
 	{
 		//Znak znajdujacy sie na kostce
 		private readonly char Letter;
-		//Wartość kostki
-		private readonly int Value;
 		//Czy blank
 		private readonly bool Blank;
 
 		public Tile(char Letter)
 		{
 			this.Letter = Letter;
-			this.Value = Configuration.GetLetterValue(Letter);
+
 			if(this.Letter.Equals(' '))
 			{
 				this.Blank = true;
@@ -32,13 +30,7 @@ namespace ScrabbleSolver.Model.Items
 		public Tile(char Letter, bool Blank)
 		{
 			this.Letter = Letter;
-			this.Value = Blank ? 0 : Configuration.GetLetterValue(Letter);
 			this.Blank = Blank;
-		}
-
-		public int GetValue()
-		{
-			return this.Value;
 		}
 
 		public char GetLetter()

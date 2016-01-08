@@ -74,19 +74,6 @@ namespace ScrabbleSolver.Board
 			this.Tile = NewTile;
 		}
 
-		/// <summary>
-		/// Metoda przeliczajaca liczbe punktow zdobytych z danego pola (nie uwzglednia premi slownych, ktore przeliczane musza byc osobno)
-		/// </summary>
-		/// <returns></returns>
-		public int CountPoints()
-		{
-			if(!Visited)
-			{
-				return LetterMultiplier * Tile.GetValue();
-			}
-			return Tile.GetValue();
-		}
-
 		public int GetLetterMultiplier()
 		{
 			return this.LetterMultiplier;

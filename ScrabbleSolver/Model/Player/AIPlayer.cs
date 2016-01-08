@@ -43,24 +43,24 @@ namespace ScrabbleSolver.Model.Player
 				{
 					Cell TempCell = TempRow.Get(i);
 
-					if(IsPositionCorrect(TempCell, false)) //Czy da sie ustawic slowo zaczynajac od tego pola tak, aby bylo to zgodne z regulami gry
+					if(GameModel.IsPositionCorrect(TempCell, false)) //Czy da sie ustawic slowo zaczynajac od tego pola tak, aby bylo to zgodne z regulami gry
 					{
 						MaxLength = GameBoard.GetBoardSide() - TempCell.GetXCoordinate();
-						MinLength = GetMinLength(TempCell, false);
+						MinLength = GameModel.GetMinLength(TempCell, false);
 
 						Dictionary.Dictionary.AlreadySetLetters ASL = new Dictionary.Dictionary.AlreadySetLetters();
-						FillAlreadySetLetters(ASL, TempRow, TempCell.GetXCoordinate());
+						GameModel.FillAlreadySetLetters(ASL, TempRow, TempCell.GetXCoordinate());
 
 						Dictionary.Dictionary.WordsFound WordsFound = GameDictionary.Find(ASL, HC);
-						WordsFound = FilterWords(WordsFound, MinLength, MaxLength);
+						WordsFound = GameModel.FilterWords(WordsFound, MinLength, MaxLength);
 
 						foreach(Dictionary.Dictionary.WordFound TempWord in WordsFound)
 						{
-							if(IsMoveCorrect(TempWord.GetWord(), TempCell, false)) //Czy ustawienie tego slowa nie spowoduje kolizji w drugiej plaszczyznie
+							if(GameModel.IsMoveCorrect(TempWord.GetWord(), TempCell, false)) //Czy ustawienie tego slowa nie spowoduje kolizji w drugiej plaszczyznie
 							{
-								PutTiles(TempRow, TempCell.GetXCoordinate(), TempWord);
+								GameModel.PutTiles(TempRow, TempCell.GetXCoordinate(), TempWord, Rack);
 
-								int Result = CountPoints(TempWord.GetWord(), TempCell, false);
+								int Result = GameModel.CountPoints(TempWord.GetWord(), TempCell, false);
 								if(Result > BestResult)
 								{
 									BestResult = Result;
@@ -69,7 +69,7 @@ namespace ScrabbleSolver.Model.Player
 									BestContainer = TempRow;
 								}
 
-								RemoveTiles(TempRow, TempCell.GetXCoordinate(), TempWord.GetWord().Length);
+								GameModel.RemoveTiles(TempRow, TempCell.GetXCoordinate(), TempWord.GetWord().Length, Rack);
 							}
 						}
 					}
@@ -81,24 +81,24 @@ namespace ScrabbleSolver.Model.Player
 				{
 					Cell TempCell = TempColumn.Get(i);
 
-					if(IsPositionCorrect(TempCell, true))
+					if(GameModel.IsPositionCorrect(TempCell, true))
 					{
 						MaxLength = GameBoard.GetBoardSide() - TempCell.GetYCoordinate();
-						MinLength = GetMinLength(TempCell, true);
+						MinLength = GameModel.GetMinLength(TempCell, true);
 
 						Dictionary.Dictionary.AlreadySetLetters ASL = new Dictionary.Dictionary.AlreadySetLetters();
-						FillAlreadySetLetters(ASL, TempColumn, TempCell.GetYCoordinate());
+						GameModel.FillAlreadySetLetters(ASL, TempColumn, TempCell.GetYCoordinate());
 
 						Dictionary.Dictionary.WordsFound WordsFound = GameDictionary.Find(ASL, HC);
-						WordsFound = FilterWords(WordsFound, MinLength, MaxLength);
+						WordsFound = GameModel.FilterWords(WordsFound, MinLength, MaxLength);
 
 						foreach(Dictionary.Dictionary.WordFound TempWord in WordsFound)
 						{
-							if(IsMoveCorrect(TempWord.GetWord(), TempCell, true))
+							if(GameModel.IsMoveCorrect(TempWord.GetWord(), TempCell, true))
 							{
-								PutTiles(TempColumn, TempCell.GetYCoordinate(), TempWord);
+								GameModel.PutTiles(TempColumn, TempCell.GetYCoordinate(), TempWord, Rack);
 
-								int Result = CountPoints(TempWord.GetWord(), TempCell, true);
+								int Result = GameModel.CountPoints(TempWord.GetWord(), TempCell, true);
 								if(Result > BestResult)
 								{
 									BestResult = Result;
@@ -107,7 +107,7 @@ namespace ScrabbleSolver.Model.Player
 									BestContainer = TempColumn;
 								}
 
-								RemoveTiles(TempColumn, TempCell.GetYCoordinate(), TempWord.GetWord().Length);
+								GameModel.RemoveTiles(TempColumn, TempCell.GetYCoordinate(), TempWord.GetWord().Length, Rack);
 							}
 						}
 					}
@@ -118,16 +118,17 @@ namespace ScrabbleSolver.Model.Player
 			{
 				if(GameModel.GetTilesSet().IsEmpty()) //Jesli nie ma juz z czego dobierac
 				{
-					SetBlocked(true);
+					Pass();
 				}
 				else
 				{
 					ReplaceTile();
+					GameModel.ResetPassCounter();
 				}
 				return;
 			}
 			this.PointsNumber += BestResult;
-			PutAndSetTiles(BestContainer, BestStartIndex, BestWord);
+			GameModel.PutAndSetTiles(BestContainer, BestStartIndex, BestWord, Rack);
 			GetNewTiles();
 		}
 
@@ -155,9 +156,9 @@ namespace ScrabbleSolver.Model.Player
 				{
 					if(TempWord.GetWord().Length > CenterIndex - i)
 					{
-						PutTiles(CenterRow, TempCell.GetXCoordinate(), TempWord);
+						GameModel.PutTiles(CenterRow, TempCell.GetXCoordinate(), TempWord, Rack);
 
-						int Result = CountWord(CenterRow, TempCell.GetXCoordinate());
+						int Result = GameModel.CountWord(CenterRow, TempCell.GetXCoordinate());
 						if(Result > BestResult)
 						{
 							BestResult = Result;
@@ -165,7 +166,7 @@ namespace ScrabbleSolver.Model.Player
 							BestWord = TempWord;
 						}
 
-						RemoveTiles(CenterRow, TempCell.GetXCoordinate(), TempWord.GetWord().Length);
+						GameModel.RemoveTiles(CenterRow, TempCell.GetXCoordinate(), TempWord.GetWord().Length, Rack);
 					}
 				}
 			}
@@ -177,7 +178,7 @@ namespace ScrabbleSolver.Model.Player
 			}
 
 			this.PointsNumber += BestResult;
-			PutAndSetTiles(CenterRow, BestStartIndex, BestWord);
+			GameModel.PutAndSetTiles(CenterRow, BestStartIndex, BestWord, Rack);
 			GameBoard.SetEmpty(false);
 			GetNewTiles();
 		}
@@ -201,245 +202,9 @@ namespace ScrabbleSolver.Model.Player
 			Rack.Add(GameModel.GetTilesSet().GetRandomTile());
 		}
 
-		/// <summary>
-		/// Metoda sprawdza czy da sie zgodnie z zasadami gry ulozyc slowo, ktora zaczyna sie od pola przekazanego w argumencie wywolania
-		/// </summary>
-		/// <param name="StartCell"></param>
-		/// <param name="Vertical">Flaga informujaca czy sprawdzamy czy slowo da sie ulozyc w pionie czy poziomie</param>
-		/// <returns></returns>
-		private bool IsPositionCorrect(Cell StartCell, bool Vertical)
+		public override void Pass()
 		{
-			Container ConsideredContainer;
-			Container LeftNeighbour;
-			Container RightNeighbour;
-			int CellIndex;
-			Cell TempCell;
-			Board.Board GameBoard = GameModel.GetBoard();
-
-			if(Vertical) //jesli sprawdzamy czy da sie ulozyc slowo pionowo
-			{
-				ConsideredContainer = GameBoard.FindColumn(StartCell);
-				CellIndex = StartCell.GetYCoordinate();
-				LeftNeighbour = GameBoard.FindColumn(StartCell.GetXCoordinate() - 1);
-				RightNeighbour = GameBoard.FindColumn(StartCell.GetXCoordinate() + 1);
-			}
-			else
-			{
-				ConsideredContainer = GameBoard.FindRow(StartCell);
-				CellIndex = StartCell.GetXCoordinate();
-				LeftNeighbour = GameBoard.FindRow(StartCell.GetYCoordinate() - 1);
-				RightNeighbour = GameBoard.FindRow(StartCell.GetYCoordinate() + 1);
-			}
-
-			TempCell = ConsideredContainer.Get(CellIndex - 1);
-			if(TempCell != null) //Sprawdzenie, czy ponad polem nie znajduje sie juz jakis znak
-			{
-				if(TempCell.IsVisited())
-				{
-					return false;
-				}
-			}
-
-			if(StartCell.IsVisited())
-			{
-				for(int i = CellIndex + 1; i < GameBoard.GetBoardSide(); ++i) //Sprawdzenie, czy za rozpatrywanym polem pozostały jakies wolne pola
-				{
-					if(!ConsideredContainer.Get(i).IsVisited())
-					{
-						return true;
-					}
-				}
-				return false;
-			}
-
-			if(GetFirstLetterDistance(ConsideredContainer, CellIndex + 1) <= Configuration.MaxLetterNumber) //plus jeden bo zaczynamy od pierwszego zajetego pola
-			{
-				return true;
-			}
-			if(GetFirstLetterDistance(LeftNeighbour, CellIndex) <= Configuration.MaxLetterNumber)
-			{
-				return true;
-			}
-			if(GetFirstLetterDistance(RightNeighbour, CellIndex) <= Configuration.MaxLetterNumber)
-			{
-				return true;
-			}
-			return false;
-		}
-
-		/// <summary>
-		/// Metoda sprawdzajaca, jaka musi byc najmniejsza dlugosc slowa, ktore zaczynac sie bedzie od pola przekazanego w argumencie wywolania, aby ulozenie go moglo byc zgodne z zasadami gry.
-		/// </summary>
-		/// <param name="StartCell">Pole, od ktorego zaczynamy ulozenie slowa</param>
-		/// <param name="Vertical">true jeśli układamy slowo w pionie, false w przeciwnym razie</param>
-		/// <returns></returns>
-		private int GetMinLength(Cell StartCell, bool Vertical)
-		{
-			Board.Board GameBoard = GameModel.GetBoard();
-			Container ConsideredContainer;
-			Container LeftNeighbour;
-			Container RightNeighbour;
-			int CellIndex;
-			Cell TempCell;
-
-			int MinLength = 0;
-			int ActualMinLength = GameBoard.GetBoardSide() + 1;
-
-			if(Vertical) //jesli sprawdzamy czy da sie ulozyc slowo pionowo
-			{
-				ConsideredContainer = GameBoard.FindColumn(StartCell);
-				CellIndex = StartCell.GetYCoordinate();
-				LeftNeighbour = GameBoard.FindColumn(StartCell.GetXCoordinate() - 1);
-				RightNeighbour = GameBoard.FindColumn(StartCell.GetXCoordinate() + 1);
-			}
-			else
-			{
-				ConsideredContainer = GameBoard.FindRow(StartCell);
-				CellIndex = StartCell.GetXCoordinate();
-				LeftNeighbour = GameBoard.FindRow(StartCell.GetYCoordinate() - 1);
-				RightNeighbour = GameBoard.FindRow(StartCell.GetYCoordinate() + 1);
-			}
-
-			bool FirstLetter = false; //czy napotkalismy juz jakas litere
-			for(int i = 0; i < Configuration.MaxLetterNumber; ++i)
-			{
-				TempCell = ConsideredContainer.Get(CellIndex + i);
-
-				if(TempCell == null)
-				{
-					break;
-				}
-
-				if(TempCell.IsVisited())
-				{
-					if(!FirstLetter)
-					{
-						FirstLetter = true;
-					}
-				}
-				else
-				{
-					if(FirstLetter)
-					{
-						ActualMinLength = MinLength;
-						break;
-					}
-				}
-				++MinLength;
-			}
-
-			TempCell = ConsideredContainer.Get(CellIndex + Configuration.MaxLetterNumber);
-			if(TempCell != null && TempCell.IsVisited()) //Jesli siodme pole za polem startowym w rozwazanym kontenerze jest zajete
-			{
-				for(int i = Configuration.MaxLetterNumber; i < GameBoard.GetBoardSide(); ++i)
-				{
-					TempCell = ConsideredContainer.Get(CellIndex + i);
-
-					if(TempCell == null || !TempCell.IsVisited())
-					{
-						ActualMinLength = ActualMinLength > MinLength ? MinLength : ActualMinLength;
-						break;
-					}
-					++MinLength;
-				}
-			}
-			else
-			{
-				if(FirstLetter)
-				{
-					ActualMinLength = ActualMinLength > MinLength ? MinLength : ActualMinLength;
-				}
-			}
-
-			MinLength = GetFirstLetterDistance(LeftNeighbour, CellIndex);
-			ActualMinLength = ActualMinLength > MinLength ? MinLength : ActualMinLength;
-
-			MinLength = GetFirstLetterDistance(RightNeighbour, CellIndex);
-			ActualMinLength = ActualMinLength > MinLength ? MinLength : ActualMinLength;
-
-			return ActualMinLength;
-		}
-
-		/// <summary>
-		/// Zliczanie odleglosci od wskazanego indeksu w kontenerze do pierwszego indeksu na ktorym znajduje sie kostka. 
-		/// </summary>
-		/// <param name="Container"></param>
-		/// <param name="Index"></param>
-		/// <returns>Odleglosc do pierwszego zajetego pola lub rozmiar boku planszy + 1 jesli takie pole nie istnieje</returns>
-		private int GetFirstLetterDistance(Container Container, int Index)
-		{
-			int Distance = 1;
-
-			if(Container != null)
-			{
-				for(int i = 0; i < Configuration.MaxLetterNumber; ++i)
-				{
-					Cell TempCell = Container.Get(Index + i);
-
-					if(TempCell == null)
-					{
-						break;
-					}
-
-					if(TempCell.IsVisited())
-					{
-						return Distance;
-					}
-					++Distance;
-				}
-			}
-			return GameModel.GetBoard().GetBoardSide() + 1;
-		}
-
-		/// <summary>
-		/// Metoda napelniajaca klase AlreadySetLetters literami znajdujacymi sie na planszy.
-		/// </summary>
-		/// <param name="ASL"></param>
-		/// <param name="ConsideredContainer"></param>
-		/// <param name="FirstIndex"></param>
-		private void FillAlreadySetLetters(Dictionary.Dictionary.AlreadySetLetters ASL, Container ConsideredContainer, int FirstIndex)
-		{
-			int LettersLeft = Configuration.MaxLetterNumber;
-
-			for(int i = 0; LettersLeft != 0; ++i)
-			{
-				Cell TempCell = ConsideredContainer.Get(FirstIndex + i);
-
-				if(TempCell == null)
-				{
-					return;
-				}
-
-				if(TempCell.IsVisited())
-				{
-					ASL.Set(i, TempCell.GetTile().GetLetter());
-				}
-				else
-				{
-					--LettersLeft;
-				}
-			}
-		}
-
-		/// <summary>
-		/// Metoda usuwa z listy znalezionych slow slowa o niewlasciwej dlguosc
-		/// </summary>
-		/// <param name="MinLength">minimalna dlugosc slowa</param>
-		/// <param name="MaxLength">maksymalna dlugosc slowa</param>
-		/// <returns></returns>
-		private Dictionary.Dictionary.WordsFound FilterWords(Dictionary.Dictionary.WordsFound WF, int MinLength, int MaxLength)
-		{
-			Dictionary.Dictionary.WordsFound FilteredWords = new Dictionary.Dictionary.WordsFound();
-
-			foreach(Dictionary.Dictionary.WordFound Word in WF)
-			{
-				int WordLength = Word.GetWord().Length;
-				if(WordLength >= MinLength && WordLength <= MaxLength)
-				{
-					FilteredWords.Add(Word);
-				}
-			}
-			return FilteredWords;
+			GameModel.PlayerPassed();
 		}
 	}
 }
