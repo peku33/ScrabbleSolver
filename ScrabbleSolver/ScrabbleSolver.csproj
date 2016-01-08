@@ -52,6 +52,8 @@
     <Compile Include="Dictionary\TrieDictionary.cs" />
     <Compile Include="Encoding\Encoding.cs" />
     <Compile Include="Encoding\Polish.cs" />
+    <Compile Include="Language\Language.cs" />
+    <Compile Include="Language\Polish.cs" />
     <Compile Include="View\Form1.cs">
       <SubType>Form</SubType>
       <CustomToolNamespace>ScrabbleSolver</CustomToolNamespace>
