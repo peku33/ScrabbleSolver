@@ -10,6 +10,10 @@ namespace ScrabbleSolver.Board
 		private int XCoordinate;
 		private int YCoordinate;
 
+		public Coordinates()
+		{
+		}
+
 		public Coordinates(int x, int y)
 		{
 			this.XCoordinate = x;

@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\GameInfoType.cs" />
     <Compile Include="Controller\Controller.cs" />
     <Compile Include="Dictionary\Benchmark.cs" />
     <Compile Include="Dictionary\Dictionary.cs" />
@@ -52,16 +53,18 @@
     <Compile Include="Dictionary\TrieDictionary.cs" />
     <Compile Include="Encoding\Encoding.cs" />
     <Compile Include="Encoding\Polish.cs" />
+    <Compile Include="Events\ApplicationEvent.cs" />
+    <Compile Include="Events\UpdateViewEvent.cs" />
     <Compile Include="Language\Language.cs" />
     <Compile Include="Language\Polish.cs" />
-    <Compile Include="View\Form1.cs">
+    <Compile Include="View\GameForm.cs">
       <SubType>Form</SubType>
       <CustomToolNamespace>ScrabbleSolver</CustomToolNamespace>
     </Compile>
-    <Compile Include="View\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="View\GameForm.Designer.cs">
+      <DependentUpon>GameForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\FormModelHelper.cs" />
+    <Compile Include="View\InitFormHelper.cs" />
     <Compile Include="Model\Board\Board.cs" />
     <Compile Include="Model\Board\Cell.cs" />
     <Compile Include="Model\Board\Column.cs" />

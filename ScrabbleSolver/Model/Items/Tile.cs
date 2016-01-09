@@ -9,28 +9,28 @@ namespace ScrabbleSolver.Model.Items
 	public class Tile
 	{
 		//Znak znajdujacy sie na kostce
-		private readonly char Letter;
+		private char Letter;
 		//Czy blank
-		private readonly bool Blank;
+		private readonly bool IsBlank;
 
+		private bool IsEmpty;
 		public Tile(char Letter)
 		{
 			this.Letter = Letter;
-
-			if(this.Letter.Equals(' '))
-			{
-				this.Blank = true;
-			}
-			else
-			{
-				this.Blank = false;
-			}
+			this.IsBlank = this.Letter.Equals(' ');
+			this.IsEmpty = false;
 		}
 
-		public Tile(char Letter, bool Blank)
+		public Tile(char Letter, bool isBlank)
 		{
 			this.Letter = Letter;
-			this.Blank = Blank;
+			this.IsBlank = isBlank;
+			this.IsEmpty = false;
+		}
+
+		public Tile(bool IsEmpty)
+		{
+			this.IsEmpty = IsEmpty;
 		}
 
 		public char GetLetter()
@@ -38,9 +38,19 @@ namespace ScrabbleSolver.Model.Items
 			return this.Letter;
 		}
 
-		public bool IsBlank()
+		public bool GetIsBlank()
 		{
-			return Blank;
+			return IsBlank;
+		}
+
+		public void SetIsEmpty(bool IsEmpty)
+		{
+			this.IsEmpty = IsEmpty;
+		}
+
+		public void SetLetter(char IsEmpty)
+		{
+			this.Letter = Letter;
 		}
 	}
 

@@ -28,14 +28,15 @@ namespace ScrabbleSolver
 			//Console.Read();
 			D.Reload();
 			Model.Model GameModel = new Model.Model(D, Language);
-
-			Controller.Controller GameController = new Controller.Controller(GameModel);
+			//GameForm GameForm = new GameForm();
+			GameForm GameForm = null;
+			Controller.Controller GameController = new Controller.Controller(GameModel, GameForm);
 
 			GameController.Start();
 
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new Form1());
+			Application.Run(new GameForm()); //TODO use GameForm implemented above
 		}
 	}
 }

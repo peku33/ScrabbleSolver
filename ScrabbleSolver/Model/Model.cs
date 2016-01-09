@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using ScrabbleSolver.Board;
 using ScrabbleSolver.Model.Items;
 using ScrabbleSolver.Model.Player;
+using Container = ScrabbleSolver.Board.Container;
 
 namespace ScrabbleSolver.Model
 {
@@ -606,7 +608,7 @@ namespace ScrabbleSolver.Model
 				}
 
 				Char Letter = TempTile.GetLetter();
-				int Value = TempTile.IsBlank() ? GameLanguage.GetLetterValue(' ') : GameLanguage.GetLetterValue(Letter);
+				int Value = TempTile.GetIsBlank() ? GameLanguage.GetLetterValue(' ') : GameLanguage.GetLetterValue(Letter);
 
 				if(TempCell.IsVisited())
 				{
@@ -694,7 +696,7 @@ namespace ScrabbleSolver.Model
 					Tile TempTile = TempCell.GetTile();
 					if(TempTile != null)
 					{
-						if(TempTile.IsBlank())
+						if(TempTile.GetIsBlank())
 						{
 							Rack.Add(new Tile(' ', true));
 						}

@@ -8,9 +8,10 @@ using System.Windows.Forms;
 
 namespace ScrabbleSolver
 {
-	static class FormModelHelper
+	static class InitFormHelper
 	{
 		private static int SINGLE_CELL_SIZE = 35;
+
 
 		public static void InitBoard(DataGridView localBoard, int rows)
 		{
