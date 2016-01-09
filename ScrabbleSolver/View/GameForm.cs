@@ -127,6 +127,7 @@ namespace ScrabbleSolver
 			}
 
 		}
+
 		/// <summary>
 		/// Metoda przycina string do jednej litery oraz zmienia na wielka litere.
 		/// </summary>
@@ -244,9 +245,27 @@ namespace ScrabbleSolver
 			if (TemporaryCopingCharacter != null)
 			{
 				CurrentCell.Value = String.Copy(TemporaryCopingCharacter);
-				CellValues[new Coordinates(CurrentCell.RowIndex, CurrentCell.ColumnIndex)].GetTile()
-					.SetLetter(TemporaryCopingCharacter.ToCharArray()[FIRST_INDEX]); //TODO now it throws exception because we create new Coordinates object. Find tile in other way.
+				Coordinates Coordinates = new Coordinates(CurrentCell.RowIndex, CurrentCell.ColumnIndex);
+				UpdateLetter(Coordinates);
+
 				TemporaryCopingCharacter = null;
+			}
+		}
+
+		/// <summary>
+		/// Metoda aktualizuje litere na danej komórce, lub jeśli nie istnieje komórka o danych współrzędnych - dodaje nową.
+		/// </summary>
+		private void UpdateLetter(Coordinates Coordinates)
+		{
+			if (CellValues.ContainsKey(Coordinates)) //TODO bug: if we comprare two object with the same coordinates we get false....
+			{
+				CellValues[Coordinates].GetTile()
+					.SetLetter(TemporaryCopingCharacter.ToCharArray()[FIRST_INDEX]);
+			}
+			else
+			{
+				Cell Cell = new Cell(Coordinates, 0, 0, new Tile(TemporaryCopingCharacter.ToCharArray()[FIRST_INDEX]), false);
+				CellValues.Add(Coordinates, Cell);
 			}
 		}
 
