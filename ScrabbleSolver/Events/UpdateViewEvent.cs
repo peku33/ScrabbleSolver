@@ -12,15 +12,15 @@ namespace ScrabbleSolver.Events
 	class UpdateViewEvent : ApplicationEvent
 	{
 		// Dictionary that contains current game state.
-		private readonly Dictionary<GameInfoType, String> _GameInfo;
+		private readonly Dictionary<PlayerId, Dictionary<GameInfoType, String>> _GameInfo;
 
 		// List that represents held characters.
-		private readonly List<Tile> _HeldCharacters;
+		private readonly Dictionary<PlayerId, List<Tile>> _HeldCharacters;
 
 		// List that represents board cells.
 		private readonly List<Cell> _BoardCells;
 
-		public UpdateViewEvent(Dictionary<GameInfoType, string> GameInfo, List<Tile> HeldCharacters, List<Cell> BoardCells)
+		public UpdateViewEvent(Dictionary<PlayerId, Dictionary<GameInfoType, String>> GameInfo, Dictionary<PlayerId, List<Tile>> HeldCharacters, List<Cell> BoardCells)
 		{
 			this._GameInfo = GameInfo;
 			this._HeldCharacters = HeldCharacters;
@@ -32,12 +32,12 @@ namespace ScrabbleSolver.Events
 			get { return _BoardCells; }
 		}
 
-		public Dictionary<GameInfoType, string> GameInfo
+		public Dictionary<PlayerId, Dictionary<GameInfoType, String>> GameInfo
 		{
 			get { return _GameInfo; }
 		}
 
-		public List<Tile> HeldCharacters
+		public Dictionary<PlayerId, List<Tile>> HeldCharacters
 		{
 			get { return _HeldCharacters; }
 		}
