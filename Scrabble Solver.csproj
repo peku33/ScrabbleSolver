@@ -1,17 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{367E6FE2-96CB-49FF-829C-2611817261D4}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <NoStandardLibraries>false</NoStandardLibraries>
-    <AssemblyName>ConsoleApplication</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ScrabbleSolver</RootNamespace>
+    <AssemblyName>ScrabbleSolver</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -19,68 +22,97 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x86</PlatformTarget>
-  </PropertyGroup>
-  <PropertyGroup>
-    <RootNamespace>Scrabble_Solver</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include=".gitignore" />
+    <Compile Include="Common\GameInfoType.cs" />
+    <Compile Include="Common\PlayerId.cs" />
+    <Compile Include="Controller\Controller.cs" />
+    <Compile Include="Dictionary\Benchmark.cs" />
+    <Compile Include="Dictionary\Dictionary.cs" />
+    <Compile Include="Dictionary\HashSetDictionary.cs" />
+    <Compile Include="Dictionary\TrieDictionary.cs" />
+    <Compile Include="Encoding\Encoding.cs" />
+    <Compile Include="Encoding\Polish.cs" />
+    <Compile Include="Events\ApplicationEvent.cs" />
+    <Compile Include="Events\UpdateViewEvent.cs" />
+    <Compile Include="Language\Language.cs" />
+    <Compile Include="Language\Polish.cs" />
+    <Compile Include="View\GameForm.cs">
+      <SubType>Form</SubType>
+      <CustomToolNamespace>ScrabbleSolver</CustomToolNamespace>
+    </Compile>
+    <Compile Include="View\GameForm.Designer.cs">
+      <DependentUpon>GameForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\InitFormHelper.cs" />
+    <Compile Include="Model\Board\Board.cs" />
+    <Compile Include="Model\Board\Cell.cs" />
+    <Compile Include="Model\Board\Column.cs" />
+    <Compile Include="Model\Board\Container.cs" />
+    <Compile Include="Model\Board\Coordinates.cs" />
+    <Compile Include="Model\Board\Row.cs" />
+    <Compile Include="Model\Configuration.cs" />
+    <Compile Include="Model\Items\Rack.cs" />
+    <Compile Include="Model\Items\Tile.cs" />
+    <Compile Include="Model\Items\TilesSet.cs" />
+    <Compile Include="Model\Model.cs" />
+    <Compile Include="Model\Player\AIPlayer.cs" />
+    <Compile Include="Model\Player\HumanPlayer.cs" />
+    <Compile Include="Model\Player\Player.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ScrabbleSolver\Controller\Controller.cs" />
-    <Compile Include="ScrabbleSolver\Language\Language.cs" />
-    <Compile Include="ScrabbleSolver\Language\Polish.cs" />
-    <Compile Include="ScrabbleSolver\Model\Board\Board.cs" />
-    <Compile Include="ScrabbleSolver\Model\Board\Column.cs" />
-    <Compile Include="ScrabbleSolver\Model\Board\Container.cs" />
-    <Compile Include="ScrabbleSolver\Model\Board\Coordinates.cs" />
-    <Compile Include="ScrabbleSolver\Model\Board\Cell.cs" />
-    <Compile Include="ScrabbleSolver\Model\Board\Row.cs" />
-    <Compile Include="ScrabbleSolver\Dictionary\Benchmark.cs" />
-    <Compile Include="ScrabbleSolver\Dictionary\Dictionary.cs" />
-    <Compile Include="ScrabbleSolver\Dictionary\HashSetDictionary.cs" />
-    <Compile Include="ScrabbleSolver\Dictionary\TrieDictionary.cs" />
-    <Compile Include="ScrabbleSolver\Encoding\Encoding.cs" />
-    <Compile Include="ScrabbleSolver\Encoding\Polish.cs" />
-    <Compile Include="ScrabbleSolver\Model\Configuration.cs" />
-    <Compile Include="ScrabbleSolver\Model\Items\Rack.cs" />
-    <Compile Include="ScrabbleSolver\Model\Items\Tile.cs" />
-    <Compile Include="ScrabbleSolver\Model\Items\TilesSet.cs" />
-    <Compile Include="ScrabbleSolver\Model\Model.cs" />
-    <Compile Include="ScrabbleSolver\Model\Move.cs" />
-    <Compile Include="ScrabbleSolver\Model\Player\AIPlayer.cs" />
-    <Compile Include="ScrabbleSolver\Model\Player\HumanPlayer.cs" />
-    <Compile Include="ScrabbleSolver\Model\Player\Player.cs" />
-    <Compile Include="ScrabbleSolver\Program.cs" />
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ScrabbleSolver\ScrabbleSolver.csproj" />
-    <Content Include="ScrabbleSolver\Slowa.txt" />
+    <Folder Include="Scoring\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include=".git\" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />
-  <ProjectExtensions>
-    <VisualStudio AllowExistingFolder="true" />
-  </ProjectExtensions>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
 </Project>

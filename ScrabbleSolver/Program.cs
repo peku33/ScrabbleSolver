@@ -1,11 +1,13 @@
 ﻿﻿using System;
-using System.Text;
+﻿using System.Collections.Concurrent;
+﻿using System.Text;
 
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WindowsFormsApplication1;
+﻿using ScrabbleSolver.Events;
 ﻿using ScrabbleSolver.Language;
 
 namespace ScrabbleSolver
@@ -27,10 +29,11 @@ namespace ScrabbleSolver
 
 			//Console.Read();
 			D.Reload();
-			Model.Model GameModel = new Model.Model(D, Language);
+			BlockingCollection<ApplicationEvent> ViewEvents = new BlockingCollection<ApplicationEvent>();
+            Model.Model GameModel = new Model.Model(D, Language);
 			//GameForm GameForm = new GameForm();
 			GameForm GameForm = null;
-			Controller.Controller GameController = new Controller.Controller(GameModel, GameForm);
+			Controller.Controller GameController = new Controller.Controller(GameModel, GameForm, ViewEvents);
 
 			GameController.Start();
 

@@ -127,7 +127,7 @@ namespace ScrabbleSolver.Model.Player
 				}
 				return;
 			}
-			this.PointsNumber += BestResult;
+			PointsNumber += BestResult;
 			GameModel.PutAndSetTiles(BestContainer, BestStartIndex, BestWord, Rack);
 			GetNewTiles();
 		}
@@ -177,7 +177,7 @@ namespace ScrabbleSolver.Model.Player
 				return;
 			}
 
-			this.PointsNumber += BestResult;
+			PointsNumber += BestResult;
 			GameModel.PutAndSetTiles(CenterRow, BestStartIndex, BestWord, Rack);
 			GameBoard.SetEmpty(false);
 			GetNewTiles();

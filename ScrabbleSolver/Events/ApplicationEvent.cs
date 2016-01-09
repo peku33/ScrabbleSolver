@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ScrabbleSolver.Events
 {
-	abstract class ApplicationEvent
+	public abstract class ApplicationEvent
 	{
 	}
 }

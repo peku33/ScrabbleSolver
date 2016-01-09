@@ -19,6 +19,8 @@ namespace ScrabbleSolver.Model
 		private readonly TilesSet TilesSet;
 		private readonly Language.Language GameLanguage;
 
+		private Player.Player CurrentPlayer;
+
 		//Licznik spasowan. Gra konczy sie gdy wszyscy gracze spasuja.
 		private int PassCounter;
 
@@ -79,17 +81,25 @@ namespace ScrabbleSolver.Model
 			++PassCounter;
 		}
 
-		public void NextTurn(int Index)
+		public void SetCurrentPlayer(int Index)
 		{
-			Player.Player P = Players[Index];
+			CurrentPlayer = Players[Index];
+		}
 
-			if(GameBoard.IsEmpty() && P != null)
+		public bool IsHumanTurn()
+		{
+			return CurrentPlayer.GetType() == typeof(HumanPlayer);
+		}
+
+		public void NextAITurn()
+		{
+			if(GameBoard.IsEmpty() && CurrentPlayer != null)
 			{
-				P.MakeFirstMove();
+				CurrentPlayer.MakeFirstMove();
 			}
 			else
 			{
-				P.MakeMove();
+				CurrentPlayer.MakeMove();
 			}
 			Console.ReadLine(); //Czekanie na klawisz na potrzeby testow
 		}
