@@ -21,15 +21,12 @@ namespace ScrabbleSolver
 		private String TemporaryCopingCharacter;
 		private Dictionary<Coordinates, Cell> CellValues;
 		private List<Tile> HeldCharacters;
+		private static int FIRST_INDEX = 0;
+		private static int ROWS_NUMBER = 1;
 
 		public GameForm()
 		{
 			InitializeComponent();
-		}
-
-		private void panel1_Paint(object sender, PaintEventArgs e)
-		{
-
 		}
 
 		/// <summary>
@@ -52,11 +49,14 @@ namespace ScrabbleSolver
 
 		}
 
+		/// <summary>
+		/// Metoda inicjująca pola HeldCharactersDataGrid.
+		/// </summary>
 		private void AddAllHeldCharacters()
 		{
-			for( int Index = 0 ; Index < HeldCharacters.Count ; Index++)
+			for( int Index = FIRST_INDEX ; Index < HeldCharacters.Count ; Index++)
 			{
-				FirstHeldCharactersDataGrid[Index, 0].Value = HeldCharacters[Index].GetLetter(); //TODO do this same for all HeldCharacters
+				FirstHeldCharactersDataGrid[Index, FIRST_INDEX].Value = HeldCharacters[Index].GetLetter(); //TODO do this same for all HeldCharacters
 			}
 		}
 
@@ -66,14 +66,15 @@ namespace ScrabbleSolver
 			InitFormHelper.InitBoard(boardGridView, BOARD_SIZE);
 
 			// init HeldCharactersLabelDataGrid boards
-			SecondHeldCharactersLabelDataGrid[0, 0].Value = "Held Characters";/// TODO get data from GameModel
-			FirstHeldCharactersLabelDataGrid[0, 0].Value = "Held Characters";/// TODO get data from GameModel
+			SecondHeldCharactersLabelDataGrid[FIRST_INDEX, FIRST_INDEX].Value = "Held Characters";/// TODO get data from GameModel
+			FirstHeldCharactersLabelDataGrid[FIRST_INDEX, FIRST_INDEX].Value = "Held Characters";/// TODO get data from GameModel
 
 			// init HeldCaractersDataGrid boards
-			InitFormHelper.InitBoard(FirstHeldCharactersDataGrid, 1);
-			InitFormHelper.InitBoard(SecondHeldCharactersDataGrid, 1);
 
-			GameInfoDataGrid[0, 0].Value = "Game player info";
+			InitFormHelper.InitBoard(FirstHeldCharactersDataGrid, ROWS_NUMBER);
+			InitFormHelper.InitBoard(SecondHeldCharactersDataGrid, ROWS_NUMBER);
+
+			GameInfoDataGrid[FIRST_INDEX, FIRST_INDEX].Value = "Game player info";
 		}
 
 		private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -120,9 +121,9 @@ namespace ScrabbleSolver
 			}
 			catch
 			{
-				
+
 			}
-					
+
 		}
 		/// <summary>
 		/// Metoda przycina string do jednej litery oraz zmienia na wielka litere.
@@ -133,7 +134,7 @@ namespace ScrabbleSolver
 			if (boardGridView[e.ColumnIndex, e.RowIndex].Value.ToString().Length > 1)
 			{
 				boardGridView[e.ColumnIndex, e.RowIndex].Value = boardGridView[e.ColumnIndex, e.RowIndex].Value.ToString()
-					.Substring(0, 1);
+					.Substring(FIRST_INDEX, 1);
 			}
 		}
 
@@ -141,11 +142,11 @@ namespace ScrabbleSolver
 		{
 			Size size = firstHeldCharactersDataGrid.Size;
 
-			for (int i = 0; i < size.Width; ++i)
+			for (int Index = FIRST_INDEX; Index < size.Width; ++Index)
 			{
-				if (firstHeldCharactersDataGrid[0, i].Value.ToString().Contains(cellValue))
+				if (firstHeldCharactersDataGrid[FIRST_INDEX, Index].Value.ToString().Contains(cellValue))
 				{
-					firstHeldCharactersDataGrid[0, i].Value = "";
+					firstHeldCharactersDataGrid[FIRST_INDEX, Index].Value = "";
 				}
 			}
 
@@ -159,7 +160,7 @@ namespace ScrabbleSolver
 			{
 				if (CellValue.GetXCoordinate() == e.ColumnIndex && CellValue.GetYCoordinate() == e.RowIndex)
 				{
-					//the black background 
+					//the black background
 					Rectangle rectangle2 = new Rectangle(e.CellBounds.X, e.CellBounds.Y, e.CellBounds.Width, e.CellBounds.Height);
 					e.Graphics.FillRectangle(Brushes.Black, rectangle2);
 
@@ -168,8 +169,7 @@ namespace ScrabbleSolver
 					e.Graphics.FillRectangle(Brushes.White, rectangle);
 					Font f = new Font(e.CellStyle.Font.FontFamily, 7);
 
-					int letterMultiplier = CellValue.GetLetterMultiplier();
-					string LetterMultiplierString = ConvertIntToString(letterMultiplier);
+					string LetterMultiplierString = ConvertIntToString(CellValue.GetLetterMultiplier());
 
 					e.Graphics.DrawString(LetterMultiplierString, f, Brushes.Black, rectangle);
 					e.PaintContent(e.ClipBounds);
@@ -182,7 +182,7 @@ namespace ScrabbleSolver
 
 		private static string ConvertIntToString(int letterMultiplier)
 		{
-			if (letterMultiplier == 0) // Letter empty
+			if (letterMultiplier == FIRST_INDEX) // Letter empty
 			{
 				return "";
 			}
@@ -218,32 +218,32 @@ namespace ScrabbleSolver
 			CellMouseDown(sender2);
 		}
 
-		private void CellMouseDown(object sender2)
+		private void CellMouseDown(object s)
 		{
-			DataGridView sender = (DataGridView) sender2;
+			DataGridView Sender = (DataGridView) s;
 
-			DataGridViewCell currentCell = sender.CurrentCell;
+			DataGridViewCell CurrentCell = Sender.CurrentCell;
 
-			if (currentCell.Value != null)
+			if (CurrentCell.Value != null)
 			{
-				String value = currentCell.Value.ToString();
+				String value = CurrentCell.Value.ToString();
 
 				TemporaryCopingCharacter = String.Copy(value);
-				currentCell.Value = null;
+				CurrentCell.Value = null;
 			}
 		}
 
-		private void boardGridView_CellMouseUp(object sender2, DataGridViewCellMouseEventArgs e)
+		private void boardGridView_CellMouseUp(object s, DataGridViewCellMouseEventArgs e)
 		{
-			DataGridView sender = (DataGridView)sender2;
+			DataGridView Sender = (DataGridView)s;
 
-			DataGridViewCell currentCell = sender.CurrentCell;
+			DataGridViewCell CurrentCell = Sender.CurrentCell;
 
 			if (TemporaryCopingCharacter != null)
 			{
-				currentCell.Value = String.Copy(TemporaryCopingCharacter);
-				CellValues[new Coordinates(currentCell.RowIndex, currentCell.ColumnIndex)].GetTile()
-					.SetLetter(TemporaryCopingCharacter.ToCharArray()[0]); //TODO now it throws exception because we create new Coordinates object. Find tile in other way.
+				CurrentCell.Value = String.Copy(TemporaryCopingCharacter);
+				CellValues[new Coordinates(CurrentCell.RowIndex, CurrentCell.ColumnIndex)].GetTile()
+					.SetLetter(TemporaryCopingCharacter.ToCharArray()[FIRST_INDEX]); //TODO now it throws exception because we create new Coordinates object. Find tile in other way.
 				TemporaryCopingCharacter = null;
 			}
 		}
@@ -251,7 +251,7 @@ namespace ScrabbleSolver
 		private void boardGridView_CellMouseDown(object sender2, DataGridViewCellMouseEventArgs e)
 		{
 
-				
+
 		}
 
 		private void FirstHeldCharactersDataGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
