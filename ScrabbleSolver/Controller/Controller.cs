@@ -8,7 +8,7 @@ namespace ScrabbleSolver.Controller
 	{
 		private readonly Model.Model GameModel;
 		private readonly GameForm GameForm;
-		
+
 		public Controller(Model.Model Model, GameForm GameForm)
 		{
 			this.GameModel = Model;
@@ -31,7 +31,7 @@ namespace ScrabbleSolver.Controller
 				i %= GameModel.GetPlayersNumber();
 			}
 
-		
+
 			Console.ReadLine(); //oczekiwanie na enter, zeby gra nie zamykala sie automatycznie - na potrzeby testow
 		}
 	}

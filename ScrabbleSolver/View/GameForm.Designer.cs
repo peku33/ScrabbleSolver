@@ -106,9 +106,9 @@
 			((System.ComponentModel.ISupportInitialize)(this.FirstHeldCharactersDataGrid)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.FirstHeldCharactersLabelDataGrid)).BeginInit();
 			this.SuspendLayout();
-			// 
+			//
 			// menuStrip1
-			// 
+			//
 			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.helpToolStripMenuItem});
@@ -117,39 +117,39 @@
 			this.menuStrip1.Size = new System.Drawing.Size(782, 24);
 			this.menuStrip1.TabIndex = 0;
 			this.menuStrip1.Text = "menuStrip1";
-			// 
+			//
 			// fileToolStripMenuItem
-			// 
+			//
 			this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.exitToolStripMenuItem});
 			this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
 			this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
 			this.fileToolStripMenuItem.Text = "File";
-			// 
+			//
 			// exitToolStripMenuItem
-			// 
+			//
 			this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
 			this.exitToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
 			this.exitToolStripMenuItem.Text = "Exit";
 			this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
-			// 
+			//
 			// helpToolStripMenuItem
-			// 
+			//
 			this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.aboutToolStripMenuItem});
 			this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
 			this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
 			this.helpToolStripMenuItem.Text = "Help";
-			// 
+			//
 			// aboutToolStripMenuItem
-			// 
+			//
 			this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
 			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
 			this.aboutToolStripMenuItem.Text = "About";
 			this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
-			// 
+			//
 			// boardGridView
-			// 
+			//
 			this.boardGridView.AllowDrop = true;
 			this.boardGridView.AllowUserToAddRows = false;
 			this.boardGridView.AllowUserToDeleteRows = false;
@@ -195,84 +195,84 @@
 			this.boardGridView.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.board_CellPainting);
 			this.boardGridView.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.board_CellValueChanged);
 			this.boardGridView.DragDrop += new System.Windows.Forms.DragEventHandler(this.board_DragDrop);
-			// 
+			//
 			// Column1
-			// 
+			//
 			this.Column1.HeaderText = "Column1";
 			this.Column1.Name = "Column1";
-			// 
+			//
 			// Column2
-			// 
+			//
 			this.Column2.HeaderText = "Column2";
 			this.Column2.Name = "Column2";
-			// 
+			//
 			// Column3
-			// 
+			//
 			this.Column3.HeaderText = "Column3";
 			this.Column3.Name = "Column3";
-			// 
+			//
 			// Column4
-			// 
+			//
 			this.Column4.HeaderText = "Column4";
 			this.Column4.Name = "Column4";
-			// 
+			//
 			// Column5
-			// 
+			//
 			this.Column5.HeaderText = "Column5";
 			this.Column5.Name = "Column5";
-			// 
+			//
 			// Column6
-			// 
+			//
 			this.Column6.HeaderText = "Column6";
 			this.Column6.Name = "Column6";
-			// 
+			//
 			// Column7
-			// 
+			//
 			this.Column7.HeaderText = "Column7";
 			this.Column7.Name = "Column7";
-			// 
+			//
 			// Column8
-			// 
+			//
 			this.Column8.HeaderText = "Column8";
 			this.Column8.Name = "Column8";
-			// 
+			//
 			// Column9
-			// 
+			//
 			this.Column9.HeaderText = "Column9";
 			this.Column9.Name = "Column9";
-			// 
+			//
 			// Column10
-			// 
+			//
 			this.Column10.HeaderText = "Column10";
 			this.Column10.Name = "Column10";
-			// 
+			//
 			// Column11
-			// 
+			//
 			this.Column11.HeaderText = "Column11";
 			this.Column11.Name = "Column11";
-			// 
+			//
 			// Column12
-			// 
+			//
 			this.Column12.HeaderText = "Column12";
 			this.Column12.Name = "Column12";
-			// 
+			//
 			// Column13
-			// 
+			//
 			this.Column13.HeaderText = "Column13";
 			this.Column13.Name = "Column13";
-			// 
+			//
 			// Column14
-			// 
+			//
 			this.Column14.HeaderText = "Column14";
 			this.Column14.Name = "Column14";
-			// 
+			//
 			// Column15
-			// 
+			//
 			this.Column15.HeaderText = "Column15";
 			this.Column15.Name = "Column15";
-			// 
+			//
 			// SecondHeldCharactersDataGrid
-			// 
+			//
 			this.SecondHeldCharactersDataGrid.AllowDrop = true;
 			this.SecondHeldCharactersDataGrid.AllowUserToAddRows = false;
 			this.SecondHeldCharactersDataGrid.AllowUserToDeleteRows = false;
@@ -322,86 +322,86 @@
 			this.SecondHeldCharactersDataGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick_1);
 			this.SecondHeldCharactersDataGrid.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.HeldCharactersDataGrid_CellMouseDown);
 			this.SecondHeldCharactersDataGrid.DragEnter += new System.Windows.Forms.DragEventHandler(this.HeldCharactersDataGrid_DragEnter);
-			// 
+			//
 			// Column16
-			// 
+			//
 			this.Column16.HeaderText = "Column16";
 			this.Column16.Name = "Column16";
-			// 
+			//
 			// Column17
-			// 
+			//
 			this.Column17.HeaderText = "Column17";
 			this.Column17.Name = "Column17";
-			// 
+			//
 			// Column18
-			// 
+			//
 			this.Column18.HeaderText = "Column18";
 			this.Column18.Name = "Column18";
-			// 
+			//
 			// Column19
-			// 
+			//
 			this.Column19.HeaderText = "Column19";
 			this.Column19.Name = "Column19";
-			// 
+			//
 			// Column20
-			// 
+			//
 			this.Column20.HeaderText = "Column20";
 			this.Column20.Name = "Column20";
-			// 
+			//
 			// Column21
-			// 
+			//
 			this.Column21.HeaderText = "Column21";
 			this.Column21.Name = "Column21";
-			// 
+			//
 			// Column22
-			// 
+			//
 			this.Column22.HeaderText = "Column22";
 			this.Column22.Name = "Column22";
-			// 
+			//
 			// separator
-			// 
+			//
 			this.separator.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
 			this.separator.HeaderText = "Column28";
 			this.separator.Name = "separator";
 			this.separator.ReadOnly = true;
-			// 
+			//
 			// Column29
-			// 
+			//
 			this.Column29.HeaderText = "Column29";
 			this.Column29.Name = "Column29";
-			// 
+			//
 			// Column30
-			// 
+			//
 			this.Column30.HeaderText = "Column30";
 			this.Column30.Name = "Column30";
-			// 
+			//
 			// Column31
-			// 
+			//
 			this.Column31.HeaderText = "Column31";
 			this.Column31.Name = "Column31";
-			// 
+			//
 			// Column32
-			// 
+			//
 			this.Column32.HeaderText = "Column32";
 			this.Column32.Name = "Column32";
-			// 
+			//
 			// Column33
-			// 
+			//
 			this.Column33.HeaderText = "Column33";
 			this.Column33.Name = "Column33";
-			// 
+			//
 			// Column34
-			// 
+			//
 			this.Column34.HeaderText = "Column34";
 			this.Column34.Name = "Column34";
-			// 
+			//
 			// Column35
-			// 
+			//
 			this.Column35.HeaderText = "Column35";
 			this.Column35.Name = "Column35";
-			// 
+			//
 			// GameInfoDataGrid
-			// 
+			//
 			this.GameInfoDataGrid.AllowUserToDeleteRows = false;
 			this.GameInfoDataGrid.AllowUserToResizeColumns = false;
 			this.GameInfoDataGrid.AllowUserToResizeRows = false;
@@ -427,9 +427,9 @@
 			this.GameInfoDataGrid.Size = new System.Drawing.Size(150, 654);
 			this.GameInfoDataGrid.TabIndex = 4;
 			this.GameInfoDataGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.GameInfoDataGrid_CellContentClick);
-			// 
+			//
 			// Column24
-			// 
+			//
 			dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
 			dataGridViewCellStyle5.BackColor = System.Drawing.Color.Black;
 			dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
@@ -440,9 +440,9 @@
 			this.Column24.Name = "Column24";
 			this.Column24.ReadOnly = true;
 			this.Column24.Width = 150;
-			// 
+			//
 			// SecondHeldCharactersLabelDataGrid
-			// 
+			//
 			this.SecondHeldCharactersLabelDataGrid.BackgroundColor = System.Drawing.SystemColors.ActiveCaptionText;
 			this.SecondHeldCharactersLabelDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.SecondHeldCharactersLabelDataGrid.ColumnHeadersVisible = false;
@@ -466,23 +466,23 @@
 			this.SecondHeldCharactersLabelDataGrid.Size = new System.Drawing.Size(782, 24);
 			this.SecondHeldCharactersLabelDataGrid.TabIndex = 3;
 			this.SecondHeldCharactersLabelDataGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick_2);
-			// 
+			//
 			// Column23
-			// 
+			//
 			this.Column23.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
 			this.Column23.HeaderText = "Column23";
 			this.Column23.Name = "Column23";
 			this.Column23.ReadOnly = true;
-			// 
+			//
 			// Column25
-			// 
+			//
 			this.Column25.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
 			this.Column25.HeaderText = "Column25";
 			this.Column25.Name = "Column25";
 			this.Column25.ReadOnly = true;
-			// 
+			//
 			// FirstHeldCharactersDataGrid
-			// 
+			//
 			this.FirstHeldCharactersDataGrid.AllowUserToAddRows = false;
 			this.FirstHeldCharactersDataGrid.AllowUserToDeleteRows = false;
 			this.FirstHeldCharactersDataGrid.AllowUserToResizeColumns = false;
@@ -532,100 +532,100 @@
 			this.FirstHeldCharactersDataGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.FirstHeldCharactersDataGrid_CellContentClick);
 			this.FirstHeldCharactersDataGrid.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.FirstHeldCharactersDataGrid_CellMouseDown);
 			this.FirstHeldCharactersDataGrid.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.FirstHeldCharactersDataGrid_CellPainting);
-			// 
+			//
 			// Column28
-			// 
+			//
 			this.Column28.Frozen = true;
 			this.Column28.HeaderText = "Column28";
 			this.Column28.Name = "Column28";
-			// 
+			//
 			// Column36
-			// 
+			//
 			this.Column36.Frozen = true;
 			this.Column36.HeaderText = "Column36";
 			this.Column36.Name = "Column36";
-			// 
+			//
 			// Column37
-			// 
+			//
 			this.Column37.Frozen = true;
 			this.Column37.HeaderText = "Column37";
 			this.Column37.Name = "Column37";
-			// 
+			//
 			// Column38
-			// 
+			//
 			this.Column38.Frozen = true;
 			this.Column38.HeaderText = "Column38";
 			this.Column38.Name = "Column38";
-			// 
+			//
 			// Column39
-			// 
+			//
 			this.Column39.Frozen = true;
 			this.Column39.HeaderText = "Column39";
 			this.Column39.Name = "Column39";
-			// 
+			//
 			// Column40
-			// 
+			//
 			this.Column40.Frozen = true;
 			this.Column40.HeaderText = "Column40";
 			this.Column40.Name = "Column40";
-			// 
+			//
 			// Column41
-			// 
+			//
 			this.Column41.Frozen = true;
 			this.Column41.HeaderText = "Column41";
 			this.Column41.Name = "Column41";
-			// 
+			//
 			// separatorFirstDataGridView
-			// 
+			//
 			this.separatorFirstDataGridView.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
 			this.separatorFirstDataGridView.HeaderText = "separatorFirdsDataGridView";
 			this.separatorFirstDataGridView.Name = "separatorFirstDataGridView";
 			this.separatorFirstDataGridView.ReadOnly = true;
-			// 
+			//
 			// Column42
-			// 
+			//
 			this.Column42.HeaderText = "Column42";
 			this.Column42.Name = "Column42";
 			this.Column42.ReadOnly = true;
-			// 
+			//
 			// Column43
-			// 
+			//
 			this.Column43.HeaderText = "Column43";
 			this.Column43.Name = "Column43";
 			this.Column43.ReadOnly = true;
-			// 
+			//
 			// Column44
-			// 
+			//
 			this.Column44.HeaderText = "Column44";
 			this.Column44.Name = "Column44";
 			this.Column44.ReadOnly = true;
-			// 
+			//
 			// Column45
-			// 
+			//
 			this.Column45.HeaderText = "Column45";
 			this.Column45.Name = "Column45";
 			this.Column45.ReadOnly = true;
-			// 
+			//
 			// Column46
-			// 
+			//
 			this.Column46.HeaderText = "Column46";
 			this.Column46.Name = "Column46";
 			this.Column46.ReadOnly = true;
-			// 
+			//
 			// Column47
-			// 
+			//
 			this.Column47.HeaderText = "Column47";
 			this.Column47.Name = "Column47";
 			this.Column47.ReadOnly = true;
-			// 
+			//
 			// Column48
-			// 
+			//
 			this.Column48.HeaderText = "Column48";
 			this.Column48.Name = "Column48";
 			this.Column48.ReadOnly = true;
-			// 
+			//
 			// FirstHeldCharactersLabelDataGrid
-			// 
+			//
 			this.FirstHeldCharactersLabelDataGrid.BackgroundColor = System.Drawing.SystemColors.ActiveCaptionText;
 			this.FirstHeldCharactersLabelDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.FirstHeldCharactersLabelDataGrid.ColumnHeadersVisible = false;
@@ -648,21 +648,21 @@
 			this.FirstHeldCharactersLabelDataGrid.ScrollBars = System.Windows.Forms.ScrollBars.None;
 			this.FirstHeldCharactersLabelDataGrid.Size = new System.Drawing.Size(632, 26);
 			this.FirstHeldCharactersLabelDataGrid.TabIndex = 6;
-			// 
+			//
 			// Column26
-			// 
+			//
 			this.Column26.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
 			this.Column26.HeaderText = "Column26";
 			this.Column26.Name = "Column26";
-			// 
+			//
 			// Column27
-			// 
+			//
 			this.Column27.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
 			this.Column27.HeaderText = "Column27";
 			this.Column27.Name = "Column27";
-			// 
+			//
 			// GameForm
-			// 
+			//
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(782, 738);
