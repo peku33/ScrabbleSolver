@@ -31,6 +31,15 @@ namespace ScrabbleSolver.Board
 			this.Visited = false;
 		}
 
+		public Cell(Coordinates CellCoordinates, int WordMultiplier, int LetterMultiplier, Tile Tile, bool Visited)
+		{
+			this.CellCoordinates = CellCoordinates;
+			this.WordMultiplier = WordMultiplier;
+			this.LetterMultiplier = LetterMultiplier;
+			this.Tile = Tile;
+			this.Visited = Visited;
+		}
+
 		public Tile GetTile()
 		{
 			return this.Tile;
@@ -59,7 +68,7 @@ namespace ScrabbleSolver.Board
 		{
 			if(IsVisited())
 			{
-				return Tile.IsBlank();
+				return Tile.GetIsBlank();
 			}
 			return false;
 		}
