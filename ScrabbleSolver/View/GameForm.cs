@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using ScrabbleSolver;
 using ScrabbleSolver.Board;
+using ScrabbleSolver.Common;
 using ScrabbleSolver.Model.Items;
 
 namespace ScrabbleSolver
@@ -18,9 +19,10 @@ namespace ScrabbleSolver
 	{
 		private static int BOARD_SIZE = 15;
 
+		private Dictionary<PlayerId, Dictionary<GameInfoType, String>> _GameInfo;
 		private String TemporaryCopingCharacter;
 		private Dictionary<Coordinates, Cell> CellValues;
-		private List<Tile> HeldCharacters;
+		private List<Tile> HeldCharacters; //TODO change to Dictionary
 		private static int FIRST_INDEX = 0;
 		private static int ROWS_NUMBER = 1;
 
