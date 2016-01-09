@@ -19,12 +19,12 @@ namespace ScrabbleSolver
 	{
 		private static int BOARD_SIZE = 15;
 
-		private Dictionary<PlayerId, Dictionary<GameInfoType, String>> _GameInfo;
+		private Dictionary<PlayerIdEnum, Dictionary<GameInfoTypeEnum, String>> _GameInfo;
 		private String TemporaryCopingCharacter;
 		private Dictionary<Coordinates, Cell> CellValues;
 		private List<Tile> HeldCharacters; //TODO change to Dictionary
-		private static int FIRST_INDEX = 0;
-		private static int ROWS_NUMBER = 1;
+		private static readonly int FIRST_INDEX = 0;
+		private static readonly int ROWS_NUMBER = 1;
 
 		public GameForm()
 		{
@@ -34,15 +34,20 @@ namespace ScrabbleSolver
 		/// <summary>
 		/// The method that loads the Form.
 		/// </summary>
-		private void Form1_Load(object sender, EventArgs e)
+		private void GameForm_Load(object sender, EventArgs e)
 		{
 			/// some sample data  - to remove in the future
 			CellValues = new Dictionary<Coordinates, Cell>();
+			_GameInfo = new Dictionary<PlayerIdEnum, Dictionary<GameInfoTypeEnum, string>>();
+
 
 			Coordinates coordinates = new Coordinates(12, 12);// test
 			CellValues.Add(coordinates, new Cell(coordinates, 5, 5, new Tile(true), false));// test
 			HeldCharacters = new List<Tile>();// test
 			HeldCharacters.Add(new Tile('K'));// test
+			Dictionary<GameInfoTypeEnum, string> Dictionary = new Dictionary<GameInfoTypeEnum, string>();// test
+			Dictionary.Add(GameInfoTypeEnum.PLAYER_SCORE, "12");// test
+			_GameInfo.Add(PlayerIdEnum.FIRST_PLAYER, Dictionary);// test
 
 			InitAllDataGridViews(); /// TODO get data from GameModel
 
@@ -76,7 +81,7 @@ namespace ScrabbleSolver
 			InitFormHelper.InitBoard(FirstHeldCharactersDataGrid, ROWS_NUMBER);
 			InitFormHelper.InitBoard(SecondHeldCharactersDataGrid, ROWS_NUMBER);
 
-			GameInfoDataGrid[FIRST_INDEX, FIRST_INDEX].Value = "Game player info";
+			InitFormHelper.InitGameInfoBoard(GameInfoDataGrid, _GameInfo);
 		}
 
 		private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
