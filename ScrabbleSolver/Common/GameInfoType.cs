@@ -8,6 +8,6 @@ namespace ScrabbleSolver.Common
 {
 	enum GameInfoType
 	{
-
+		PLAYER_SCORE
 	}
 }
