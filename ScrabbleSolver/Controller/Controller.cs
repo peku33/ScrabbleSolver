@@ -73,6 +73,24 @@ namespace ScrabbleSolver.Controller
 	{
 		public override void Execute(ApplicationEvent Event)
 		{
+			UpdateViewEvent MoveEvent = Event as UpdateViewEvent;;
+
+			MoveEvent.getBoardCells();
+		}
+	}
+
+	class ChangeTileStrategy : Strategy
+	{
+		public override void Execute(ApplicationEvent Event)
+		{
+
+		}
+	}
+
+	class PlayerPassStrategy : Strategy
+	{
+		public override void Execute(ApplicationEvent Event)
+		{
 
 		}
 	}
