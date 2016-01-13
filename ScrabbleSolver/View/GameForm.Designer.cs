@@ -676,7 +676,7 @@
 			this.Margin = new System.Windows.Forms.Padding(2);
 			this.Name = "GameForm";
 			this.Text = "ScrabbleSolver";
-			this.Load += new System.EventHandler(this.Form1_Load);
+			this.Load += new System.EventHandler(this.GameForm_Load);
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.boardGridView)).EndInit();

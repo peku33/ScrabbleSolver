@@ -45,8 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\GameInfoType.cs" />
-    <Compile Include="Common\PlayerId.cs" />
+    <Compile Include="Common\Consts.cs" />
+    <Compile Include="Common\GameInfoTypeEnum.cs" />
+    <Compile Include="Common\PlayerIdEnum.cs" />
     <Compile Include="Controller\Controller.cs" />
     <Compile Include="Dictionary\Benchmark.cs" />
     <Compile Include="Dictionary\Dictionary.cs" />

@@ -5,23 +5,33 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ScrabbleSolver.Common;
 
 namespace ScrabbleSolver
 {
 	static class InitFormHelper
 	{
-		private static int SINGLE_CELL_SIZE = 35;
+		private static readonly int SINGLE_CELL_SIZE = 35;
+		private static readonly int FIRST_INDEX = 0;
+		private static readonly short MAX_NUM_OF_PLAYERS = 4;
+		private static readonly short GAME_INFO_DATA_PER_PLAYER = 2;
+		private static readonly int GAME_INFO_BOARD_ROWS = MAX_NUM_OF_PLAYERS * GAME_INFO_DATA_PER_PLAYER + 1;
 
 		public static void InitBoard(DataGridView localBoard, int rows)
 		{
 			localBoard.BackgroundColor = Color.Black;
 
+			AddRowsToDataGridView(localBoard, rows);
+
+			InitCells(localBoard);
+		}
+
+		public static void AddRowsToDataGridView(DataGridView localBoard, int rows)
+		{
 			for (int i = 0; i < rows; ++i)
 			{
 				localBoard.Rows.Add();
 			}
-
-			InitCells(localBoard);
 		}
 
 		public static void InitCells(DataGridView dataGridView)
@@ -61,6 +71,36 @@ namespace ScrabbleSolver
 			}
 			dataGridViewCell.Style.ForeColor = Color.Red;
 			dataGridViewCell.Style.SelectionForeColor = Color.Red;
+
+		}
+
+		public static void InitGameInfoBoard(DataGridView gameInfoDataGrid, Dictionary<PlayerIdEnum, Dictionary<GameInfoTypeEnum, string>> GameInfo)
+		{
+			int GameInfoDataGridRowIndex = FIRST_INDEX;
+			InitFormHelper.AddRowsToDataGridView(gameInfoDataGrid, GAME_INFO_BOARD_ROWS);
+			gameInfoDataGrid[FIRST_INDEX, GameInfoDataGridRowIndex].Value = "Game player info";
+			if (GameInfo != null)
+			{
+				foreach (KeyValuePair<PlayerIdEnum, Dictionary<GameInfoTypeEnum, string>> PlayerIdEnumGameInfoKeyValuePair in GameInfo)
+				{
+					++GameInfoDataGridRowIndex;
+					PlayerIdEnum PlayerIdEnum = PlayerIdEnumGameInfoKeyValuePair.Key;
+					gameInfoDataGrid[FIRST_INDEX, GameInfoDataGridRowIndex].Value = Consts.GetStringByPlayerIdEnum(PlayerIdEnum).ToUpper();
+					Dictionary<GameInfoTypeEnum, string> Dictionary = PlayerIdEnumGameInfoKeyValuePair.Value;
+					if (Dictionary != null)
+					{
+						foreach (KeyValuePair<GameInfoTypeEnum, string> GameInfoTypeEnumStringValuePair in Dictionary)
+						{
+							++GameInfoDataGridRowIndex;
+							GameInfoTypeEnum GameInfoTypeEnum = GameInfoTypeEnumStringValuePair.Key;
+							string Value = GameInfoTypeEnumStringValuePair.Value;
+							gameInfoDataGrid[FIRST_INDEX, GameInfoDataGridRowIndex].Value =
+								Consts.GetStringByGameInfoTypeEnum(GameInfoTypeEnum) + Value;
+
+						}
+					}
+				}
+			}
 
 		}
 	}

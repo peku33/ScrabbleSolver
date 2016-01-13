@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace ScrabbleSolver.Common
 {
-	enum PlayerId
+	enum GameInfoTypeEnum
 	{
-		FIRST_PLAYER, 
-		SECOND_PLAYER, 
-		THIRD_PLAYER, 
-		FOURTH_PLAYER
+		PLAYER_SCORE
 	}
 }
