@@ -123,7 +123,7 @@ namespace ScrabbleSolver.Model.Player
 				}
 				else
 				{
-					ReplaceTile();
+					ReplaceTile(null);
 					GameModel.ResetPassCounter();
 				}
 				return true;
@@ -131,6 +131,7 @@ namespace ScrabbleSolver.Model.Player
 			PointsNumber += BestResult;
 			GameModel.PutAndSetTiles(BestContainer, BestStartIndex, BestWord, Rack);
 			GetNewTiles();
+			return true;
 		}
 
 		public override void MakeFirstMove(PutWordEvent MoveEvent)
@@ -174,7 +175,7 @@ namespace ScrabbleSolver.Model.Player
 
 			if(BestWord == null || BestWord.GetWord().Length < 2) //Jesli nie da sie ulozyc zadnego slowa
 			{
-				ReplaceTile();
+				ReplaceTile(null);
 				return;
 			}
 

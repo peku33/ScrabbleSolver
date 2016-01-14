@@ -48,7 +48,7 @@ namespace ScrabbleSolver.Model.Items
 			this.IsEmpty = IsEmpty;
 		}
 
-		public void SetLetter(char IsEmpty)
+		public void SetLetter(char Letter)
 		{
 			this.Letter = Letter;
 		}
