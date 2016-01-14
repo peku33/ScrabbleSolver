@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ScrabbleSolver.Common
 {
-	enum GameInfoTypeEnum
+	public enum GameInfoTypeEnum
 	{
 		PLAYER_SCORE
 	}

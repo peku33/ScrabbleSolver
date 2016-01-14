@@ -29,5 +29,22 @@ namespace ScrabbleSolver.Board
 		{
 			return this.YCoordinate;
 		}
+
+		public override int GetHashCode()
+		{
+			return XCoordinate ^ YCoordinate;
+		}
+
+		public bool Equals(Coordinates p)
+		{
+			// If parameter is null return false:
+			if ((object)p == null)
+			{
+				return false;
+			}
+
+			// Return true if the fields match:
+			return (XCoordinate == p.XCoordinate) && (YCoordinate == p.YCoordinate);
+		}
 	}
 }
