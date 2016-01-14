@@ -64,8 +64,6 @@ namespace ScrabbleSolver.Controller
 
 				PlayerIndex %= GameModel.GetPlayersNumber();
 			}
-
-
 			Console.ReadLine(); //oczekiwanie na enter, zeby gra nie zamykala sie automatycznie - na potrzeby testow
 		}
 
