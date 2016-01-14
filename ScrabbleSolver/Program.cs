@@ -35,6 +35,8 @@ namespace ScrabbleSolver
 			GameForm GameForm = null;
 			Controller.Controller GameController = new Controller.Controller(GameModel, GameForm, ViewEvents);
 
+			GameController.AddStrategies();
+
 			GameController.Start();
 
 			Application.EnableVisualStyles();

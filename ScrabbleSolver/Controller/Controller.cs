@@ -1,10 +1,10 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Concurrent;
 using ScrabbleSolver.Events;
 using ScrabbleSolver.Model;
 using ScrabbleSolver.Model.Player;
 using System.Collections.Generic;
+using ScrabbleSolver.Board;
 
 namespace ScrabbleSolver.Controller
 {
@@ -13,16 +13,19 @@ namespace ScrabbleSolver.Controller
 		private readonly Model.Model GameModel;
 		private readonly GameForm GameForm;
 		private readonly BlockingCollection<ApplicationEvent> ViewEvents;
-		private readonly Dictionary<System.Type, Strategy> Strategy;
+		private readonly Dictionary<System.Type, Strategy> Strategies;
 
 		public Controller(Model.Model Model, GameForm GameForm, BlockingCollection<ApplicationEvent> ViewEvents)
 		{
 			this.GameModel = Model;
 			this.GameForm = GameForm;
 			this.ViewEvents = ViewEvents;
-			this.Strategy = new Dictionary<System.Type, Strategy>();
+			this.Strategies = new Dictionary<System.Type, Strategy>();
+		}
 
-			Strategy.Add(typeof(UpdateViewEvent), new PlayerMoveStrategy());
+		public void AddStrategies()
+		{
+			Strategies.Add(typeof(UpdateViewEvent), new PlayerMoveStrategy(this));
 		}
 
 		public void Start()
@@ -30,68 +33,93 @@ namespace ScrabbleSolver.Controller
 			GameModel.InitPlayers(new AIPlayer(GameModel), new AIPlayer(GameModel), null, null);
 			GameModel.TestDisplay();
 
-			int i = 0;
+			int PlayerIndex = 0; 
 			while(!GameModel.IsEnd())
 			{
-				GameModel.SetCurrentPlayer(i);
+				GameModel.SetCurrentPlayer(PlayerIndex);
 
 				if(GameModel.IsHumanTurn())
 				{
 					Strategy EventStrategy;
 					ApplicationEvent Event = ViewEvents.Take();
 
-					Strategy.TryGetValue(Event.GetType(), out EventStrategy);
+					Strategies.TryGetValue(Event.GetType(), out EventStrategy);
 
 					if(EventStrategy != null)
 					{
-						EventStrategy.Execute(Event);
+						if(EventStrategy.Execute(Event)) //Jesli ruch odbyl sie zgodnie z zasadami to przechodzimy do nastepnego gracza, jesli nie to powtarzamy ture
+						{
+							++PlayerIndex;
+						}
 					}
 				}
 				else
 				{
+					++PlayerIndex;
 					GameModel.NextAITurn();
 				}
 
 				GameModel.TestDisplay(); //Konsolowe wyswietlanie stanu gry na potrzeby testow
 										 //	GameForm.UptadeForm(); //TODO add parameters
 
-				++i;
-				i %= GameModel.GetPlayersNumber();
+				PlayerIndex %= GameModel.GetPlayersNumber();
 			}
 
 
 			Console.ReadLine(); //oczekiwanie na enter, zeby gra nie zamykala sie automatycznie - na potrzeby testow
 		}
-	}
 
-	abstract class Strategy
-	{
-		public abstract void Execute(ApplicationEvent Event);
-	}
-
-	class PlayerMoveStrategy : Strategy
-	{
-		public override void Execute(ApplicationEvent Event)
+		public Model.Model GetModel()
 		{
-			UpdateViewEvent MoveEvent = Event as UpdateViewEvent;;
-
-			MoveEvent.getBoardCells();
+			return GameModel;
 		}
-	}
 
-	class ChangeTileStrategy : Strategy
-	{
-		public override void Execute(ApplicationEvent Event)
+		abstract class Strategy
 		{
+			protected Controller Parent;
 
+			protected Strategy(Controller Parent)
+			{
+				this.Parent = Parent;
+			}
+			/// <summary>
+			/// Wykonanie ruchu
+			/// </summary>
+			/// <param name="Event"></param>
+			/// <returns>true jesli ruch odbyl sie poprawnie</returns>
+			public abstract bool Execute(ApplicationEvent Event);
 		}
-	}
 
-	class PlayerPassStrategy : Strategy
-	{
-		public override void Execute(ApplicationEvent Event)
+		class PlayerMoveStrategy : Strategy
 		{
+			public PlayerMoveStrategy(Controller Parent) : base(Parent) {}
 
+			public override bool Execute(ApplicationEvent Event)
+			{
+				return Parent.GetModel().GetCurrentPlayer().MakeMove(Event as PutWordEvent);
+			}
+		}
+
+		class ChangeTileStrategy : Strategy
+		{
+			public ChangeTileStrategy(Controller Parent) : base(Parent){}
+
+			public override bool Execute(ApplicationEvent Event)
+			{
+				Parent.GetModel().GetCurrentPlayer().ReplaceTile(Event as ReplaceTileEvent);
+				return true;
+			}
+		}
+
+		class PassStrategy : Strategy
+		{
+			public PassStrategy(Controller Parent) : base(Parent){}
+
+			public override bool Execute(ApplicationEvent Event)
+			{
+				Parent.GetModel().GetCurrentPlayer().Pass();
+				return true;
+			}
 		}
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using ScrabbleSolver.Board;
+using ScrabbleSolver.Events;
 using ScrabbleSolver.Model.Items;
 
 namespace ScrabbleSolver.Model.Player
@@ -28,19 +29,19 @@ namespace ScrabbleSolver.Model.Player
 		}
 
 		/// <summary>
-		/// Wykonanie ruchu
+		/// Wykonanie ruchu. Zwraca true jesli ruch zostanie wykonany poprawnie 
 		/// </summary>
-		public abstract void MakeMove();
+		public abstract bool MakeMove(PutWordEvent MoveEvent);
 
 		/// <summary>
 		/// Wykonanie pierwszego ruchu
 		/// </summary>
-		public abstract void MakeFirstMove();
+		public abstract void MakeFirstMove(PutWordEvent MoveEvent);
 
 		/// <summary>
 		/// Wymiana kostki
 		/// </summary>
-		public abstract void ReplaceTile();
+		public abstract void ReplaceTile(ReplaceTileEvent ReplaceTile);
 
 		/// <summary>
 		/// Spasowanie ruchu

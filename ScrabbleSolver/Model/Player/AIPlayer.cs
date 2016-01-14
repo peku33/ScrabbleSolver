@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ScrabbleSolver.Board;
+using ScrabbleSolver.Events;
 using ScrabbleSolver.Model.Items;
 
 namespace ScrabbleSolver.Model.Player
@@ -22,7 +23,7 @@ namespace ScrabbleSolver.Model.Player
 		/// umieszczone). Po wykonaniu procedury dla wszystkich pól, algorytm wstawia najlepsze znalezione słowo. Jeśli gracz nie ma możliwości wstawienia słowa w żadne miejsce, wymienia losową kostkę lub 
 		/// ustawia flage informujaca ze nie jest w stanie wykonac juz ruchu jesli zestaw kostek jest pusty.
 		/// </summary>
-		public override void MakeMove()
+		public override bool MakeMove(PutWordEvent MoveEvent)
 		{
 			int BestResult = 0;
 			int BestStartIndex = 0;
@@ -125,14 +126,14 @@ namespace ScrabbleSolver.Model.Player
 					ReplaceTile();
 					GameModel.ResetPassCounter();
 				}
-				return;
+				return true;
 			}
 			PointsNumber += BestResult;
 			GameModel.PutAndSetTiles(BestContainer, BestStartIndex, BestWord, Rack);
 			GetNewTiles();
 		}
 
-		public override void MakeFirstMove()
+		public override void MakeFirstMove(PutWordEvent MoveEvent)
 		{
 			int BestResult = 0;
 			int BestStartIndex = 0;
@@ -186,7 +187,7 @@ namespace ScrabbleSolver.Model.Player
 		/// <summary>
 		/// Wymiana kostki. Z tabliczki zostaje wyjeta losowa kostka, ktora nie jest blankiem - blanka nigdy nie oplaca sie wymieniac.
 		/// </summary>
-		public override void ReplaceTile()
+		public override void ReplaceTile(ReplaceTileEvent ReplaceTile)
 		{
 			Tile TempTile;
 

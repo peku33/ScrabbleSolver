@@ -86,6 +86,11 @@ namespace ScrabbleSolver.Model
 			CurrentPlayer = Players[Index];
 		}
 
+		public Player.Player GetCurrentPlayer()
+		{
+			return CurrentPlayer;
+		}
+
 		public bool IsHumanTurn()
 		{
 			return CurrentPlayer.GetType() == typeof(HumanPlayer);
@@ -95,11 +100,11 @@ namespace ScrabbleSolver.Model
 		{
 			if(GameBoard.IsEmpty() && CurrentPlayer != null)
 			{
-				CurrentPlayer.MakeFirstMove();
+				CurrentPlayer.MakeFirstMove(null);
 			}
 			else
 			{
-				CurrentPlayer.MakeMove();
+				CurrentPlayer.MakeMove(null);
 			}
 			Console.ReadLine(); //Czekanie na klawisz na potrzeby testow
 		}
@@ -165,6 +170,153 @@ namespace ScrabbleSolver.Model
 				}
 			}
 			return BestPlayer;
+		}
+
+		/// <summary>
+		/// Metoda sprawdza czy na planszy z widoku pojawily sie nowe kostki i czy zostaly wstawione zgodnie z zasadami gry. 
+		/// </summary>
+		/// <returns>Lista nowowstawionych kostek i flaga informujaca czy ruch odbywa sie w pionie czy w poziomie lub null jesli ruch jest niepoprawny</returns>
+		public Tuple<List<Cell>, bool> CheckAndGetNewCells(List<Cell> NewBoardCells)
+		{
+			List<Cell> Cells = new List<Cell>();
+			bool isVertical = false;
+
+			foreach(Cell TempCell in NewBoardCells)
+			{
+				Cell OldCell = GameBoard.GetCell(TempCell.GetXCoordinate(), TempCell.GetYCoordinate());
+
+				if(OldCell != null && OldCell.GetTile() == null && TempCell.GetTile() != null)
+				{
+					Cells.Add(TempCell);
+				}
+			}
+
+			if(Cells.Count == 0) //Nic nie zostalo wstawione => gracz pasuje
+			{
+				return new Tuple<List<Cell>, bool>(Cells, false);
+			}
+
+			if(Cells.Count > 1)
+			{
+				if(Cells[0].GetXCoordinate() == Cells[1].GetXCoordinate())
+				{
+					isVertical = true;
+				}
+
+				if(!ContainedInOneContainer(Cells))
+				{
+					return null;
+				}
+			}
+
+			Container Container;
+			int StartIndex = GameBoard.GetBoardSide();
+			int EndIndex = 0;
+
+			if(isVertical)
+			{
+				foreach(Cell TempCell in Cells)
+				{
+					int y = TempCell.GetYCoordinate();
+					if(y > EndIndex)
+					{
+						EndIndex = y;
+					}
+					if(y < StartIndex)
+					{
+						StartIndex = y;
+					}
+				}
+			}
+			else
+			{
+				foreach(Cell TempCell in Cells)
+				{
+					int x = TempCell.GetXCoordinate();
+					if(x > EndIndex)
+					{
+						EndIndex = x;
+					}
+					if(x < StartIndex)
+					{
+						StartIndex = x;
+					}
+				}
+			}
+			if(isVertical)
+			{
+				Container = GameBoard.FindRow(Cells[0]);
+			}
+			else
+			{
+				Container = GameBoard.FindColumn(Cells[0]);
+			}
+
+			if(!IsOneWord(Container, StartIndex, EndIndex))
+			{
+				return null;
+			}
+
+			return new Tuple<List<Cell>, bool>(Cells, isVertical);
+		}
+
+		/// <summary>
+		/// Metoda sprawdza czy wszystkie komorki z listy znajduja sie w tym samym rzedzie lub kolumnie
+		/// </summary>
+		/// <param name="Cells"></param>
+		/// <returns></returns>
+		public bool ContainedInOneContainer(List<Cell> Cells)
+		{
+			if(Cells.Count == 0)
+			{
+				return true;
+			}
+
+			int x = Cells[0].GetXCoordinate();
+			int y = Cells[0].GetYCoordinate();
+			bool Vertical = true;
+
+			foreach(Cell TempCell in Cells)
+			{
+				if(TempCell.GetXCoordinate() != x)
+				{
+					Vertical = false;
+					break;
+				}
+			}
+
+			if(Vertical)
+			{
+				return true;
+			}
+
+			foreach(Cell TempCell in Cells)
+			{
+				if(TempCell.GetYCoordinate() != y)
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		/// <summary>
+		/// Metoda sprawdzajaca czy pomiedzy indeksami przekazanymi w argumencie wywolania nie ma pustego pola
+		/// </summary>
+		/// <param name="Container"></param>
+		/// <param name="StartIndex"></param>
+		/// <param name="EndIndex"></param>
+		/// <returns></returns>
+		private bool IsOneWord(Container Container, int StartIndex, int EndIndex)
+		{
+			for(; StartIndex > EndIndex; ++StartIndex)
+			{
+				if(Container.Get(StartIndex).GetTile() == null)
+				{
+					return false;
+				}
+			}
+			return true;
 		}
 
 		/// <summary>
@@ -522,6 +674,44 @@ namespace ScrabbleSolver.Model
 		}
 
 		/// <summary>
+		/// Metoda zwraca slowo, ktore przechodzi przez index podany w argumecnie wywolania
+		/// </summary>
+		/// <param name="Container"></param>
+		/// <param name="Index"></param>
+		/// <returns></returns>
+		public String GetWord(Container Container, int Index)
+		{
+			String NewWord = String.Empty;
+
+			foreach(Cell TempCell in Container)
+			{
+				if(TempCell.GetTile() != null)
+				{
+					NewWord += TempCell.GetTile().GetLetter();
+				}
+				else if(TempCell.GetXCoordinate() > Index) //Ulozone zostalo cale slowo
+				{
+					if(NewWord.Length > 1)
+					{
+						return NewWord;
+					}
+					break;
+				}
+				else
+				{
+					NewWord = String.Empty;
+				}
+			}
+			if(NewWord.Length > 1)//Jesli slowo konczy sie przy krawedzi planszy
+			{
+				return NewWord;
+			}
+
+			return NewWord;
+		}
+
+
+		/// <summary>
 		/// Metoda zliczajaca punkty ktore otrzyma gracz za ulozenie okreslonego slowa w okreslone miejsce
 		/// </summary>
 		/// <param name="Word"></param>
@@ -663,6 +853,30 @@ namespace ScrabbleSolver.Model
 			}
 		}
 
+		public void PutTiles(List<Cell> Cells)
+		{
+			foreach(Cell TempCell in Cells)
+			{
+				GameBoard.GetCell(TempCell.GetXCoordinate(), TempCell.GetYCoordinate()).SetTile(TempCell.GetTile());
+			}
+		}
+
+		public void RemoveTiles(List<Cell> Cells)
+		{
+			foreach(Cell TempCell in Cells)
+			{
+				GameBoard.GetCell(TempCell.GetXCoordinate(), TempCell.GetYCoordinate()).SetTile(null);
+			}
+		}
+
+		public void SetVisited(List<Cell> Cells)
+		{
+			foreach(Cell TempCell in Cells)
+			{
+				GameBoard.GetCell(TempCell.GetXCoordinate(), TempCell.GetYCoordinate()).SetVisited(true);
+			}
+		}
+
 		/// <summary>
 		/// Metoda wstawia kostki w odpowiednie miejsce na planszy, usuwa je z tabliczki i oznacza pola jako odwiedzone - wykorzystywana przy ostatecznym wstawianiu kostek na plansze
 		/// </summary>
@@ -727,7 +941,7 @@ namespace ScrabbleSolver.Model
 		/// <param name="Container">Plaszyzna z ktorej odczytujemy slowo</param>
 		/// <param name="Index">Indeks, na ktorym nie ma jeszcze ulozonej kostki</param>
 		/// <returns>tuple zawierajacy dlugosc slowa oraz indeks od ktorego slowo sie zaczyna w kontenerze Container</returns>
-		private Tuple<int, int> GetWordInfo(Container Container, int Index)
+		public Tuple<int, int> GetWordInfo(Container Container, int Index)
 		{
 			Cell TempCell;
 			int StartIndex = 0;
@@ -753,7 +967,6 @@ namespace ScrabbleSolver.Model
 			}
 			return Tuple.Create(NewWordLength, StartIndex);
 		}
-
 
 		/// <summary>
 		/// Zliczanie odleglosci od wskazanego indeksu w kontenerze do pierwszego indeksu na ktorym znajduje sie kostka. 

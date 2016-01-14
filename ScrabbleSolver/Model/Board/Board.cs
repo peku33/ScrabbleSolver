@@ -123,6 +123,11 @@ namespace ScrabbleSolver.Board
 			return this.Columns;
 		}
 
+		public Cell GetCell(int x, int y)
+		{
+			return Columns[x].Get(y);
+		}
+
 		public Row FindRow(Cell Cell)
 		{
 			return Rows.FirstOrDefault(TempRow => TempRow.Contains(Cell));

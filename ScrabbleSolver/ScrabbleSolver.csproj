@@ -56,7 +56,9 @@
     <Compile Include="Encoding\Encoding.cs" />
     <Compile Include="Encoding\Polish.cs" />
     <Compile Include="Events\ApplicationEvent.cs" />
-    <Compile Include="Events\UpdateModelEvent.cs" />
+    <Compile Include="Events\PassEvent.cs" />
+    <Compile Include="Events\PutWordEvent.cs" />
+    <Compile Include="Events\ReplaceTileEvent.cs" />
     <Compile Include="Events\UpdateViewEvent.cs" />
     <Compile Include="Language\Language.cs" />
     <Compile Include="Language\Polish.cs" />
