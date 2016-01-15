@@ -6,25 +6,17 @@ namespace ScrabbleSolver.Events
 {
 	public class ReplaceTileEvent : ApplicationEvent
 	{
-		// Lita reprezentujaca kostki ktore pozostaly w tabliczce gracza
-		private readonly List<Tile> PlayerTiles;
-		// Kostka ktora ma zostac wymieniona
-		private readonly Tile ReplacedTile;
+		// Zawartosc kostki ktora ma zostac wymieniona
+		private readonly String ReplacedTileString;
 
-		public ReplaceTileEvent(List<Tile> Tiles, Tile ReplacedTile)
+		public ReplaceTileEvent(String ReplacedTileString)
 		{
-			PlayerTiles = Tiles;
-			this.ReplacedTile = ReplacedTile;
+			this.ReplacedTileString = ReplacedTileString;
 		} 
 
-		public List<Tile> GetPlayerTiles()
+		public String GetReplacedTile()
 		{
-			return PlayerTiles;
-		}
-
-		public Tile GetReplacedTile()
-		{
-			return ReplacedTile;
+			return ReplacedTileString;
 		}
 	}
 }

@@ -41,7 +41,7 @@ namespace ScrabbleSolver
 
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new GameForm()); //TODO use GameForm implemented above
+			Application.Run(new GameForm(ViewEvents)); //TODO use GameForm implemented above
 		}
 	}
 }

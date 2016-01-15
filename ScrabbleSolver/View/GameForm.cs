@@ -1,17 +1,21 @@
 ﻿using System;
 using System.CodeDom;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ScrabbleSolver;
 using ScrabbleSolver.Board;
 using ScrabbleSolver.Common;
+using ScrabbleSolver.Events;
 using ScrabbleSolver.Model.Items;
+using ScrabbleSolver.View;
 
 namespace ScrabbleSolver
 {
@@ -23,11 +27,16 @@ namespace ScrabbleSolver
 		private String TemporaryCopingCharacter;
 		private Dictionary<Coordinates, Cell> CellValues;
 		private List<Tile> HeldCharacters; //TODO change to Dictionary
+		private BlockingCollection<ApplicationEvent> viewEvents;
+		private Thread Thread;
+		private Thread ReplaceTileFormThread;
+
 		private static readonly int FIRST_INDEX = 0;
 		private static readonly int ROWS_NUMBER = 1;
 
-		public GameForm()
+		public GameForm(BlockingCollection<ApplicationEvent> viewEvents)
 		{
+			this.viewEvents = viewEvents;
 			InitializeComponent();
 		}
 
@@ -300,6 +309,37 @@ namespace ScrabbleSolver
 		public void UptadeForm()
 		{
 			//TODO
+		}
+
+		private void newGameToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+
+			Thread = new Thread(OpenNewGameForm);
+			Thread.SetApartmentState(ApartmentState.STA);
+			Thread.Start();
+		}
+
+		private void OpenNewGameForm()
+		{
+			Application.Run(new NewGameForm(viewEvents));
+		}
+
+		private void nextTurnButton_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void replaceTileButton_Click(object sender, EventArgs e)
+		{
+			ReplaceTileFormThread = new Thread(OpenReplaceTileForm);
+			ReplaceTileFormThread.SetApartmentState(ApartmentState.STA);
+			ReplaceTileFormThread.Start();
+
+		}
+
+		private void OpenReplaceTileForm()
+		{
+			Application.Run(new ReplaceTileForm(viewEvents));
 		}
 	}
 }

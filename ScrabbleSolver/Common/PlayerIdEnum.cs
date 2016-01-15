@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ScrabbleSolver.Common
 {
-	enum PlayerIdEnum
+	public enum PlayerIdEnum
 	{
 		FIRST_PLAYER, 
 		SECOND_PLAYER, 
