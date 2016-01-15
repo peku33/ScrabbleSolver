@@ -8,7 +8,6 @@ namespace ScrabbleSolver.Model
 	public static class Configuration
 	{
 		//Ścieżki do plików inicjalizacyjnych
-		public static String BoardFile = @"..\..\Board.txt";
 		public static String DictionaryFile = @"..\..\Slowa.txt";
 
 		//Pojemność tabliczki

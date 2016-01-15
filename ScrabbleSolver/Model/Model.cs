@@ -14,11 +14,10 @@ namespace ScrabbleSolver.Model
 	public class Model
 	{
 		private readonly List<Player.Player> Players;
-		private readonly Board.Board GameBoard;
 		private readonly Dictionary.Dictionary GameDictionary;
-		private readonly TilesSet TilesSet;
 		private readonly Language.Language GameLanguage;
-
+		private Board.Board GameBoard;
+		private TilesSet TilesSet;
 		private Player.Player CurrentPlayer;
 
 		//Licznik spasowan. Gra konczy sie gdy wszyscy gracze spasuja.
@@ -29,26 +28,23 @@ namespace ScrabbleSolver.Model
 			this.GameLanguage = Language;
 			TilesSet = new TilesSet(Language);
 			this.Players = new List<Player.Player>();
-			this.GameBoard = new Board.Board(Configuration.BoardFile);
+			this.GameBoard = new Board.Board();
 			this.GameDictionary = GameDictionary;
 			this.PassCounter = 0;
 		}
 
-		public void InitPlayers(Player.Player Player1, Player.Player Player2, Player.Player Player3, Player.Player Player4)
+		public void AddPlayer(Player.Player NewPlayer)
 		{
-			if(Player1 != null)
-				Players.Add(Player1);
-			if(Player2 != null)
-				Players.Add(Player2);
-			if(Player3 != null)
-				Players.Add(Player3);
-			if(Player4 != null)
-				Players.Add(Player4);
+			Players.Add(NewPlayer);
+			NewPlayer.GetNewTiles();
+		}
 
-			foreach(Player.Player Player in Players)
-			{
-				Player.GetNewTiles();
-			}
+		public void ResetGame()
+		{
+			GameBoard = new Board.Board();
+			Players.Clear();
+			TilesSet = new TilesSet(GameLanguage);
+			PassCounter = 0;
 		}
 
 		public Dictionary.Dictionary GetDictionary()

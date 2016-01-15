@@ -135,9 +135,9 @@ namespace ScrabbleSolver.Model.Player
 			{
 				return;
 			}
+			Rack.Remove(new Tile(ReplaceEvent.GetReplacedTile()[0]));
 
-			//TODO ReplaceEvent returns String value, so we need probably create Tile object first
-		//	GameModel.GetTilesSet().Add(ReplaceEvent.GetReplacedTile()); //wrzucenie starej kostki do zestawu
+			GameModel.GetTilesSet().Add(new Tile(ReplaceEvent.GetReplacedTile()[0]));
 			Rack.Add(GameModel.GetTilesSet().GetRandomTile()); //wylosowanie nowej kostki i dodanie do tabliczki
 		}
 

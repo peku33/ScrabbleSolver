@@ -12,9 +12,6 @@ namespace ScrabbleSolver.Board
 		//Liczba kostek mieszczących się w jednym rzędzie planszy
 		private static readonly int BoardSide = 15;
 
-		//Ścieżka do pliku mapy
-		private readonly String BoardPath;
-
 		//Lista wierszy planszy
 		private readonly List<Row> Rows;
 
@@ -23,9 +20,8 @@ namespace ScrabbleSolver.Board
 
 		private bool Empty;
 
-		public Board(String BoardPath)
+		public Board()
 		{
-			this.BoardPath = BoardPath;
 			Rows = new List<Row>();
 			Columns = new List<Column>();
 			Empty = true;

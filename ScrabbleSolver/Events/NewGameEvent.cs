@@ -16,6 +16,14 @@ namespace ScrabbleSolver.Events
 			IsComputerPlayer = isComputerPlayer;
 		}
 
+		public Tuple<bool, bool> GetPlayerInfo(PlayerIdEnum PlayerId)
+		{
+			bool ShouldAddPlayer;
+			bool IsComputer;
+			ShouldAddPlayerDictionary.TryGetValue(PlayerId, out ShouldAddPlayer);
+			IsComputerPlayer.TryGetValue(PlayerId, out IsComputer);
 
+            return new Tuple<bool, bool>(ShouldAddPlayer, IsComputer);
+		}
 	}
 }

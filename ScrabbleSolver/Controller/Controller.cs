@@ -5,6 +5,7 @@ using ScrabbleSolver.Model;
 using ScrabbleSolver.Model.Player;
 using System.Collections.Generic;
 using ScrabbleSolver.Board;
+using ScrabbleSolver.Common;
 
 namespace ScrabbleSolver.Controller
 {
@@ -25,46 +26,70 @@ namespace ScrabbleSolver.Controller
 
 		public void AddStrategies()
 		{
-			Strategies.Add(typeof(UpdateViewEvent), new PlayerMoveStrategy(this));
+			//Strategies.Add(typeof(UpdateViewEvent), new PutWordStrategy(this));
+			Strategies.Add(typeof(PassEvent), new PassStrategy(this));
+			Strategies.Add(typeof(PutWordEvent), new PutWordStrategy(this));
+			Strategies.Add(typeof(ReplaceTileEvent), new ReplaceTileStrategy(this));
+			Strategies.Add(typeof(NewGameEvent), new NewGameStrategy(this));
 		}
 
 		public void Start()
 		{
-			GameModel.InitPlayers(new AIPlayer(GameModel), new AIPlayer(GameModel), null, null);
-			GameModel.TestDisplay();
-
-			int PlayerIndex = 0; 
-			while(!GameModel.IsEnd())
+			while(true)
 			{
-				GameModel.SetCurrentPlayer(PlayerIndex);
+				GameModel.TestDisplay();
+				int PlayerIndex = 0;
 
-				if(GameModel.IsHumanTurn())
+				if(GameModel.GetPlayersNumber() == 0) //Zaden gracz nie gra, wiec gra stoi dopoki nie otrzyma zdarzenia nowej gry
 				{
+					PlayerIndex = 0;
 					Strategy EventStrategy;
-					ApplicationEvent Event = ViewEvents.Take();
+					ApplicationEvent Event;
+
+					do
+					{
+						Event = ViewEvents.Take();
+					} while(Event.GetType() != typeof(NewGameEvent));
 
 					Strategies.TryGetValue(Event.GetType(), out EventStrategy);
+					EventStrategy.Execute(Event);
+					continue;
+				}
 
-					if(EventStrategy != null)
+				while(!GameModel.IsEnd())
+				{
+					GameModel.SetCurrentPlayer(PlayerIndex);
+
+					if(GameModel.IsHumanTurn())
 					{
-						if(EventStrategy.Execute(Event)) //Jesli ruch odbyl sie zgodnie z zasadami to przechodzimy do nastepnego gracza, jesli nie to powtarzamy ture
+						Strategy EventStrategy;
+						ApplicationEvent Event = ViewEvents.Take();
+
+						Strategies.TryGetValue(Event.GetType(), out EventStrategy);
+
+						if(EventStrategy != null)
 						{
-							++PlayerIndex;
+							if(EventStrategy.Execute(Event))
+							//Jesli ruch odbyl sie zgodnie z zasadami to przechodzimy do nastepnego gracza, jesli nie to powtarzamy ture
+							{
+								++PlayerIndex;
+							}
 						}
 					}
-				}
-				else
-				{
-					++PlayerIndex;
-					GameModel.NextAITurn();
-				}
+					else
+					{
+						++PlayerIndex;
+						GameModel.NextAITurn();
+					}
 
-				GameModel.TestDisplay(); //Konsolowe wyswietlanie stanu gry na potrzeby testow
-										 //	GameForm.UptadeForm(); //TODO add parameters
+					GameModel.TestDisplay(); //Konsolowe wyswietlanie stanu gry na potrzeby testow
+											 //	GameForm.UptadeForm(); //TODO add parameters
 
-				PlayerIndex %= GameModel.GetPlayersNumber();
+					PlayerIndex %= GameModel.GetPlayersNumber();
+				}
+				
+				//TODO - dojscie do tego miejsca programu oznacza, ze gra sie skonczyla - trzeba wywolac z widoku funkcje, ktora podkresli kto wygral
 			}
-			Console.ReadLine(); //oczekiwanie na enter, zeby gra nie zamykala sie automatycznie - na potrzeby testow
 		}
 
 		public Model.Model GetModel()
@@ -80,17 +105,15 @@ namespace ScrabbleSolver.Controller
 			{
 				this.Parent = Parent;
 			}
-			/// <summary>
-			/// Wykonanie ruchu
-			/// </summary>
-			/// <param name="Event"></param>
-			/// <returns>true jesli ruch odbyl sie poprawnie</returns>
+
 			public abstract bool Execute(ApplicationEvent Event);
 		}
 
-		class PlayerMoveStrategy : Strategy
+		class PutWordStrategy : Strategy
 		{
-			public PlayerMoveStrategy(Controller Parent) : base(Parent) {}
+			public PutWordStrategy(Controller Parent) : base(Parent)
+			{
+			}
 
 			public override bool Execute(ApplicationEvent Event)
 			{
@@ -98,9 +121,11 @@ namespace ScrabbleSolver.Controller
 			}
 		}
 
-		class ChangeTileStrategy : Strategy
+		class ReplaceTileStrategy : Strategy
 		{
-			public ChangeTileStrategy(Controller Parent) : base(Parent){}
+			public ReplaceTileStrategy(Controller Parent) : base(Parent)
+			{
+			}
 
 			public override bool Execute(ApplicationEvent Event)
 			{
@@ -111,11 +136,60 @@ namespace ScrabbleSolver.Controller
 
 		class PassStrategy : Strategy
 		{
-			public PassStrategy(Controller Parent) : base(Parent){}
+			public PassStrategy(Controller Parent) : base(Parent)
+			{
+			}
 
 			public override bool Execute(ApplicationEvent Event)
 			{
 				Parent.GetModel().GetCurrentPlayer().Pass();
+				return true;
+			}
+		}
+
+		class NewGameStrategy : Strategy
+		{
+			public NewGameStrategy(Controller Parent) : base(Parent)
+			{
+			}
+
+			public override bool Execute(ApplicationEvent Event)
+			{
+				NewGameEvent NewGameEvent = Event as NewGameEvent;
+
+				if(NewGameEvent == null)
+				{
+					return false;
+				}
+
+				Parent.GetModel().ResetGame();
+
+				List<Player> Players = new List<Player>();
+				List<Tuple<bool, bool>> PlayerInfoList = new List<Tuple<bool, bool>>();
+
+				foreach(PlayerIdEnum PlayerId in Enum.GetValues(typeof(PlayerIdEnum)))
+				{
+					PlayerInfoList.Add(NewGameEvent.GetPlayerInfo(PlayerId));
+				}
+
+				foreach(Tuple<bool, bool> PlayerInfo in PlayerInfoList)
+				{
+					bool ShouldAddPlayer = PlayerInfo.Item1;
+					bool isComputer = PlayerInfo.Item2;
+					int PlayerIndex = 1;
+					if(ShouldAddPlayer)
+					{
+						if(isComputer)
+						{
+							Parent.GetModel().AddPlayer(new AIPlayer(Parent.GetModel()));
+						}
+						else
+						{
+							Parent.GetModel().AddPlayer(new HumanPlayer("Player" + PlayerIndex++, Parent.GetModel()));
+						}
+					}
+				}
+
 				return true;
 			}
 		}
