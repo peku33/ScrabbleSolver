@@ -73,8 +73,7 @@ namespace ScrabbleSolver.Controller
 
 						if(EventStrategy != null)
 						{
-							if(EventStrategy.Execute(Event))
-							//Jesli ruch odbyl sie zgodnie z zasadami to przechodzimy do nastepnego gracza, jesli nie to powtarzamy ture
+							if(EventStrategy.Execute(Event)) //Jesli ruch odbyl sie zgodnie z zasadami to przechodzimy do nastepnego gracza, jesli nie to powtarzamy ture
 							{
 								++PlayerIndex;
 							}
@@ -87,11 +86,11 @@ namespace ScrabbleSolver.Controller
 					}
 
 					GameModel.TestDisplay(); //Konsolowe wyswietlanie stanu gry na potrzeby testow
-					UpdateView();                   
+					UpdateView();
 
 					PlayerIndex %= GameModel.GetPlayersNumber();
 				}
-				
+
 				//TODO - dojscie do tego miejsca programu oznacza, ze gra sie skonczyla - trzeba wywolac z widoku funkcje, ktora podkresli kto wygral
 			}
 		}
