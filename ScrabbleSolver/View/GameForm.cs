@@ -56,18 +56,9 @@ namespace ScrabbleSolver
 			_GameInfo = new Dictionary<PlayerIdEnum, Dictionary<GameInfoTypeEnum, string>>();
 			heldCharacters = new Dictionary<PlayerIdEnum,List<Tile>>();
 
-
-			Coordinates coordinates = new Coordinates(12, 12);// test
-			CellValues.Add(coordinates, new Cell(coordinates, 5, 5, new Tile(true), false));// test
-
-			Dictionary<GameInfoTypeEnum, string> Dictionary = new Dictionary<GameInfoTypeEnum, string>();// test
-			Dictionary.Add(GameInfoTypeEnum.PLAYER_SCORE, "12");// test
-			_GameInfo.Add(PlayerIdEnum.FIRST_PLAYER, Dictionary);// test
-
 			InitAllDataGridViews(); /// TODO get data from GameModel
 			InitPlayerIdEnumToDataGridViewCellDictionary();
 
-			InitFormHelper.FormatSingleCell(4, 4, boardGridView, false); // test
 			AddAllHeldCharacters();
 
 		}
@@ -348,8 +339,9 @@ namespace ScrabbleSolver
 		}
 
 
-		public void UptadeForm(UpdateViewEvent UpdateViewEvent)
+		public void UpdateForm(UpdateViewEvent UpdateViewEvent)
 		{
+
 			CellValues.Clear();
 			foreach (Cell boardCell in UpdateViewEvent.BoardCells)
 			{
@@ -360,6 +352,8 @@ namespace ScrabbleSolver
 			 _GameInfo = UpdateViewEvent.GameInfo;
 			heldCharacters = UpdateViewEvent.HeldCharacters;
 			_CurrentPlayer = UpdateViewEvent.CurrentPlayer;
+
+
 			Invalidate();
 			Update();
 		}

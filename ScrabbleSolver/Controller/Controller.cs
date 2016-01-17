@@ -4,6 +4,7 @@ using ScrabbleSolver.Events;
 using ScrabbleSolver.Model;
 using ScrabbleSolver.Model.Player;
 using System.Collections.Generic;
+using System.Threading;
 using ScrabbleSolver.Board;
 using ScrabbleSolver.Common;
 using ScrabbleSolver.Model.Items;
@@ -105,7 +106,15 @@ namespace ScrabbleSolver.Controller
 		/// </summary>
 		public void UpdateView()
 		{
-			GameForm.UptadeForm(new UpdateViewEvent(GameModel.GetGameInfo(), GameModel.GetHeldCharacters(), GameModel.GetBoardCells(), GameModel.GetCurrentPlayerIndex()));
+			GameForm.BeginInvoke(
+				new Action(
+							() =>
+							{
+								GameForm.UpdateForm(new UpdateViewEvent(GameModel.GetGameInfo(), GameModel.GetHeldCharacters(),
+									GameModel.GetBoardCells(), GameModel.GetCurrentPlayerIndex()));
+							})
+						);
+			Thread.Sleep(1000);
 		}
 
 		abstract class Strategy
