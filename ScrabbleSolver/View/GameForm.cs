@@ -353,7 +353,6 @@ namespace ScrabbleSolver
 			heldCharacters = UpdateViewEvent.HeldCharacters;
 			_CurrentPlayer = UpdateViewEvent.CurrentPlayer;
 
-
 			Invalidate();
 			Update();
 		}

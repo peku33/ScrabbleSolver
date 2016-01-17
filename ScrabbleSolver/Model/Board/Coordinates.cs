@@ -35,14 +35,15 @@ namespace ScrabbleSolver.Board
 			return XCoordinate ^ YCoordinate;
 		}
 
-		public bool Equals(Coordinates p)
+		public override bool Equals(object o)
 		{
 			// If parameter is null return false:
-			if ((object)p == null)
+			if ((object)o == null)
 			{
 				return false;
 			}
 
+			Coordinates p = (Coordinates) o;
 			// Return true if the fields match:
 			return (XCoordinate == p.XCoordinate) && (YCoordinate == p.YCoordinate);
 		}
