@@ -217,9 +217,18 @@ namespace ScrabbleSolver
 					// the white foreground
 					Rectangle rectangle = new Rectangle(e.CellBounds.X+1 , e.CellBounds.Y+1 , e.CellBounds.Width-2, e.CellBounds.Height-2);
 					e.Graphics.FillRectangle(Brushes.White, rectangle);
-					Font f = new Font(e.CellStyle.Font.FontFamily, 6);
+					Font f = new Font(e.CellStyle.Font.FontFamily, 7);
 
-					string StringToPrint = "L" + ConvertIntToString(CellValue.GetLetterMultiplier()) + " W" + ConvertIntToString(CellValue.GetWordMultiplier());
+					string StringToPrint = "";
+					if (CellValue.GetLetterMultiplier() != 1)
+					{
+						StringToPrint += "L " + ConvertIntToString(CellValue.GetLetterMultiplier()) + " ";
+					}
+
+					if (CellValue.GetWordMultiplier() != 1)
+					{
+						StringToPrint += "W " + ConvertIntToString(CellValue.GetWordMultiplier());
+					}
 
 					e.Graphics.DrawString(StringToPrint, f, Brushes.Black, rectangle);
 					e.PaintContent(e.ClipBounds);
@@ -342,17 +351,24 @@ namespace ScrabbleSolver
 		public void UpdateForm(UpdateViewEvent UpdateViewEvent)
 		{
 
-			CellValues.Clear();
 			foreach (Cell boardCell in UpdateViewEvent.BoardCells)
 			{
+
 				Coordinates coordinates = new Coordinates(boardCell.GetXCoordinate(), boardCell.GetYCoordinate());
+				CellValues.Remove(coordinates);
 				CellValues.Add(coordinates, boardCell);
 
 				if (boardCell.GetTile() != null)
 				{
-					boardGridView[boardCell.GetXCoordinate(), boardCell.GetYCoordinate()].Value = boardCell.GetTile().GetLetter().ToString().ToUpper();			
+					boardGridView[boardCell.GetXCoordinate(), boardCell.GetYCoordinate()].Value =
+						boardCell.GetTile().GetLetter().ToString().ToUpper();
+				}
+				else
+				{
+					boardGridView[boardCell.GetXCoordinate(), boardCell.GetYCoordinate()].Value = "";
 				}
 			}
+
 
 			 _GameInfo = UpdateViewEvent.GameInfo;
 			heldCharacters = UpdateViewEvent.HeldCharacters;
@@ -372,7 +388,7 @@ namespace ScrabbleSolver
 
 		private void InitAllCellValues()
 		{
-
+			CellValues.Clear();
 			for (int IndexYCoordinate = FIRST_INDEX; IndexYCoordinate < BOARD_SIZE; ++IndexYCoordinate)
 			{
 				for (int IndexXCoordinate = FIRST_INDEX; IndexXCoordinate < BOARD_SIZE; ++IndexXCoordinate)

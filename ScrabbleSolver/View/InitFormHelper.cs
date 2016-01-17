@@ -11,7 +11,7 @@ namespace ScrabbleSolver
 {
 	static class InitFormHelper
 	{
-		private static readonly int SINGLE_CELL_SIZE = 35;
+		private static readonly int SINGLE_CELL_SIZE = 38;
 		private static readonly int FIRST_INDEX = 0;
 		private static readonly short MAX_NUM_OF_PLAYERS = 4;
 		private static readonly short GAME_INFO_DATA_PER_PLAYER = 2;
