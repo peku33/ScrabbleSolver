@@ -56,7 +56,7 @@ namespace ScrabbleSolver
 			_GameInfo = new Dictionary<PlayerIdEnum, Dictionary<GameInfoTypeEnum, string>>();
 			heldCharacters = new Dictionary<PlayerIdEnum,List<Tile>>();
 
-			InitAllDataGridViews(); /// TODO get data from GameModel
+			InitAllDataGridViews();
 			InitPlayerIdEnumToDataGridViewCellDictionary();
 
 			AddAllHeldCharacters();
@@ -347,6 +347,11 @@ namespace ScrabbleSolver
 			{
 				Coordinates coordinates = new Coordinates(boardCell.GetXCoordinate(), boardCell.GetYCoordinate());
 				CellValues.Add(coordinates, boardCell);
+
+				if (boardCell.GetTile() != null)
+				{
+					boardGridView[boardCell.GetXCoordinate(), boardCell.GetYCoordinate()].Value = boardCell.GetTile().GetLetter().ToString().ToUpper();			
+				}
 			}
 
 			 _GameInfo = UpdateViewEvent.GameInfo;
