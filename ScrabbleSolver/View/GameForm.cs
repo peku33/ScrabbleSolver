@@ -26,7 +26,11 @@ namespace ScrabbleSolver
 		private Dictionary<PlayerIdEnum, Dictionary<GameInfoTypeEnum, String>> _GameInfo;
 		private String TemporaryCopingCharacter;
 		private Dictionary<Coordinates, Cell> CellValues;
-		private List<Tile> HeldCharacters; //TODO change to Dictionary
+		private Dictionary<PlayerIdEnum, List<Tile>> heldCharacters;
+
+		private Dictionary<PlayerIdEnum, DataGridViewCell> PlayerIdEnumToDataGridViewCellLabelDictionary;
+		private Dictionary<PlayerIdEnum, DataGridViewCell> PlayerIdEnumToDataGridViewCellDataDictionary;
+
 		private BlockingCollection<ApplicationEvent> viewEvents;
 		private Thread Thread;
 		private Thread ReplaceTileFormThread;
@@ -49,21 +53,37 @@ namespace ScrabbleSolver
 			/// some sample data  - to remove in the future
 			CellValues = new Dictionary<Coordinates, Cell>();
 			_GameInfo = new Dictionary<PlayerIdEnum, Dictionary<GameInfoTypeEnum, string>>();
+			heldCharacters = new Dictionary<PlayerIdEnum,List<Tile>>();
 
 
 			Coordinates coordinates = new Coordinates(12, 12);// test
 			CellValues.Add(coordinates, new Cell(coordinates, 5, 5, new Tile(true), false));// test
-			HeldCharacters = new List<Tile>();// test
-			HeldCharacters.Add(new Tile('K'));// test
+
 			Dictionary<GameInfoTypeEnum, string> Dictionary = new Dictionary<GameInfoTypeEnum, string>();// test
 			Dictionary.Add(GameInfoTypeEnum.PLAYER_SCORE, "12");// test
 			_GameInfo.Add(PlayerIdEnum.FIRST_PLAYER, Dictionary);// test
 
 			InitAllDataGridViews(); /// TODO get data from GameModel
+			InitPlayerIdEnumToDataGridViewCellDictionary();
 
 			InitFormHelper.FormatSingleCell(4, 4, boardGridView, false); // test
 			AddAllHeldCharacters();
 
+		}
+
+		private void InitPlayerIdEnumToDataGridViewCellDictionary()
+		{
+			PlayerIdEnumToDataGridViewCellLabelDictionary = new Dictionary<PlayerIdEnum, DataGridViewCell>();
+			PlayerIdEnumToDataGridViewCellLabelDictionary.Add(PlayerIdEnum.FIRST_PLAYER, FirstHeldCharactersLabelDataGrid[FIRST_INDEX, FIRST_INDEX]);
+			PlayerIdEnumToDataGridViewCellLabelDictionary.Add(PlayerIdEnum.SECOND_PLAYER, FirstHeldCharactersLabelDataGrid[SECOND_INDEX, FIRST_INDEX]);
+			PlayerIdEnumToDataGridViewCellLabelDictionary.Add(PlayerIdEnum.THIRD_PLAYER, SecondHeldCharactersLabelDataGrid[FIRST_INDEX, FIRST_INDEX]);
+			PlayerIdEnumToDataGridViewCellLabelDictionary.Add(PlayerIdEnum.FOURTH_PLAYER, SecondHeldCharactersLabelDataGrid[SECOND_INDEX, FIRST_INDEX]);
+
+			PlayerIdEnumToDataGridViewCellDataDictionary = new Dictionary<PlayerIdEnum, DataGridViewCell>();
+			PlayerIdEnumToDataGridViewCellDataDictionary.Add(PlayerIdEnum.FIRST_PLAYER, FirstHeldCharactersDataGrid[FIRST_INDEX, FIRST_INDEX]);
+			PlayerIdEnumToDataGridViewCellDataDictionary.Add(PlayerIdEnum.SECOND_PLAYER, FirstHeldCharactersDataGrid[8, FIRST_INDEX]);
+			PlayerIdEnumToDataGridViewCellDataDictionary.Add(PlayerIdEnum.THIRD_PLAYER, SecondHeldCharactersDataGrid[FIRST_INDEX, FIRST_INDEX]);
+			PlayerIdEnumToDataGridViewCellDataDictionary.Add(PlayerIdEnum.FOURTH_PLAYER, SecondHeldCharactersDataGrid[8, FIRST_INDEX]);
 		}
 
 		/// <summary>
@@ -71,9 +91,25 @@ namespace ScrabbleSolver
 		/// </summary>
 		private void AddAllHeldCharacters()
 		{
-			for( int Index = FIRST_INDEX ; Index < HeldCharacters.Count ; Index++)
+
+			foreach (KeyValuePair<PlayerIdEnum, List<Tile>> KVP in heldCharacters)
 			{
-				FirstHeldCharactersDataGrid[Index, FIRST_INDEX].Value = HeldCharacters[Index].GetLetter(); //TODO do this same for all HeldCharacters
+				PlayerIdEnum playerIdEnum = KVP.Key;
+				List<Tile> value = KVP.Value;
+				DataGridViewCell DataGridViewCell = null;
+				PlayerIdEnumToDataGridViewCellDataDictionary.TryGetValue(playerIdEnum, out DataGridViewCell);
+
+				if (DataGridViewCell != null)
+				{
+					int FirstColumnIndexOffset = DataGridViewCell.ColumnIndex;
+					DataGridView dataGridView = DataGridViewCell.DataGridView;
+
+					for( int Index = FIRST_INDEX ; Index < value.Count ; Index++)
+					{
+						dataGridView[Index + FirstColumnIndexOffset, FIRST_INDEX].Value = value[Index].GetLetter(); 
+					}
+
+				}
 			}
 		}
 
@@ -87,7 +123,7 @@ namespace ScrabbleSolver
 			SecondHeldCharactersLabelDataGrid[SECOND_INDEX, FIRST_INDEX].Value = "Held Characters Fourth Player ";/// TODO get data from GameModel
 			FirstHeldCharactersLabelDataGrid[FIRST_INDEX, FIRST_INDEX].Value = "Held Characters First Player";/// TODO get data from GameModel
 			FirstHeldCharactersLabelDataGrid[SECOND_INDEX, FIRST_INDEX].Value = "Held Characters Second Player";/// TODO get data from GameModel
-																											  /// 
+																											  
 			// init HeldCaractersDataGrid boards
 
 			InitFormHelper.InitBoard(FirstHeldCharactersDataGrid, ROWS_NUMBER);
@@ -123,8 +159,10 @@ namespace ScrabbleSolver
 		{
 			try
 			{
+				List<Tile> TileList = null;
+				heldCharacters.TryGetValue(PlayerIdEnum.FIRST_PLAYER, out TileList);//TODO Its just tile list of first player.
 				AdjustInsertedString(e);
-				foreach (Tile heldCharacter in HeldCharacters)
+				foreach (Tile heldCharacter in TileList)
 				{
 					string CellLetter = heldCharacter.GetLetter().ToString();
 					if (CellLetter.Contains(boardGridView[e.ColumnIndex, e.RowIndex].Value.ToString()))
@@ -158,7 +196,7 @@ namespace ScrabbleSolver
 			}
 		}
 
-		private void removeCharacterFromHeldCharactersDataGrid(string cellValue, DataGridView firstHeldCharactersDataGrid)
+		private void removeCharacterFromHeldCharactersDataGrid(string cellValue, DataGridView firstHeldCharactersDataGrid) //TODO Its just tile list of first player.
 		{
 			Size size = firstHeldCharactersDataGrid.Size;
 
@@ -311,15 +349,38 @@ namespace ScrabbleSolver
 
 		public void UptadeForm(UpdateViewEvent UpdateViewEvent)
 		{
-			//TODO
+			CellValues.Clear();
+			foreach (Cell boardCell in UpdateViewEvent.BoardCells)
+			{
+				Coordinates coordinates = new Coordinates(boardCell.GetXCoordinate(), boardCell.GetYCoordinate());
+				CellValues.Add(coordinates, boardCell);
+			}
+
+			 _GameInfo = UpdateViewEvent.GameInfo;
+			heldCharacters = UpdateViewEvent.HeldCharacters;
+			Form.ActiveForm.Update();
 		}
 
 		private void newGameToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-
+			InitAllCellValues();
 			Thread = new Thread(OpenNewGameForm);
 			Thread.SetApartmentState(ApartmentState.STA);
 			Thread.Start();
+		}
+
+		private void InitAllCellValues()
+		{
+
+			for (int IndexYCoordinate = FIRST_INDEX; IndexYCoordinate < BOARD_SIZE; ++IndexYCoordinate)
+			{
+				for (int IndexXCoordinate = FIRST_INDEX; IndexXCoordinate < BOARD_SIZE; ++IndexXCoordinate)
+				{
+					Coordinates coordinates = new Coordinates(IndexXCoordinate, IndexYCoordinate);// test
+					CellValues.Add(coordinates, new Cell(coordinates, 0, 0, new Tile(true), false));// test
+				}
+			}
+
 		}
 
 		private void OpenNewGameForm()

@@ -4,7 +4,8 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading;
+﻿using System.Threading.Tasks;
 using System.Windows.Forms;
 using WindowsFormsApplication1;
 ﻿using ScrabbleSolver.Events;
@@ -12,8 +13,17 @@ using WindowsFormsApplication1;
 
 namespace ScrabbleSolver
 {
+
+
 	static class Program
 	{
+		private static Controller.Controller GameController;
+
+		public static void ControllerThread()
+		{
+			GameController.Start();
+		}
+
 		/// <summary>
 		/// The main entry point for the application.
 		/// </summary>
@@ -32,16 +42,21 @@ namespace ScrabbleSolver
 			BlockingCollection<ApplicationEvent> ViewEvents = new BlockingCollection<ApplicationEvent>();
             Model.Model GameModel = new Model.Model(D, Language);
 			//GameForm GameForm = new GameForm();
-			GameForm GameForm = null;
-			Controller.Controller GameController = new Controller.Controller(GameModel, GameForm, ViewEvents);
+			Application.EnableVisualStyles();
+			Application.SetCompatibleTextRenderingDefault(false);
+			GameForm GameForm = new GameForm(ViewEvents);
+			GameController = new Controller.Controller(GameModel, GameForm, ViewEvents);
 
 			GameController.AddStrategies();
+			ThreadStart childref = new ThreadStart(ControllerThread);
+			Thread childThread = new Thread(childref);
+			childThread.Start();
+
+			Application.Run(GameForm); //TODO use GameForm implemented above
 
 			GameController.Start();
 
-			Application.EnableVisualStyles();
-			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new GameForm(ViewEvents)); //TODO use GameForm implemented above
+
 		}
 	}
 }
