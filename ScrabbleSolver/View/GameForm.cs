@@ -217,11 +217,11 @@ namespace ScrabbleSolver
 					// the white foreground
 					Rectangle rectangle = new Rectangle(e.CellBounds.X+1 , e.CellBounds.Y+1 , e.CellBounds.Width-2, e.CellBounds.Height-2);
 					e.Graphics.FillRectangle(Brushes.White, rectangle);
-					Font f = new Font(e.CellStyle.Font.FontFamily, 7);
+					Font f = new Font(e.CellStyle.Font.FontFamily, 6);
 
-					string LetterMultiplierString = ConvertIntToString(CellValue.GetLetterMultiplier());
+					string StringToPrint = "L" + ConvertIntToString(CellValue.GetLetterMultiplier()) + " W" + ConvertIntToString(CellValue.GetWordMultiplier());
 
-					e.Graphics.DrawString(LetterMultiplierString, f, Brushes.Black, rectangle);
+					e.Graphics.DrawString(StringToPrint, f, Brushes.Black, rectangle);
 					e.PaintContent(e.ClipBounds);
 					e.Handled = true;
 
