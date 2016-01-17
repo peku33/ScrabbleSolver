@@ -220,6 +220,12 @@ namespace ScrabbleSolver.Model
 			return BestPlayer;
 		}
 
+		public void RemovePlayers()
+		{
+			this.Players.Clear();
+			CurrentPlayer = null;
+		}
+
 		/// <summary>
 		/// Metoda sprawdza czy na planszy z widoku pojawily sie nowe kostki i czy zostaly wstawione zgodnie z zasadami gry. 
 		/// </summary>
