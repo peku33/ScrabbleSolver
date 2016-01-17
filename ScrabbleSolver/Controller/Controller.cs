@@ -58,6 +58,7 @@ namespace ScrabbleSolver.Controller
 
 					Strategies.TryGetValue(Event.GetType(), out EventStrategy);
 					EventStrategy.Execute(Event);
+					UpdateView();
 					continue;
 				}
 
