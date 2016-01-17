@@ -45,7 +45,14 @@ namespace ScrabbleSolver.Board
 			this.CellCoordinates = new Coordinates(ToCopyCell.GetXCoordinate(), ToCopyCell.GetYCoordinate());
 			this.WordMultiplier = ToCopyCell.GetWordMultiplier();
 			this.LetterMultiplier = ToCopyCell.GetLetterMultiplier();
-			this.Tile = new Tile(ToCopyCell.GetTile());
+			if(ToCopyCell.GetTile() != null)
+			{
+				this.Tile = new Tile(ToCopyCell.GetTile());
+			}
+			else
+			{
+				this.Tile = null;
+			}
 			this.Visited = ToCopyCell.IsVisited();
 		}
 

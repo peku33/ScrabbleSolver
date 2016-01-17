@@ -55,8 +55,6 @@ namespace ScrabbleSolver
 			Application.Run(GameForm); //TODO use GameForm implemented above
 
 			GameController.Start();
-
-
 		}
 	}
 }
