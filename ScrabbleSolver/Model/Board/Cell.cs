@@ -40,6 +40,15 @@ namespace ScrabbleSolver.Board
 			this.Visited = Visited;
 		}
 
+		public Cell(Cell ToCopyCell)
+		{
+			this.CellCoordinates = new Coordinates(ToCopyCell.GetXCoordinate(), ToCopyCell.GetYCoordinate());
+			this.WordMultiplier = ToCopyCell.GetWordMultiplier();
+			this.LetterMultiplier = ToCopyCell.GetLetterMultiplier();
+			this.Tile = new Tile(ToCopyCell.GetTile().GetLetter());
+			this.Visited = ToCopyCell.IsVisited();
+		}
+
 		public Tile GetTile()
 		{
 			return this.Tile;

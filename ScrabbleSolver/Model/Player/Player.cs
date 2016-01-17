@@ -63,6 +63,11 @@ namespace ScrabbleSolver.Model.Player
 			return Rack.Count == 0;
 		}
 
+		public Rack GetRack()
+		{
+			return Rack;
+		}
+
 		/// <summary>
 		/// Losowanie nowych kostek
 		/// </summary>

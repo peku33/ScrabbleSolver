@@ -6,6 +6,7 @@ using ScrabbleSolver.Model.Player;
 using System.Collections.Generic;
 using ScrabbleSolver.Board;
 using ScrabbleSolver.Common;
+using ScrabbleSolver.Model.Items;
 
 namespace ScrabbleSolver.Controller
 {
@@ -86,7 +87,7 @@ namespace ScrabbleSolver.Controller
 					}
 
 					GameModel.TestDisplay(); //Konsolowe wyswietlanie stanu gry na potrzeby testow
-											 //	GameForm.UptadeForm(); //TODO add parameters
+					UpdateView();                   
 
 					PlayerIndex %= GameModel.GetPlayersNumber();
 				}
@@ -98,6 +99,14 @@ namespace ScrabbleSolver.Controller
 		public Model.Model GetModel()
 		{
 			return GameModel;
+		}
+
+		/// <summary>
+		/// Odświezenie widoku
+		/// </summary>
+		public void UpdateView()
+		{
+			GameForm.UptadeForm(new UpdateViewEvent(GameModel.GetGameInfo(), GameModel.GetHeldCharacters(), GameModel.GetBoardCells()));
 		}
 
 		abstract class Strategy

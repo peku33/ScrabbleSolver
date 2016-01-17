@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using ScrabbleSolver.Board;
+using ScrabbleSolver.Common;
 using ScrabbleSolver.Model.Items;
 using ScrabbleSolver.Model.Player;
 using Container = ScrabbleSolver.Board.Container;
@@ -50,6 +51,41 @@ namespace ScrabbleSolver.Model
 		public Dictionary.Dictionary GetDictionary()
 		{
 			return this.GameDictionary;
+		}
+
+		public Dictionary<PlayerIdEnum, Dictionary<GameInfoTypeEnum, String>> GetGameInfo()
+		{
+			Dictionary<PlayerIdEnum, Dictionary<GameInfoTypeEnum, String>> GameInfo = new Dictionary<PlayerIdEnum, Dictionary<GameInfoTypeEnum, string>>();
+			int i = 0;
+
+			foreach(Player.Player TempPlayer in Players)
+			{
+				Dictionary<GameInfoTypeEnum, String> PlayerInfo = new Dictionary<GameInfoTypeEnum, string>();
+				PlayerInfo.Add(GameInfoTypeEnum.PLAYER_SCORE, TempPlayer.GetPointsNumber().ToString());
+				GameInfo.Add((PlayerIdEnum)i, PlayerInfo);
+				i++;
+			}
+
+			return GameInfo;
+		}
+
+		public Dictionary<PlayerIdEnum, List<Tile>> GetHeldCharacters()
+		{
+			Dictionary<PlayerIdEnum, List<Tile>> HeldCharacters = new Dictionary<PlayerIdEnum, List<Tile>>();
+			int i = 0;
+
+			foreach(Player.Player TempPlayer in Players)
+			{
+				HeldCharacters.Add((PlayerIdEnum)i, TempPlayer.GetRack());
+				i++;
+			}
+
+			return HeldCharacters;
+		}
+
+		public List<Cell> GetBoardCells()
+		{
+			return GameBoard.GetBoardCells();
 		}
 
 		public Board.Board GetBoard()

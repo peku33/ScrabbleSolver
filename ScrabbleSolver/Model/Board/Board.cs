@@ -109,6 +109,20 @@ namespace ScrabbleSolver.Board
 			return Board.BoardSide;
 		}
 
+		public List<Cell> GetBoardCells()
+		{
+			List<Cell> BoardCells = new List<Cell>();
+
+			foreach(Row TempRow in Rows)
+			{
+				foreach(Cell TempCell in TempRow)
+				{
+					BoardCells.Add(new Cell(TempCell));
+				}
+			}
+			return BoardCells;
+		} 
+
 		public List<Row> GetRows()
 		{
 			return this.Rows;
