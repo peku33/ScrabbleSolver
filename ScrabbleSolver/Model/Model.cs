@@ -152,7 +152,6 @@ namespace ScrabbleSolver.Model
 			{
 				CurrentPlayer.MakeMove(null);
 			}
-			Console.ReadLine(); //Czekanie na klawisz na potrzeby testow
 		}
 
 		/// <summary>
