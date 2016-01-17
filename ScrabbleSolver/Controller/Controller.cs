@@ -83,8 +83,8 @@ namespace ScrabbleSolver.Controller
 					}
 					else
 					{
-						++PlayerIndex;
 						GameModel.NextAITurn();
+						++PlayerIndex;
 					}
 
 					GameModel.TestDisplay(); //Konsolowe wyswietlanie stanu gry na potrzeby testow
