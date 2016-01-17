@@ -144,13 +144,16 @@ namespace ScrabbleSolver.Model
 
 		public void NextAITurn()
 		{
-			if(GameBoard.IsEmpty() && CurrentPlayer != null)
+			if(CurrentPlayer != null)
 			{
-				CurrentPlayer.MakeFirstMove(null);
-			}
-			else
-			{
-				CurrentPlayer.MakeMove(null);
+				if(GameBoard.IsEmpty())
+				{
+					CurrentPlayer.MakeFirstMove(null);
+				}
+				else
+				{
+					CurrentPlayer.MakeMove(null);
+				}
 			}
 		}
 
@@ -215,6 +218,12 @@ namespace ScrabbleSolver.Model
 				}
 			}
 			return BestPlayer;
+		}
+
+		public void RemovePlayers()
+		{
+			this.Players.Clear();
+			CurrentPlayer = null;
 		}
 
 		/// <summary>

@@ -93,6 +93,7 @@ namespace ScrabbleSolver.Controller
 				}
 
 				//TODO - dojscie do tego miejsca programu oznacza, ze gra sie skonczyla - trzeba wywolac z widoku funkcje, ktora podkresli kto wygral
+				GameModel.RemovePlayers();
 			}
 		}
 
