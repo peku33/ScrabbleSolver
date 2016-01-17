@@ -34,7 +34,7 @@ namespace ScrabbleSolver.Model.Items
 			}
 			foreach(Tile TempTile in this)
 			{
-				if(TempTile.GetIsBlank())
+				if(TempTile.IsBlank())
 				{
 					return Remove(TempTile);
 				}

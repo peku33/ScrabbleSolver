@@ -45,7 +45,7 @@ namespace ScrabbleSolver.Board
 			this.CellCoordinates = new Coordinates(ToCopyCell.GetXCoordinate(), ToCopyCell.GetYCoordinate());
 			this.WordMultiplier = ToCopyCell.GetWordMultiplier();
 			this.LetterMultiplier = ToCopyCell.GetLetterMultiplier();
-			this.Tile = new Tile(ToCopyCell.GetTile().GetLetter());
+			this.Tile = new Tile(ToCopyCell.GetTile());
 			this.Visited = ToCopyCell.IsVisited();
 		}
 
@@ -77,7 +77,7 @@ namespace ScrabbleSolver.Board
 		{
 			if(IsVisited())
 			{
-				return Tile.GetIsBlank();
+				return Tile.IsBlank();
 			}
 			return false;
 		}

@@ -840,7 +840,7 @@ namespace ScrabbleSolver.Model
 				}
 
 				Char Letter = TempTile.GetLetter();
-				int Value = TempTile.GetIsBlank() ? GameLanguage.GetLetterValue(' ') : GameLanguage.GetLetterValue(Letter);
+				int Value = TempTile.IsBlank() ? GameLanguage.GetLetterValue(' ') : GameLanguage.GetLetterValue(Letter);
 
 				if(TempCell.IsVisited())
 				{
@@ -952,7 +952,7 @@ namespace ScrabbleSolver.Model
 					Tile TempTile = TempCell.GetTile();
 					if(TempTile != null)
 					{
-						if(TempTile.GetIsBlank())
+						if(TempTile.IsBlank())
 						{
 							Rack.Add(new Tile(' ', true));
 						}
