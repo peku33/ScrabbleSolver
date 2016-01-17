@@ -31,6 +31,7 @@ namespace ScrabbleSolver
 		private Thread Thread;
 		private Thread ReplaceTileFormThread;
 
+		private static readonly int SECOND_INDEX = 1;
 		private static readonly int FIRST_INDEX = 0;
 		private static readonly int ROWS_NUMBER = 1;
 
@@ -82,9 +83,11 @@ namespace ScrabbleSolver
 			InitFormHelper.InitBoard(boardGridView, BOARD_SIZE);
 
 			// init HeldCharactersLabelDataGrid boards
-			SecondHeldCharactersLabelDataGrid[FIRST_INDEX, FIRST_INDEX].Value = "Held Characters";/// TODO get data from GameModel
-			FirstHeldCharactersLabelDataGrid[FIRST_INDEX, FIRST_INDEX].Value = "Held Characters";/// TODO get data from GameModel
-
+			SecondHeldCharactersLabelDataGrid[FIRST_INDEX, FIRST_INDEX].Value = "Held Characters Third Player";/// TODO get data from GameModel
+			SecondHeldCharactersLabelDataGrid[SECOND_INDEX, FIRST_INDEX].Value = "Held Characters Fourth Player ";/// TODO get data from GameModel
+			FirstHeldCharactersLabelDataGrid[FIRST_INDEX, FIRST_INDEX].Value = "Held Characters First Player";/// TODO get data from GameModel
+			FirstHeldCharactersLabelDataGrid[SECOND_INDEX, FIRST_INDEX].Value = "Held Characters Second Player";/// TODO get data from GameModel
+																											  /// 
 			// init HeldCaractersDataGrid boards
 
 			InitFormHelper.InitBoard(FirstHeldCharactersDataGrid, ROWS_NUMBER);
