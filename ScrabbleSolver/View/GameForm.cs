@@ -417,7 +417,7 @@ namespace ScrabbleSolver
 
 		private void nextTurnButton_Click(object sender, EventArgs e)
 		{
-
+			viewEvents.Add(new PutWordEvent(CellValues.Values.ToList(), heldCharacters[_CurrentPlayer]));
 		}
 
 		private void replaceTileButton_Click(object sender, EventArgs e)
