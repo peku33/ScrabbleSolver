@@ -6,7 +6,7 @@ using ScrabbleSolver.Model.Items;
 
 namespace ScrabbleSolver.Events
 {
-	class UpdateViewEvent : ApplicationEvent
+	public class UpdateViewEvent : ApplicationEvent
 	{
 		// Dictionary that contains current game state.
 		private readonly Dictionary<PlayerIdEnum, Dictionary<GameInfoTypeEnum, String>> _GameInfo;

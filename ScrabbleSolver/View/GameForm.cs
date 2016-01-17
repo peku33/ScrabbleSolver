@@ -306,7 +306,7 @@ namespace ScrabbleSolver
 		}
 
 
-		public void UptadeForm()
+		public void UptadeForm(UpdateViewEvent UpdateViewEvent)
 		{
 			//TODO
 		}
