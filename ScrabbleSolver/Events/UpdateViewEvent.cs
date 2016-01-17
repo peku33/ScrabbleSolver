@@ -27,6 +27,11 @@ namespace ScrabbleSolver.Events
 			this._CurrentPlayer = CurrentPlayer;
 		}
 
+		public PlayerIdEnum CurrentPlayer
+		{
+			get { return _CurrentPlayer; }
+		}
+
 		public List<Cell> BoardCells
 		{
 			get { return _BoardCells; }

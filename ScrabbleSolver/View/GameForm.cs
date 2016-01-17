@@ -23,6 +23,7 @@ namespace ScrabbleSolver
 	{
 		private static int BOARD_SIZE = 15;
 
+		private PlayerIdEnum _CurrentPlayer;
 		private Dictionary<PlayerIdEnum, Dictionary<GameInfoTypeEnum, String>> _GameInfo;
 		private String TemporaryCopingCharacter;
 		private Dictionary<Coordinates, Cell> CellValues;
@@ -358,7 +359,9 @@ namespace ScrabbleSolver
 
 			 _GameInfo = UpdateViewEvent.GameInfo;
 			heldCharacters = UpdateViewEvent.HeldCharacters;
-			Form.ActiveForm.Update();
+			_CurrentPlayer = UpdateViewEvent.CurrentPlayer;
+			Invalidate();
+			Update();
 		}
 
 		private void newGameToolStripMenuItem_Click(object sender, EventArgs e)
