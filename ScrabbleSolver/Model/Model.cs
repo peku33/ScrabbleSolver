@@ -144,15 +144,17 @@ namespace ScrabbleSolver.Model
 
 		public void NextAITurn()
 		{
-			if(GameBoard.IsEmpty() && CurrentPlayer != null)
+			if(CurrentPlayer != null)
 			{
-				CurrentPlayer.MakeFirstMove(null);
+				if(GameBoard.IsEmpty())
+				{
+					CurrentPlayer.MakeFirstMove(null);
+				}
+				else
+				{
+					CurrentPlayer.MakeMove(null);
+				}
 			}
-			else
-			{
-				CurrentPlayer.MakeMove(null);
-			}
-			Console.ReadLine(); //Czekanie na klawisz na potrzeby testow
 		}
 
 		/// <summary>
