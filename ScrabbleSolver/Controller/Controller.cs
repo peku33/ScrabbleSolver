@@ -105,7 +105,7 @@ namespace ScrabbleSolver.Controller
 		/// </summary>
 		public void UpdateView()
 		{
-			GameForm.UptadeForm(new UpdateViewEvent(GameModel.GetGameInfo(), GameModel.GetHeldCharacters(), GameModel.GetBoardCells()));
+			GameForm.UptadeForm(new UpdateViewEvent(GameModel.GetGameInfo(), GameModel.GetHeldCharacters(), GameModel.GetBoardCells(), GameModel.GetCurrentPlayerIndex()));
 		}
 
 		abstract class Strategy

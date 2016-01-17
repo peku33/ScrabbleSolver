@@ -17,11 +17,14 @@ namespace ScrabbleSolver.Events
 		// List that represents board cells.
 		private readonly List<Cell> _BoardCells;
 
-		public UpdateViewEvent(Dictionary<PlayerIdEnum, Dictionary<GameInfoTypeEnum, String>> GameInfo, Dictionary<PlayerIdEnum, List<Tile>> HeldCharacters, List<Cell> BoardCells)
+		private readonly PlayerIdEnum _CurrentPlayer;
+
+		public UpdateViewEvent(Dictionary<PlayerIdEnum, Dictionary<GameInfoTypeEnum, String>> GameInfo, Dictionary<PlayerIdEnum, List<Tile>> HeldCharacters, List<Cell> BoardCells, PlayerIdEnum CurrentPlayer)
 		{
 			this._GameInfo = GameInfo;
 			this._HeldCharacters = HeldCharacters;
 			this._BoardCells = BoardCells;
+			this._CurrentPlayer = CurrentPlayer;
 		}
 
 		public List<Cell> BoardCells

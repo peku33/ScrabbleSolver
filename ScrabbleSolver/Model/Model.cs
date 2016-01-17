@@ -83,6 +83,20 @@ namespace ScrabbleSolver.Model
 			return HeldCharacters;
 		}
 
+		public PlayerIdEnum GetCurrentPlayerIndex()
+		{
+			int i = 0;
+
+			for(; i < Players.Count; ++i)
+			{
+				if(Players[i] == CurrentPlayer)
+				{
+					return (PlayerIdEnum)i;
+				}
+			}
+			return (PlayerIdEnum)i;
+		}
+
 		public List<Cell> GetBoardCells()
 		{
 			return GameBoard.GetBoardCells();
