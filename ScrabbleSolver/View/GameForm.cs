@@ -59,7 +59,7 @@ namespace ScrabbleSolver
 			InitAllDataGridViews();
 			InitPlayerIdEnumToDataGridViewCellDictionary();
 
-			AddAllHeldCharacters();
+			
 
 		}
 
@@ -152,7 +152,8 @@ namespace ScrabbleSolver
 			try
 			{
 				List<Tile> TileList = null;
-				heldCharacters.TryGetValue(PlayerIdEnum.FIRST_PLAYER, out TileList);//TODO Its just tile list of first player.
+
+				heldCharacters.TryGetValue(_CurrentPlayer, out TileList);//TODO Its just tile list of first player.
 				AdjustInsertedString(e);
 				foreach (Tile heldCharacter in TileList)
 				{
@@ -315,8 +316,16 @@ namespace ScrabbleSolver
 		{
 			if (CellValues.ContainsKey(Coordinates)) //TODO bug: if we comprare two object with the same coordinates we get false....
 			{
-				CellValues[Coordinates].GetTile()
-					.SetLetter(TemporaryCopingCharacter.ToCharArray()[FIRST_INDEX]);
+				if (CellValues[Coordinates].GetTile() != null)
+				{
+					CellValues[Coordinates].GetTile()
+						.SetLetter(TemporaryCopingCharacter.ToCharArray()[FIRST_INDEX]);
+				}
+				else
+				{
+					CellValues[Coordinates].SetTile(new Tile(TemporaryCopingCharacter.ToCharArray()[FIRST_INDEX]));
+				}
+
 			}
 			else
 			{
@@ -373,6 +382,7 @@ namespace ScrabbleSolver
 			 _GameInfo = UpdateViewEvent.GameInfo;
 			heldCharacters = UpdateViewEvent.HeldCharacters;
 			_CurrentPlayer = UpdateViewEvent.CurrentPlayer;
+			AddAllHeldCharacters();
 
 			Invalidate();
 			Update();
@@ -407,7 +417,7 @@ namespace ScrabbleSolver
 
 		private void nextTurnButton_Click(object sender, EventArgs e)
 		{
-
+			viewEvents.Add(new PutWordEvent(CellValues.Values.ToList(), heldCharacters[_CurrentPlayer]));
 		}
 
 		private void replaceTileButton_Click(object sender, EventArgs e)
