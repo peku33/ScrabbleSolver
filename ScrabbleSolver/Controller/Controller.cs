@@ -24,6 +24,9 @@ namespace ScrabbleSolver.Controller
 			this.Strategies = new Dictionary<System.Type, Strategy>();
 		}
 
+		/// <summary>
+		/// Dodanie strategii do mapy
+		/// </summary>
 		public void AddStrategies()
 		{
 			//Strategies.Add(typeof(UpdateViewEvent), new PutWordStrategy(this));
