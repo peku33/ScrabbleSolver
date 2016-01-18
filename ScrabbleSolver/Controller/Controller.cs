@@ -88,9 +88,10 @@ namespace ScrabbleSolver.Controller
 					}
 
 					GameModel.TestDisplay(); //Konsolowe wyswietlanie stanu gry na potrzeby testow
-					UpdateView();
-
 					PlayerIndex %= GameModel.GetPlayersNumber();
+					GameModel.SetCurrentPlayer(PlayerIndex);
+
+					UpdateView();
 				}
 
 				//TODO - dojscie do tego miejsca programu oznacza, ze gra sie skonczyla - trzeba wywolac z widoku funkcje, ktora podkresli kto wygral
@@ -108,7 +109,7 @@ namespace ScrabbleSolver.Controller
 		/// </summary>
 		public void UpdateView()
 		{
-			GameForm.BeginInvoke(
+			GameForm.Invoke(
 				new Action(
 							() =>
 							{

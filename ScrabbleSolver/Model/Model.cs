@@ -38,12 +38,18 @@ namespace ScrabbleSolver.Model
 		{
 			Players.Add(NewPlayer);
 			NewPlayer.GetNewTiles();
+
+			if(CurrentPlayer == null)
+			{
+				CurrentPlayer = NewPlayer;
+			}
 		}
 
 		public void ResetGame()
 		{
 			GameBoard = new Board.Board();
 			Players.Clear();
+			CurrentPlayer = null;
 			TilesSet = new TilesSet(GameLanguage);
 			PassCounter = 0;
 		}
@@ -241,7 +247,8 @@ namespace ScrabbleSolver.Model
 
 				if(OldCell != null && OldCell.GetTile() == null && TempCell.GetTile() != null)
 				{
-					Cells.Add(TempCell);
+					OldCell.SetTile(TempCell.GetTile());
+					Cells.Add(OldCell);
 				}
 			}
 
@@ -259,6 +266,7 @@ namespace ScrabbleSolver.Model
 
 				if(!ContainedInOneContainer(Cells))
 				{
+					RemoveTiles(Cells);
 					return null;
 				}
 			}
@@ -308,6 +316,7 @@ namespace ScrabbleSolver.Model
 
 			if(!IsOneWord(Container, StartIndex, EndIndex))
 			{
+				RemoveTiles(Cells);
 				return null;
 			}
 
