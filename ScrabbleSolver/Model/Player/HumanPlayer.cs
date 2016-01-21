@@ -63,7 +63,7 @@ namespace ScrabbleSolver.Model.Player
 						{
 							return false;
 						}
-						if(TempCell.GetYRowCoordinate() == MiddleCoordinate)
+						if(TempCell.GetYColumnCoordinate() == MiddleCoordinate)
 						{
 							MiddleField = true;
 						}
@@ -73,7 +73,7 @@ namespace ScrabbleSolver.Model.Player
 				{
 					foreach(Cell TempCell in Cells)
 					{
-						if(TempCell.GetYRowCoordinate() != MiddleCoordinate)
+						if(TempCell.GetYColumnCoordinate() != MiddleCoordinate)
 						{
 							return false;
 						}
@@ -98,18 +98,41 @@ namespace ScrabbleSolver.Model.Player
 
 			if(Vertical)
 			{
-				NewWord = GameModel.GetWord(GameModel.GetBoard().FindColumn(Cells[0]), Cells[0].GetYRowCoordinate(), Vertical);
-				StartIndex = GameModel.GetWordInfo(GameModel.GetBoard().FindColumn(Cells[0]), Cells[0].GetYRowCoordinate()).Item2;
-				StartCell = GameModel.GetBoard().GetCell(Cells[0].GetXColumnCoordinate(), StartIndex);
+				NewWord = GameModel.GetWord(GameModel.GetBoard().FindColumn(Cells[0]), Cells[0].GetYColumnCoordinate(), Vertical);
+
+				if(NewWord.Length == 1)
+				{
+					Vertical = !Vertical;
+					NewWord = GameModel.GetWord(GameModel.GetBoard().FindRow(Cells[0]), Cells[0].GetXColumnCoordinate(), Vertical);
+					StartIndex = GameModel.GetWordInfo(GameModel.GetBoard().FindRow(Cells[0]), Cells[0].GetXColumnCoordinate()).Item2;
+					StartCell = GameModel.GetBoard().GetCell(StartIndex, Cells[0].GetYColumnCoordinate());
+				}
+				else
+				{
+					StartIndex = GameModel.GetWordInfo(GameModel.GetBoard().FindColumn(Cells[0]), Cells[0].GetYColumnCoordinate()).Item2;
+					StartCell = GameModel.GetBoard().GetCell(Cells[0].GetXColumnCoordinate(), StartIndex);
+				}
 			}
 			else
 			{
 				NewWord = GameModel.GetWord(GameModel.GetBoard().FindRow(Cells[0]), Cells[0].GetXColumnCoordinate(), Vertical);
-				StartIndex = GameModel.GetWordInfo(GameModel.GetBoard().FindRow(Cells[0]), Cells[0].GetXColumnCoordinate()).Item2;
-				StartCell = GameModel.GetBoard().GetCell(StartIndex, Cells[0].GetYRowCoordinate());
+
+				if(NewWord.Length == 1)
+				{
+					Vertical = !Vertical;
+					NewWord = GameModel.GetWord(GameModel.GetBoard().FindColumn(Cells[0]), Cells[0].GetYColumnCoordinate(), Vertical);
+					StartIndex = GameModel.GetWordInfo(GameModel.GetBoard().FindColumn(Cells[0]), Cells[0].GetYColumnCoordinate()).Item2;
+					StartCell = GameModel.GetBoard().GetCell(Cells[0].GetXColumnCoordinate(), StartIndex);
+				}
+				else
+				{
+					StartIndex = GameModel.GetWordInfo(GameModel.GetBoard().FindRow(Cells[0]), Cells[0].GetXColumnCoordinate()).Item2;
+					StartCell = GameModel.GetBoard().GetCell(StartIndex, Cells[0].GetYColumnCoordinate());
+				}
 			}
 
-			if(!GameModel.GetDictionary().Exists(NewWord) || !GameModel.IsMoveCorrect(NewWord, StartCell, Vertical)) //Jesli slowo nie istnieje albo jego ulozenie powoduje ulozenie niepoprawnych slow
+			if(!GameModel.GetDictionary().Exists(NewWord) || !GameModel.IsMoveCorrect(NewWord, StartCell, Vertical)
+				|| (!GameModel.GetBoard().IsEmpty() && !GameModel.IsPositionCorrect(StartCell, Vertical))) //Jesli slowo nie istnieje albo jest wstawione w niepoprawne miejsce albo jego ulozenie powoduje ulozenie niepoprawnych slow
 			{
 				GameModel.RemoveTiles(Cells);
 				return false;

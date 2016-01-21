@@ -11,6 +11,18 @@ namespace ScrabbleSolver.Model.Items
 		//Instancja klasy random używana do losowania kostek z tabliczki
 		private static Random Rand = new Random();
 
+		public Rack(Rack toCopyRack)
+		{
+			foreach(Tile TempTile in toCopyRack)
+			{
+				Add(TempTile);
+			}
+		}
+
+		public Rack() : base()
+		{
+		}
+
 		public String GetTileString()
 		{
 			String Result = String.Empty;

@@ -53,6 +53,7 @@ namespace ScrabbleSolver.Model
 			CurrentPlayer = null;
 			TilesSet = new TilesSet(GameLanguage);
 			PassCounter = 0;
+			GameBoard.SetEmpty(true);
 		}
 
 		public Dictionary.Dictionary GetDictionary()
@@ -83,7 +84,7 @@ namespace ScrabbleSolver.Model
 
 			foreach(Player.Player TempPlayer in Players)
 			{
-				HeldCharacters.Add((PlayerIdEnum)i, TempPlayer.GetRack());
+				HeldCharacters.Add((PlayerIdEnum)i, TempPlayer.GetRackCopy());
 				i++;
 			}
 
@@ -664,7 +665,7 @@ namespace ScrabbleSolver.Model
 						{
 							NewWord += Word[i];
 						}
-						else if(TempCell.IsVisited())
+						else if(TempCell.GetTile() != null)
 						{
 							NewWord += TempCell.GetTile().GetLetter();
 						}
@@ -707,7 +708,7 @@ namespace ScrabbleSolver.Model
 						{
 							NewWord += Word[i];
 						}
-						else if(TempCell.IsVisited())
+						else if(TempCell.GetTile() != null)
 						{
 							NewWord += TempCell.GetTile().GetLetter();
 						}
