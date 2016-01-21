@@ -339,7 +339,6 @@ namespace ScrabbleSolver
 
 			}
 
-
 			foreach (Tile tile in TileList)
 			{
 				if (tile.IsEmpty())
@@ -359,18 +358,42 @@ namespace ScrabbleSolver
 
 			if (TemporaryCopingCharacter != null)
 			{
-				CurrentCell.Value = String.Copy(TemporaryCopingCharacter);
+				bool IsBlank = TemporaryCopingCharacter == " ";
+
+				if (IsBlank)
+				{
+					CurrentCell.Value = OpenFormAndGetBlankValue();
+
+				}
+				else
+				{
+					CurrentCell.Value = String.Copy(TemporaryCopingCharacter);
+				}
+
 				Coordinates Coordinates = new Coordinates(CurrentCell.ColumnIndex, CurrentCell.RowIndex);
-				UpdateLetter(Coordinates);
+				UpdateLetter(Coordinates, IsBlank);
 
 				TemporaryCopingCharacter = null;
 			}
 		}
 
+		private string OpenFormAndGetBlankValue()
+		{
+			using (var form = new ChooseCharacter())
+			{
+				var result = form.ShowDialog();
+				if (result == DialogResult.OK)
+				{
+					return form.Letter;            //values preserved after close
+				}
+			}
+			return "";
+		}
+
 		/// <summary>
 		/// Metoda aktualizuje litere na danej komórce, lub jeśli nie istnieje komórka o danych współrzędnych - dodaje nową.
 		/// </summary>
-		private void UpdateLetter(Coordinates Coordinates)
+		private void UpdateLetter(Coordinates Coordinates, bool isBlank)
 		{
 			if (CellValues.ContainsKey(Coordinates)) //TODO bug: if we comprare two object with the same coordinates we get false....
 			{
@@ -378,16 +401,17 @@ namespace ScrabbleSolver
 				{
 					CellValues[Coordinates].GetTile()
 						.SetLetter(TemporaryCopingCharacter.ToCharArray()[FIRST_INDEX]);
+					CellValues[Coordinates].GetTile().SetIsBlank(isBlank);
 				}
 				else
 				{
-					CellValues[Coordinates].SetTile(new Tile(TemporaryCopingCharacter.ToCharArray()[FIRST_INDEX]));
+					CellValues[Coordinates].SetTile(new Tile(TemporaryCopingCharacter.ToCharArray()[FIRST_INDEX], isBlank));
 				}
 
 			}
 			else
 			{
-				Cell Cell = new Cell(Coordinates, 0, 0, new Tile(TemporaryCopingCharacter.ToCharArray()[FIRST_INDEX]), false);
+				Cell Cell = new Cell(Coordinates, 0, 0, new Tile(TemporaryCopingCharacter.ToCharArray()[FIRST_INDEX], isBlank), false);
 				CellValues.Add(Coordinates, Cell);
 			}
 		}

@@ -11,7 +11,7 @@ namespace ScrabbleSolver.Model.Items
 		//Znak znajdujacy sie na kostce
 		private char Letter;
 		//Czy blank
-		private readonly bool Blank;
+		private bool Blank;
 
 		private bool Empty;
 
@@ -64,6 +64,11 @@ namespace ScrabbleSolver.Model.Items
 		public void SetLetter(char Letter)
 		{
 			this.Letter = Letter;
+		}
+
+		public void SetIsBlank(bool IsBlank)
+		{
+			this.Blank = IsBlank;
 		}
 	}
 
