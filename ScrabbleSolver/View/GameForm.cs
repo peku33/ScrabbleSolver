@@ -352,7 +352,7 @@ namespace ScrabbleSolver
 
 				if (IsBlank)
 				{
-					CurrentCell.Value = OpenFormAndGetBlankValue();
+					CurrentCell.Value = String.Copy(OpenFormAndGetBlankValue());
 
 				}
 				else
