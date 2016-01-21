@@ -103,7 +103,7 @@ namespace ScrabbleSolver
 							GameInfoTypeEnum GameInfoTypeEnum = GameInfoTypeEnumStringValuePair.Key;
 							string Value = GameInfoTypeEnumStringValuePair.Value;
 							gameInfoDataGrid[FIRST_INDEX, GameInfoDataGridRowIndex].Value =
-								Consts.GetStringByGameInfoTypeEnum(GameInfoTypeEnum) + Value;
+								Consts.GetStringByGameInfoTypeEnum(GameInfoTypeEnum) + ": " + Value;
 
 						}
 					}
