@@ -117,7 +117,6 @@ namespace ScrabbleSolver.Controller
 									GameModel.GetBoardCells(), GameModel.GetCurrentPlayerIndex()));
 							})
 						);
-			Thread.Sleep(1000);
 		}
 
 		abstract class Strategy
