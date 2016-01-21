@@ -140,7 +140,12 @@ namespace ScrabbleSolver.Controller
 
 			public override bool Execute(ApplicationEvent Event)
 			{
-				return Parent.GetModel().GetCurrentPlayer().MakeMove(Event as PutWordEvent);
+				if(!Parent.GetModel().GetCurrentPlayer().MakeMove(Event as PutWordEvent))
+				{
+					Parent.UpdateView();
+					return false;
+				}
+				return true;
 			}
 		}
 
