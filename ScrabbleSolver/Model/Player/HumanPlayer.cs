@@ -132,7 +132,7 @@ namespace ScrabbleSolver.Model.Player
 			}
 
 			if(!GameModel.GetDictionary().Exists(NewWord) || !GameModel.IsMoveCorrect(NewWord, StartCell, Vertical)
-				|| (!GameModel.GetBoard().IsEmpty() && !GameModel.IsPositionCorrect(StartCell, Vertical))) //Jesli slowo nie istnieje albo jest wstawione w niepoprawne miejsce albo jego ulozenie powoduje ulozenie niepoprawnych slow
+				|| (!GameModel.GetBoard().IsEmpty() && !IsWordPutCorrect(StartCell, Vertical, NewWord.Length))) //Jesli slowo nie istnieje albo jest wstawione w niepoprawne miejsce albo jego ulozenie powoduje ulozenie niepoprawnych slow
 			{
 				GameModel.RemoveTiles(Cells);
 				return false;
@@ -167,6 +167,63 @@ namespace ScrabbleSolver.Model.Player
 		public override void Pass()
 		{
 			GameModel.PlayerPassed();
+		}
+
+		public bool IsWordPutCorrect(Cell StartCell, bool Vertical, int Length)
+		{
+			int Index;
+			Board.Board GameBoard = GameModel.GetBoard();
+			Cell FirstNeighbour, SecondNeighbour;
+
+			if(Vertical)
+			{
+				Index = StartCell.GetXColumnCoordinate();
+				Row TempRow;
+
+				for(int i = 0; i < Length; ++i)
+				{
+					int y = StartCell.GetYRowCoordinate();
+					int x = StartCell.GetXColumnCoordinate();
+					TempRow = GameBoard.FindRow(y + i);
+
+					FirstNeighbour = TempRow.Get(x + 1);
+					SecondNeighbour = TempRow.Get(x - 1);
+
+					if(FirstNeighbour != null && FirstNeighbour.GetTile() != null)
+					{
+						return true;
+					}
+					if(SecondNeighbour != null && SecondNeighbour.GetTile() != null)
+					{
+						return true;
+					}
+				}
+			}
+			else
+			{
+				Index = StartCell.GetYRowCoordinate();
+				Column TempColumn;
+
+				for(int i = 0; i < Length; ++i)
+				{
+					int y = StartCell.GetYRowCoordinate();
+					int x = StartCell.GetXColumnCoordinate();
+					TempColumn = GameBoard.FindColumn(x + i);
+
+					FirstNeighbour = TempColumn.Get(y + 1);
+					SecondNeighbour = TempColumn.Get(y - 1);
+
+					if(FirstNeighbour != null && FirstNeighbour.GetTile() != null)
+					{
+						return true;
+					}
+					if(SecondNeighbour != null && SecondNeighbour.GetTile() != null)
+					{
+						return true;
+					}
+				}
+			}
+			return false;
 		}
 	}
 }
