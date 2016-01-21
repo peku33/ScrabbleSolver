@@ -39,7 +39,7 @@ namespace ScrabbleSolver
 		private static readonly int SECOND_INDEX = 1;
 		private static readonly int FIRST_INDEX = 0;
 		private static readonly int ROWS_NUMBER = 1;
-
+		private static readonly int MAX_HELD_CHARACTERS_NUMBER = 7;
 		public GameForm(BlockingCollection<ApplicationEvent> viewEvents)
 		{
 			this.viewEvents = viewEvents;
@@ -209,7 +209,7 @@ namespace ScrabbleSolver
 
 			foreach (var CellValue in CellValues.Values)
 			{
-				if (CellValue.GetXColumnCoordinate() == e.ColumnIndex && CellValue.GetYColumnCoordinate() == e.RowIndex)
+				if (CellValue.GetXColumnCoordinate() == e.ColumnIndex && CellValue.GetYRowCoordinate() == e.RowIndex)
 				{
 					//the black background
 					Rectangle rectangle2 = new Rectangle(e.CellBounds.X, e.CellBounds.Y, e.CellBounds.Width, e.CellBounds.Height);
@@ -288,8 +288,66 @@ namespace ScrabbleSolver
 			{
 				String value = CurrentCell.Value.ToString();
 
+				if (TemporaryCopingCharacter != null)
+				{
+					PutAwayTempLetter(TemporaryCopingCharacter);
+				}
+				GetLetterFromHeldCharacters(String.Copy(value));
 				TemporaryCopingCharacter = String.Copy(value);
 				CurrentCell.Value = null;
+
+			}
+		}
+
+		private void GetLetterFromHeldCharacters(string copy)
+		{
+			List<Tile> TileList = null;
+			heldCharacters.TryGetValue(_CurrentPlayer, out TileList);
+
+			foreach (Tile tile in TileList)
+			{
+				if (!tile.IsEmpty() && tile.GetLetter() == copy.ToCharArray()[FIRST_INDEX])
+				{
+					tile.SetIsEmpty(true);
+				}
+			}
+		}
+
+		private void PutAwayTempLetter(string temporaryCopingCharacter)
+		{
+			DataGridViewCell DGVC;
+			PlayerIdEnumToDataGridViewCellDataDictionary.TryGetValue(_CurrentPlayer, out DGVC);
+
+			List<Tile> TileList = null;
+			heldCharacters.TryGetValue(_CurrentPlayer, out TileList);
+
+
+			if (DGVC != null)
+			{
+				int FirstColumnIndexOffset = DGVC.ColumnIndex;
+				DataGridView dataGridView = DGVC.DataGridView;
+
+				for (int Index = FIRST_INDEX; Index < MAX_HELD_CHARACTERS_NUMBER; Index++)
+				{
+					if (dataGridView[Index + FirstColumnIndexOffset, FIRST_INDEX].Value == null ||
+					    dataGridView[Index + FirstColumnIndexOffset, FIRST_INDEX].ToString() == "")
+					{
+						dataGridView[Index + FirstColumnIndexOffset, FIRST_INDEX].Value = temporaryCopingCharacter;
+						break;
+					}
+				}
+
+			}
+
+
+			foreach (Tile tile in TileList)
+			{
+				if (tile.IsEmpty())
+				{
+					tile.SetIsEmpty(false);
+					tile.SetLetter(temporaryCopingCharacter.ToCharArray()[FIRST_INDEX]);
+					break;
+				}
 			}
 		}
 
@@ -363,18 +421,18 @@ namespace ScrabbleSolver
 			foreach (Cell boardCell in UpdateViewEvent.BoardCells)
 			{
 
-				Coordinates coordinates = new Coordinates(boardCell.GetXColumnCoordinate(), boardCell.GetYColumnCoordinate());
+				Coordinates coordinates = new Coordinates(boardCell.GetXColumnCoordinate(), boardCell.GetYRowCoordinate());
 				CellValues.Remove(coordinates);
 				CellValues.Add(coordinates, boardCell);
 
 				if (boardCell.GetTile() != null)
 				{
-					boardGridView[boardCell.GetXColumnCoordinate(), boardCell.GetYColumnCoordinate()].Value =
+					boardGridView[boardCell.GetXColumnCoordinate(), boardCell.GetYRowCoordinate()].Value =
 						boardCell.GetTile().GetLetter().ToString().ToUpper();
 				}
 				else
 				{
-					boardGridView[boardCell.GetXColumnCoordinate(), boardCell.GetYColumnCoordinate()].Value = "";
+					boardGridView[boardCell.GetXColumnCoordinate(), boardCell.GetYRowCoordinate()].Value = "";
 				}
 			}
 

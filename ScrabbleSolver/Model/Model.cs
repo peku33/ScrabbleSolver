@@ -244,7 +244,7 @@ namespace ScrabbleSolver.Model
 
 			foreach(Cell TempCell in NewBoardCells)
 			{
-				Cell OldCell = GameBoard.GetCell(TempCell.GetXColumnCoordinate(), TempCell.GetYColumnCoordinate());
+				Cell OldCell = GameBoard.GetCell(TempCell.GetXColumnCoordinate(), TempCell.GetYRowCoordinate());
 
 				if(OldCell != null && OldCell.GetTile() == null && TempCell.GetTile() != null)
 				{
@@ -280,7 +280,7 @@ namespace ScrabbleSolver.Model
 			{
 				foreach(Cell TempCell in Cells)
 				{
-					int y = TempCell.GetYColumnCoordinate();
+					int y = TempCell.GetYRowCoordinate();
 					if(y > EndIndex)
 					{
 						EndIndex = y;
@@ -337,7 +337,7 @@ namespace ScrabbleSolver.Model
 			}
 
 			int x = Cells[0].GetXColumnCoordinate();
-			int y = Cells[0].GetYColumnCoordinate();
+			int y = Cells[0].GetYRowCoordinate();
 			bool Vertical = true;
 
 			foreach(Cell TempCell in Cells)
@@ -356,7 +356,7 @@ namespace ScrabbleSolver.Model
 
 			foreach(Cell TempCell in Cells)
 			{
-				if(TempCell.GetYColumnCoordinate() != y)
+				if(TempCell.GetYRowCoordinate() != y)
 				{
 					return false;
 				}
@@ -400,7 +400,7 @@ namespace ScrabbleSolver.Model
 			if(Vertical) //jesli sprawdzamy czy da sie ulozyc slowo pionowo
 			{
 				ConsideredContainer = GameBoard.FindColumn(StartCell);
-				CellIndex = StartCell.GetYColumnCoordinate();
+				CellIndex = StartCell.GetYRowCoordinate();
 				LeftNeighbour = GameBoard.FindColumn(StartCell.GetXColumnCoordinate() - 1);
 				RightNeighbour = GameBoard.FindColumn(StartCell.GetXColumnCoordinate() + 1);
 			}
@@ -408,8 +408,8 @@ namespace ScrabbleSolver.Model
 			{
 				ConsideredContainer = GameBoard.FindRow(StartCell);
 				CellIndex = StartCell.GetXColumnCoordinate();
-				LeftNeighbour = GameBoard.FindRow(StartCell.GetYColumnCoordinate() - 1);
-				RightNeighbour = GameBoard.FindRow(StartCell.GetYColumnCoordinate() + 1);
+				LeftNeighbour = GameBoard.FindRow(StartCell.GetYRowCoordinate() - 1);
+				RightNeighbour = GameBoard.FindRow(StartCell.GetYRowCoordinate() + 1);
 			}
 
 			TempCell = ConsideredContainer.Get(CellIndex - 1);
@@ -468,7 +468,7 @@ namespace ScrabbleSolver.Model
 			if(Vertical) //jesli sprawdzamy czy da sie ulozyc slowo pionowo
 			{
 				ConsideredContainer = GameBoard.FindColumn(StartCell);
-				CellIndex = StartCell.GetYColumnCoordinate();
+				CellIndex = StartCell.GetYRowCoordinate();
 				LeftNeighbour = GameBoard.FindColumn(StartCell.GetXColumnCoordinate() - 1);
 				RightNeighbour = GameBoard.FindColumn(StartCell.GetXColumnCoordinate() + 1);
 			}
@@ -476,8 +476,8 @@ namespace ScrabbleSolver.Model
 			{
 				ConsideredContainer = GameBoard.FindRow(StartCell);
 				CellIndex = StartCell.GetXColumnCoordinate();
-				LeftNeighbour = GameBoard.FindRow(StartCell.GetYColumnCoordinate() - 1);
-				RightNeighbour = GameBoard.FindRow(StartCell.GetYColumnCoordinate() + 1);
+				LeftNeighbour = GameBoard.FindRow(StartCell.GetYRowCoordinate() - 1);
+				RightNeighbour = GameBoard.FindRow(StartCell.GetYRowCoordinate() + 1);
 			}
 
 			bool FirstLetter = false; //czy napotkalismy juz jakas litere
@@ -607,7 +607,7 @@ namespace ScrabbleSolver.Model
 			{
 				Column TempColumn = GameBoard.FindColumn(StartCell.GetXColumnCoordinate());
 				String NewWord = String.Copy(Word);
-				Index = StartCell.GetYColumnCoordinate() + Word.Length; //Indeks pola bezposrednio za slowem.
+				Index = StartCell.GetYRowCoordinate() + Word.Length; //Indeks pola bezposrednio za slowem.
 
 				if(Index < GameBoard.GetBoardSide())
 				{
@@ -627,7 +627,7 @@ namespace ScrabbleSolver.Model
 			}
 			else
 			{
-				Row TempRow = GameBoard.FindRow(StartCell.GetYColumnCoordinate());
+				Row TempRow = GameBoard.FindRow(StartCell.GetYRowCoordinate());
 				String NewWord = String.Copy(Word);
 				Index = StartCell.GetXColumnCoordinate() + Word.Length; //Indeks pola bezposrednio za slowem.
 
@@ -655,7 +655,7 @@ namespace ScrabbleSolver.Model
 
 				for(int i = 0; i < Word.Length; ++i)
 				{
-					TempRow = GameBoard.FindRow(StartCell.GetYColumnCoordinate() + i);
+					TempRow = GameBoard.FindRow(StartCell.GetYRowCoordinate() + i);
 					String NewWord = String.Empty;
 
 					foreach(Cell TempCell in TempRow)
@@ -693,7 +693,7 @@ namespace ScrabbleSolver.Model
 			}
 			else
 			{
-				Index = StartCell.GetYColumnCoordinate();
+				Index = StartCell.GetYRowCoordinate();
 				Column TempColumn;
 
 				for(int i = 0; i < Word.Length; ++i)
@@ -703,7 +703,7 @@ namespace ScrabbleSolver.Model
 
 					foreach(Cell TempCell in TempColumn)
 					{
-						if(TempCell.GetYColumnCoordinate() == Index)
+						if(TempCell.GetYRowCoordinate() == Index)
 						{
 							NewWord += Word[i];
 						}
@@ -711,7 +711,7 @@ namespace ScrabbleSolver.Model
 						{
 							NewWord += TempCell.GetTile().GetLetter();
 						}
-						else if(TempCell.GetYColumnCoordinate() > Index)
+						else if(TempCell.GetYRowCoordinate() > Index)
 						{
 							if(NewWord.Length > 1)
 							{
@@ -755,7 +755,7 @@ namespace ScrabbleSolver.Model
 					{
 						NewWord += TempCell.GetTile().GetLetter();
 					}
-					else if(TempCell.GetYColumnCoordinate() > Index) //Ulozone zostalo cale slowo
+					else if(TempCell.GetYRowCoordinate() > Index) //Ulozone zostalo cale slowo
 					{
 						if(NewWord.Length > 1)
 						{
@@ -820,7 +820,7 @@ namespace ScrabbleSolver.Model
 			if(Vertical)
 			{
 				ConsideredContainer = GameBoard.FindColumn(StartCell);
-				CellIndex = StartCell.GetYColumnCoordinate();
+				CellIndex = StartCell.GetYRowCoordinate();
 			}
 			else
 			{
@@ -838,7 +838,7 @@ namespace ScrabbleSolver.Model
 
 				for(int i = 0; i < Word.Length; ++i)
 				{
-					TempRow = GameBoard.FindRow(StartCell.GetYColumnCoordinate() + i);
+					TempRow = GameBoard.FindRow(StartCell.GetYRowCoordinate() + i);
 
 					if(!TempRow.Get(Index).IsVisited())
 					{
@@ -854,7 +854,7 @@ namespace ScrabbleSolver.Model
 			}
 			else
 			{
-				int Index = StartCell.GetYColumnCoordinate();
+				int Index = StartCell.GetYRowCoordinate();
 				Column TempColumn;
 				var NewWordParamteres = new Tuple<int, int>(0, 0);
 
@@ -950,7 +950,7 @@ namespace ScrabbleSolver.Model
 		{
 			foreach(Cell TempCell in Cells)
 			{
-				GameBoard.GetCell(TempCell.GetXColumnCoordinate(), TempCell.GetYColumnCoordinate()).SetTile(TempCell.GetTile());
+				GameBoard.GetCell(TempCell.GetXColumnCoordinate(), TempCell.GetYRowCoordinate()).SetTile(TempCell.GetTile());
 			}
 		}
 
@@ -958,7 +958,7 @@ namespace ScrabbleSolver.Model
 		{
 			foreach(Cell TempCell in Cells)
 			{
-				GameBoard.GetCell(TempCell.GetXColumnCoordinate(), TempCell.GetYColumnCoordinate()).SetTile(null);
+				GameBoard.GetCell(TempCell.GetXColumnCoordinate(), TempCell.GetYRowCoordinate()).SetTile(null);
 			}
 		}
 
@@ -966,7 +966,7 @@ namespace ScrabbleSolver.Model
 		{
 			foreach(Cell TempCell in Cells)
 			{
-				GameBoard.GetCell(TempCell.GetXColumnCoordinate(), TempCell.GetYColumnCoordinate()).SetVisited(true);
+				GameBoard.GetCell(TempCell.GetXColumnCoordinate(), TempCell.GetYRowCoordinate()).SetVisited(true);
 			}
 		}
 

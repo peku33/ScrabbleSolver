@@ -42,7 +42,7 @@ namespace ScrabbleSolver.Board
 
 		public Cell(Cell ToCopyCell)
 		{
-			this.CellCoordinates = new Coordinates(ToCopyCell.GetXColumnCoordinate(), ToCopyCell.GetYColumnCoordinate());
+			this.CellCoordinates = new Coordinates(ToCopyCell.GetXColumnCoordinate(), ToCopyCell.GetYRowCoordinate());
 			this.WordMultiplier = ToCopyCell.GetWordMultiplier();
 			this.LetterMultiplier = ToCopyCell.GetLetterMultiplier();
 			if(ToCopyCell.GetTile() != null)
@@ -66,7 +66,7 @@ namespace ScrabbleSolver.Board
 			return CellCoordinates.GetXCoordinate();
 		}
 
-		public int GetYColumnCoordinate()
+		public int GetYRowCoordinate()
 		{
 			return CellCoordinates.GetYCoordinate();
 		}

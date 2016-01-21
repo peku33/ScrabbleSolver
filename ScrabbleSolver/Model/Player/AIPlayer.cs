@@ -84,11 +84,11 @@ namespace ScrabbleSolver.Model.Player
 
 					if(GameModel.IsPositionCorrect(TempCell, true))
 					{
-						MaxLength = GameBoard.GetBoardSide() - TempCell.GetYColumnCoordinate();
+						MaxLength = GameBoard.GetBoardSide() - TempCell.GetYRowCoordinate();
 						MinLength = GameModel.GetMinLength(TempCell, true);
 
 						Dictionary.Dictionary.AlreadySetLetters ASL = new Dictionary.Dictionary.AlreadySetLetters();
-						GameModel.FillAlreadySetLetters(ASL, TempColumn, TempCell.GetYColumnCoordinate());
+						GameModel.FillAlreadySetLetters(ASL, TempColumn, TempCell.GetYRowCoordinate());
 
 						Dictionary.Dictionary.WordsFound WordsFound = GameDictionary.Find(ASL, HC);
 						WordsFound = GameModel.FilterWords(WordsFound, MinLength, MaxLength);
@@ -97,18 +97,18 @@ namespace ScrabbleSolver.Model.Player
 						{
 							if(GameModel.IsMoveCorrect(TempWord.GetWord(), TempCell, true))
 							{
-								GameModel.PutTiles(TempColumn, TempCell.GetYColumnCoordinate(), TempWord, Rack);
+								GameModel.PutTiles(TempColumn, TempCell.GetYRowCoordinate(), TempWord, Rack);
 
 								int Result = GameModel.CountPoints(TempWord.GetWord(), TempCell, true);
 								if(Result > BestResult)
 								{
 									BestResult = Result;
-									BestStartIndex = TempCell.GetYColumnCoordinate();
+									BestStartIndex = TempCell.GetYRowCoordinate();
 									BestWord = TempWord;
 									BestContainer = TempColumn;
 								}
 
-								GameModel.RemoveTiles(TempColumn, TempCell.GetYColumnCoordinate(), TempWord.GetWord().Length, Rack);
+								GameModel.RemoveTiles(TempColumn, TempCell.GetYRowCoordinate(), TempWord.GetWord().Length, Rack);
 							}
 						}
 					}
