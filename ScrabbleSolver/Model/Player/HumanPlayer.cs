@@ -63,7 +63,7 @@ namespace ScrabbleSolver.Model.Player
 						{
 							return false;
 						}
-						if(TempCell.GetYColumnCoordinate() == MiddleCoordinate)
+						if(TempCell.GetYRowCoordinate() == MiddleCoordinate)
 						{
 							MiddleField = true;
 						}
@@ -73,7 +73,7 @@ namespace ScrabbleSolver.Model.Player
 				{
 					foreach(Cell TempCell in Cells)
 					{
-						if(TempCell.GetYColumnCoordinate() != MiddleCoordinate)
+						if(TempCell.GetYRowCoordinate() != MiddleCoordinate)
 						{
 							return false;
 						}
@@ -98,18 +98,18 @@ namespace ScrabbleSolver.Model.Player
 
 			if(Vertical)
 			{
-				NewWord = GameModel.GetWord(GameModel.GetBoard().FindColumn(Cells[0]), Cells[0].GetYColumnCoordinate(), Vertical);
+				NewWord = GameModel.GetWord(GameModel.GetBoard().FindColumn(Cells[0]), Cells[0].GetYRowCoordinate(), Vertical);
 
 				if(NewWord.Length == 1)
 				{
 					Vertical = !Vertical;
 					NewWord = GameModel.GetWord(GameModel.GetBoard().FindRow(Cells[0]), Cells[0].GetXColumnCoordinate(), Vertical);
 					StartIndex = GameModel.GetWordInfo(GameModel.GetBoard().FindRow(Cells[0]), Cells[0].GetXColumnCoordinate()).Item2;
-					StartCell = GameModel.GetBoard().GetCell(StartIndex, Cells[0].GetYColumnCoordinate());
+					StartCell = GameModel.GetBoard().GetCell(StartIndex, Cells[0].GetYRowCoordinate());
 				}
 				else
 				{
-					StartIndex = GameModel.GetWordInfo(GameModel.GetBoard().FindColumn(Cells[0]), Cells[0].GetYColumnCoordinate()).Item2;
+					StartIndex = GameModel.GetWordInfo(GameModel.GetBoard().FindColumn(Cells[0]), Cells[0].GetYRowCoordinate()).Item2;
 					StartCell = GameModel.GetBoard().GetCell(Cells[0].GetXColumnCoordinate(), StartIndex);
 				}
 			}
@@ -120,14 +120,14 @@ namespace ScrabbleSolver.Model.Player
 				if(NewWord.Length == 1)
 				{
 					Vertical = !Vertical;
-					NewWord = GameModel.GetWord(GameModel.GetBoard().FindColumn(Cells[0]), Cells[0].GetYColumnCoordinate(), Vertical);
-					StartIndex = GameModel.GetWordInfo(GameModel.GetBoard().FindColumn(Cells[0]), Cells[0].GetYColumnCoordinate()).Item2;
+					NewWord = GameModel.GetWord(GameModel.GetBoard().FindColumn(Cells[0]), Cells[0].GetYRowCoordinate(), Vertical);
+					StartIndex = GameModel.GetWordInfo(GameModel.GetBoard().FindColumn(Cells[0]), Cells[0].GetYRowCoordinate()).Item2;
 					StartCell = GameModel.GetBoard().GetCell(Cells[0].GetXColumnCoordinate(), StartIndex);
 				}
 				else
 				{
 					StartIndex = GameModel.GetWordInfo(GameModel.GetBoard().FindRow(Cells[0]), Cells[0].GetXColumnCoordinate()).Item2;
-					StartCell = GameModel.GetBoard().GetCell(StartIndex, Cells[0].GetYColumnCoordinate());
+					StartCell = GameModel.GetBoard().GetCell(StartIndex, Cells[0].GetYRowCoordinate());
 				}
 			}
 
