@@ -221,14 +221,14 @@ namespace ScrabbleSolver
 					Font f = new Font(e.CellStyle.Font.FontFamily, 7);
 
 					string StringToPrint = "";
-					if (CellValue.GetLetterMultiplier() != 1)
+					if (CellValue.GetLetterMultiplier() != 1 && CellValue.GetLetterMultiplier() != FIRST_INDEX)
 					{
-						StringToPrint += "L " + ConvertIntToString(CellValue.GetLetterMultiplier()) + " ";
+						StringToPrint += "L " + CellValue.GetLetterMultiplier().ToString() + " ";
 					}
 
-					if (CellValue.GetWordMultiplier() != 1)
+					if (CellValue.GetWordMultiplier() != 1 && CellValue.GetWordMultiplier() != FIRST_INDEX)
 					{
-						StringToPrint += "W " + ConvertIntToString(CellValue.GetWordMultiplier());
+						StringToPrint += "W " + CellValue.GetWordMultiplier().ToString();
 					}
 
 					e.Graphics.DrawString(StringToPrint, f, Brushes.Black, rectangle);
@@ -240,17 +240,6 @@ namespace ScrabbleSolver
 
 		}
 
-		private static string ConvertIntToString(int letterMultiplier)
-		{
-			if (letterMultiplier == FIRST_INDEX) // Letter empty
-			{
-				return "";
-			}
-			else
-			{
-				return letterMultiplier.ToString();
-			}
-		}
 
 		private void dataGridView1_CellContentClick_2(object sender, DataGridViewCellEventArgs e)
 		{
@@ -499,10 +488,22 @@ namespace ScrabbleSolver
 
 		private void nextTurnButton_Click(object sender, EventArgs e)
 		{
-			List<Tile> heldCharacter = heldCharacters[_CurrentPlayer];
+			List<Tile> heldCharacter = removeEmptyTilesFromList(heldCharacters[_CurrentPlayer]);
 			viewEvents.Add(new PutWordEvent(CellValues.Values.ToList(), heldCharacter));
 		}
 
+		private List<Tile> removeEmptyTilesFromList(List<Tile> heldCharacters)
+		{
+			List<Tile> HeldCharactersWithoutEmptyTiles = new List<Tile>();
+			foreach (Tile heldCharacter in heldCharacters)
+			{
+				if (!heldCharacter.IsEmpty())
+				{
+					HeldCharactersWithoutEmptyTiles.Add(heldCharacter);
+				}
+			}
+			return HeldCharactersWithoutEmptyTiles;
+		}
 		private void replaceTileButton_Click(object sender, EventArgs e)
 		{
 			ReplaceTileFormThread = new Thread(OpenReplaceTileForm);
