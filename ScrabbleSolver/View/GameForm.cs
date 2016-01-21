@@ -209,7 +209,7 @@ namespace ScrabbleSolver
 
 			foreach (var CellValue in CellValues.Values)
 			{
-				if (CellValue.GetXCoordinate() == e.ColumnIndex && CellValue.GetYCoordinate() == e.RowIndex)
+				if (CellValue.GetXColumnCoordinate() == e.ColumnIndex && CellValue.GetYColumnCoordinate() == e.RowIndex)
 				{
 					//the black background
 					Rectangle rectangle2 = new Rectangle(e.CellBounds.X, e.CellBounds.Y, e.CellBounds.Width, e.CellBounds.Height);
@@ -302,7 +302,7 @@ namespace ScrabbleSolver
 			if (TemporaryCopingCharacter != null)
 			{
 				CurrentCell.Value = String.Copy(TemporaryCopingCharacter);
-				Coordinates Coordinates = new Coordinates(CurrentCell.RowIndex, CurrentCell.ColumnIndex);
+				Coordinates Coordinates = new Coordinates(CurrentCell.ColumnIndex, CurrentCell.RowIndex);
 				UpdateLetter(Coordinates);
 
 				TemporaryCopingCharacter = null;
@@ -363,18 +363,18 @@ namespace ScrabbleSolver
 			foreach (Cell boardCell in UpdateViewEvent.BoardCells)
 			{
 
-				Coordinates coordinates = new Coordinates(boardCell.GetXCoordinate(), boardCell.GetYCoordinate());
+				Coordinates coordinates = new Coordinates(boardCell.GetXColumnCoordinate(), boardCell.GetYColumnCoordinate());
 				CellValues.Remove(coordinates);
 				CellValues.Add(coordinates, boardCell);
 
 				if (boardCell.GetTile() != null)
 				{
-					boardGridView[boardCell.GetXCoordinate(), boardCell.GetYCoordinate()].Value =
+					boardGridView[boardCell.GetXColumnCoordinate(), boardCell.GetYColumnCoordinate()].Value =
 						boardCell.GetTile().GetLetter().ToString().ToUpper();
 				}
 				else
 				{
-					boardGridView[boardCell.GetXCoordinate(), boardCell.GetYCoordinate()].Value = "";
+					boardGridView[boardCell.GetXColumnCoordinate(), boardCell.GetYColumnCoordinate()].Value = "";
 				}
 			}
 
@@ -417,7 +417,8 @@ namespace ScrabbleSolver
 
 		private void nextTurnButton_Click(object sender, EventArgs e)
 		{
-			viewEvents.Add(new PutWordEvent(CellValues.Values.ToList(), heldCharacters[_CurrentPlayer]));
+			List<Tile> heldCharacter = heldCharacters[_CurrentPlayer];
+			viewEvents.Add(new PutWordEvent(CellValues.Values.ToList(), heldCharacter));
 		}
 
 		private void replaceTileButton_Click(object sender, EventArgs e)
