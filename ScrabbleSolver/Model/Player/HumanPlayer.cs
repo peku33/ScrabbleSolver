@@ -61,6 +61,7 @@ namespace ScrabbleSolver.Model.Player
 					{
 						if(TempCell.GetXColumnCoordinate() != MiddleCoordinate)
 						{
+							GameModel.RemoveTiles(Cells);
 							return false;
 						}
 						if(TempCell.GetYRowCoordinate() == MiddleCoordinate)
@@ -75,6 +76,7 @@ namespace ScrabbleSolver.Model.Player
 					{
 						if(TempCell.GetYRowCoordinate() != MiddleCoordinate)
 						{
+							GameModel.RemoveTiles(Cells);
 							return false;
 						}
 						if(TempCell.GetXColumnCoordinate() == MiddleCoordinate)
@@ -86,6 +88,7 @@ namespace ScrabbleSolver.Model.Player
 
 				if(!MiddleField)
 				{
+					GameModel.RemoveTiles(Cells);
 					return false;
 				}
 			}
