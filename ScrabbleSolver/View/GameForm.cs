@@ -39,7 +39,6 @@ namespace ScrabbleSolver
 		private static readonly int SECOND_INDEX = 1;
 		private static readonly int FIRST_INDEX = 0;
 		private static readonly int ROWS_NUMBER = 1;
-		private static readonly int MAX_HELD_CHARACTERS_NUMBER = 7;
 		public GameForm(BlockingCollection<ApplicationEvent> viewEvents)
 		{
 			this.viewEvents = viewEvents;
@@ -165,7 +164,9 @@ namespace ScrabbleSolver
 
 						heldCharacter.SetIsEmpty(true);
 
-						removeCharacterFromHeldCharactersDataGrid(CellLetter, FirstHeldCharactersDataGrid);
+						DataGridViewCell DGVC;
+						PlayerIdEnumToDataGridViewCellDataDictionary.TryGetValue(_CurrentPlayer, out DGVC);
+						removeCharacterFromHeldCharactersDataGrid(CellLetter, DGVC.DataGridView);
 					}
 				}
 			}
@@ -316,7 +317,7 @@ namespace ScrabbleSolver
 				int FirstColumnIndexOffset = DGVC.ColumnIndex;
 				DataGridView dataGridView = DGVC.DataGridView;
 
-				for (int Index = FIRST_INDEX; Index < MAX_HELD_CHARACTERS_NUMBER; Index++)
+				for (int Index = FIRST_INDEX; Index < TileList.Count; Index++)
 				{
 					if (dataGridView[Index + FirstColumnIndexOffset, FIRST_INDEX].Value == null ||
 					    dataGridView[Index + FirstColumnIndexOffset, FIRST_INDEX].ToString() == "")
