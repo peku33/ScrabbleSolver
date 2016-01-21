@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Remoting.Messaging;
 using ScrabbleSolver.Board;
 using ScrabbleSolver.Events;
 using ScrabbleSolver.Model.Items;
@@ -66,6 +67,11 @@ namespace ScrabbleSolver.Model.Player
 		public Rack GetRack()
 		{
 			return Rack;
+		}
+
+		public Rack GetRackCopy()
+		{
+			return new Rack(Rack);
 		}
 
 		/// <summary>

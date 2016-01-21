@@ -83,7 +83,7 @@ namespace ScrabbleSolver.Model
 
 			foreach(Player.Player TempPlayer in Players)
 			{
-				HeldCharacters.Add((PlayerIdEnum)i, TempPlayer.GetRack());
+				HeldCharacters.Add((PlayerIdEnum)i, TempPlayer.GetRackCopy());
 				i++;
 			}
 
