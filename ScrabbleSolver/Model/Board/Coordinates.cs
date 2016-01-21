@@ -7,32 +7,32 @@ namespace ScrabbleSolver.Board
 	/// </summary>
 	public class Coordinates
 	{
-		private int XCoordinate;
-		private int YCoordinate;
+		private int XColumnCoordinate;
+		private int YRowCoordinate;
 
 		public Coordinates()
 		{
 		}
 
-		public Coordinates(int x, int y)
+		public Coordinates(int xColumn, int yRow)
 		{
-			this.XCoordinate = x;
-			this.YCoordinate = y;
+			this.XColumnCoordinate = xColumn;
+			this.YRowCoordinate = yRow;
 		}
 
 		public int GetXCoordinate()
 		{
-			return this.XCoordinate;
+			return this.XColumnCoordinate;
 		}
 
 		public int GetYCoordinate()
 		{
-			return this.YCoordinate;
+			return this.YRowCoordinate;
 		}
 
 		public override int GetHashCode()
 		{
-			return XCoordinate ^ YCoordinate;
+			return XColumnCoordinate ^ YRowCoordinate;
 		}
 
 		public override bool Equals(object o)
@@ -45,7 +45,7 @@ namespace ScrabbleSolver.Board
 
 			Coordinates p = (Coordinates) o;
 			// Return true if the fields match:
-			return (XCoordinate == p.XCoordinate) && (YCoordinate == p.YCoordinate);
+			return (XColumnCoordinate == p.XColumnCoordinate) && (YRowCoordinate == p.YRowCoordinate);
 		}
 	}
 }

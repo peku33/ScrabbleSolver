@@ -59,11 +59,11 @@ namespace ScrabbleSolver.Model.Player
 				{
 					foreach(Cell TempCell in Cells)
 					{
-						if(TempCell.GetXCoordinate() != MiddleCoordinate)
+						if(TempCell.GetXColumnCoordinate() != MiddleCoordinate)
 						{
 							return false;
 						}
-						if(TempCell.GetYCoordinate() == MiddleCoordinate)
+						if(TempCell.GetYColumnCoordinate() == MiddleCoordinate)
 						{
 							MiddleField = true;
 						}
@@ -73,11 +73,11 @@ namespace ScrabbleSolver.Model.Player
 				{
 					foreach(Cell TempCell in Cells)
 					{
-						if(TempCell.GetYCoordinate() != MiddleCoordinate)
+						if(TempCell.GetYColumnCoordinate() != MiddleCoordinate)
 						{
 							return false;
 						}
-						if(TempCell.GetXCoordinate() == MiddleCoordinate)
+						if(TempCell.GetXColumnCoordinate() == MiddleCoordinate)
 						{
 							MiddleField = true;
 						}
@@ -98,15 +98,15 @@ namespace ScrabbleSolver.Model.Player
 
 			if(Vertical)
 			{
-				NewWord = GameModel.GetWord(GameModel.GetBoard().FindColumn(Cells[0]), Cells[0].GetYCoordinate(), Vertical);
-				StartIndex = GameModel.GetWordInfo(GameModel.GetBoard().FindColumn(Cells[0]), Cells[0].GetYCoordinate()).Item2;
-				StartCell = GameModel.GetBoard().GetCell(Cells[0].GetXCoordinate(), StartIndex);
+				NewWord = GameModel.GetWord(GameModel.GetBoard().FindColumn(Cells[0]), Cells[0].GetYColumnCoordinate(), Vertical);
+				StartIndex = GameModel.GetWordInfo(GameModel.GetBoard().FindColumn(Cells[0]), Cells[0].GetYColumnCoordinate()).Item2;
+				StartCell = GameModel.GetBoard().GetCell(Cells[0].GetXColumnCoordinate(), StartIndex);
 			}
 			else
 			{
-				NewWord = GameModel.GetWord(GameModel.GetBoard().FindRow(Cells[0]), Cells[0].GetXCoordinate(), Vertical);
-				StartIndex = GameModel.GetWordInfo(GameModel.GetBoard().FindRow(Cells[0]), Cells[0].GetXCoordinate()).Item2;
-				StartCell = GameModel.GetBoard().GetCell(StartIndex, Cells[0].GetYCoordinate());
+				NewWord = GameModel.GetWord(GameModel.GetBoard().FindRow(Cells[0]), Cells[0].GetXColumnCoordinate(), Vertical);
+				StartIndex = GameModel.GetWordInfo(GameModel.GetBoard().FindRow(Cells[0]), Cells[0].GetXColumnCoordinate()).Item2;
+				StartCell = GameModel.GetBoard().GetCell(StartIndex, Cells[0].GetYColumnCoordinate());
 			}
 
 			if(!GameModel.GetDictionary().Exists(NewWord) || !GameModel.IsMoveCorrect(NewWord, StartCell, Vertical)) //Jesli slowo nie istnieje albo jego ulozenie powoduje ulozenie niepoprawnych slow
