@@ -190,15 +190,15 @@ namespace ScrabbleSolver
 			}
 		}
 
-		private void removeCharacterFromHeldCharactersDataGrid(string cellValue, DataGridView firstHeldCharactersDataGrid) //TODO Its just tile list of first player.
+		private void removeCharacterFromHeldCharactersDataGrid(string cellValue, DataGridView HeldCharactersDataGrid)
 		{
-			Size size = firstHeldCharactersDataGrid.Size;
+			Size size = HeldCharactersDataGrid.Size;
 
 			for (int Index = FIRST_INDEX; Index < size.Width; ++Index)
 			{
-				if (firstHeldCharactersDataGrid[FIRST_INDEX, Index].Value.ToString().Contains(cellValue))
+				if (HeldCharactersDataGrid[FIRST_INDEX, Index].Value.ToString().Contains(cellValue))
 				{
-					firstHeldCharactersDataGrid[FIRST_INDEX, Index].Value = "";
+					HeldCharactersDataGrid[FIRST_INDEX, Index].Value = "";
 				}
 			}
 
@@ -456,9 +456,21 @@ namespace ScrabbleSolver
 			_CurrentPlayer = UpdateViewEvent.CurrentPlayer;
 			AddAllHeldCharacters();
 			InitFormHelper.UpdateGameInfoBoard(GameInfoDataGrid, _GameInfo);
+			UpdateHeldCharactersLabels();
 
 			Invalidate();
 			Update();
+		}
+
+		private void UpdateHeldCharactersLabels()
+		{
+			foreach (DataGridViewCell dataGridViewCell in PlayerIdEnumToDataGridViewCellLabelDictionary.Values.ToList())
+			{
+				dataGridViewCell.Style.BackColor = Color.White;
+			}
+			DataGridViewCell DGVC;
+			PlayerIdEnumToDataGridViewCellLabelDictionary.TryGetValue(_CurrentPlayer, out DGVC);
+			DGVC.Style.BackColor = Color.Gold;
 		}
 
 		private void newGameToolStripMenuItem_Click(object sender, EventArgs e)
