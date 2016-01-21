@@ -79,6 +79,14 @@ namespace ScrabbleSolver
 			int GameInfoDataGridRowIndex = FIRST_INDEX;
 			InitFormHelper.AddRowsToDataGridView(gameInfoDataGrid, GAME_INFO_BOARD_ROWS);
 			gameInfoDataGrid[FIRST_INDEX, GameInfoDataGridRowIndex].Value = "Game player info";
+
+
+		}
+
+		public static void UpdateGameInfoBoard(DataGridView gameInfoDataGrid,
+			Dictionary<PlayerIdEnum, Dictionary<GameInfoTypeEnum, string>> GameInfo)
+		{
+			int GameInfoDataGridRowIndex = FIRST_INDEX;
 			if (GameInfo != null)
 			{
 				foreach (KeyValuePair<PlayerIdEnum, Dictionary<GameInfoTypeEnum, string>> PlayerIdEnumGameInfoKeyValuePair in GameInfo)
@@ -101,7 +109,6 @@ namespace ScrabbleSolver
 					}
 				}
 			}
-
 		}
 	}
 }

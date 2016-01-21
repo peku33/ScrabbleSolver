@@ -454,6 +454,7 @@ namespace ScrabbleSolver
 			heldCharacters = UpdateViewEvent.HeldCharacters;
 			_CurrentPlayer = UpdateViewEvent.CurrentPlayer;
 			AddAllHeldCharacters();
+			InitFormHelper.UpdateGameInfoBoard(GameInfoDataGrid, _GameInfo);
 
 			Invalidate();
 			Update();
