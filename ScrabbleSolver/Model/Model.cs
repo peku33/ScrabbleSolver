@@ -374,7 +374,7 @@ namespace ScrabbleSolver.Model
 		/// <returns></returns>
 		private bool IsOneWord(Container Container, int StartIndex, int EndIndex)
 		{
-			for(; StartIndex > EndIndex; ++StartIndex)
+			for(; StartIndex < EndIndex; ++StartIndex)
 			{
 				if(Container.Get(StartIndex).GetTile() == null)
 				{
