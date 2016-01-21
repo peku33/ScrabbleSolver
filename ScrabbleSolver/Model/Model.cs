@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Windows.Forms.VisualStyles;
 using ScrabbleSolver.Board;
 using ScrabbleSolver.Common;
 using ScrabbleSolver.Model.Items;
@@ -307,11 +308,11 @@ namespace ScrabbleSolver.Model
 			}
 			if(isVertical)
 			{
-				Container = GameBoard.FindRow(Cells[0]);
+				Container = GameBoard.FindColumn(Cells[0]);
 			}
 			else
 			{
-				Container = GameBoard.FindColumn(Cells[0]);
+				Container = GameBoard.FindRow(Cells[0]);
 			}
 
 			if(!IsOneWord(Container, StartIndex, EndIndex))
@@ -742,32 +743,61 @@ namespace ScrabbleSolver.Model
 		/// <param name="Container"></param>
 		/// <param name="Index"></param>
 		/// <returns></returns>
-		public String GetWord(Container Container, int Index)
+		public String GetWord(Container Container, int Index, bool Vertical)
 		{
 			String NewWord = String.Empty;
 
-			foreach(Cell TempCell in Container)
+			if(Vertical)
 			{
-				if(TempCell.GetTile() != null)
+				foreach(Cell TempCell in Container)
 				{
-					NewWord += TempCell.GetTile().GetLetter();
-				}
-				else if(TempCell.GetXCoordinate() > Index) //Ulozone zostalo cale slowo
-				{
-					if(NewWord.Length > 1)
+					if(TempCell.GetTile() != null)
 					{
-						return NewWord;
+						NewWord += TempCell.GetTile().GetLetter();
 					}
-					break;
+					else if(TempCell.GetYCoordinate() > Index) //Ulozone zostalo cale slowo
+					{
+						if(NewWord.Length > 1)
+						{
+							return NewWord;
+						}
+						break;
+					}
+					else
+					{
+						NewWord = String.Empty;
+					}
 				}
-				else
+				if(NewWord.Length > 1) //Jesli slowo konczy sie przy krawedzi planszy
 				{
-					NewWord = String.Empty;
+					return NewWord;
 				}
 			}
-			if(NewWord.Length > 1)//Jesli slowo konczy sie przy krawedzi planszy
+			else
 			{
-				return NewWord;
+				foreach(Cell TempCell in Container)
+				{
+					if(TempCell.GetTile() != null)
+					{
+						NewWord += TempCell.GetTile().GetLetter();
+					}
+					else if(TempCell.GetXCoordinate() > Index) //Ulozone zostalo cale slowo
+					{
+						if(NewWord.Length > 1)
+						{
+							return NewWord;
+						}
+						break;
+					}
+					else
+					{
+						NewWord = String.Empty;
+					}
+				}
+				if(NewWord.Length > 1) //Jesli slowo konczy sie przy krawedzi planszy
+				{
+					return NewWord;
+				}
 			}
 
 			return NewWord;

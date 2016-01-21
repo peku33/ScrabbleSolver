@@ -59,11 +59,11 @@ namespace ScrabbleSolver.Model.Player
 				{
 					foreach(Cell TempCell in Cells)
 					{
-						if(TempCell.GetYCoordinate() != MiddleCoordinate)
+						if(TempCell.GetXCoordinate() != MiddleCoordinate)
 						{
 							return false;
 						}
-						if(TempCell.GetXCoordinate() == MiddleCoordinate)
+						if(TempCell.GetYCoordinate() == MiddleCoordinate)
 						{
 							MiddleField = true;
 						}
@@ -73,11 +73,11 @@ namespace ScrabbleSolver.Model.Player
 				{
 					foreach(Cell TempCell in Cells)
 					{
-						if(TempCell.GetXCoordinate() != MiddleCoordinate)
+						if(TempCell.GetYCoordinate() != MiddleCoordinate)
 						{
 							return false;
 						}
-						if(TempCell.GetYCoordinate() == MiddleCoordinate)
+						if(TempCell.GetXCoordinate() == MiddleCoordinate)
 						{
 							MiddleField = true;
 						}
@@ -98,13 +98,13 @@ namespace ScrabbleSolver.Model.Player
 
 			if(Vertical)
 			{
-				NewWord = GameModel.GetWord(GameModel.GetBoard().FindColumn(Cells[0]), Cells[0].GetYCoordinate());
+				NewWord = GameModel.GetWord(GameModel.GetBoard().FindColumn(Cells[0]), Cells[0].GetYCoordinate(), Vertical);
 				StartIndex = GameModel.GetWordInfo(GameModel.GetBoard().FindColumn(Cells[0]), Cells[0].GetYCoordinate()).Item2;
 				StartCell = GameModel.GetBoard().GetCell(Cells[0].GetXCoordinate(), StartIndex);
 			}
 			else
 			{
-				NewWord = GameModel.GetWord(GameModel.GetBoard().FindRow(Cells[0]), Cells[0].GetXCoordinate());
+				NewWord = GameModel.GetWord(GameModel.GetBoard().FindRow(Cells[0]), Cells[0].GetXCoordinate(), Vertical);
 				StartIndex = GameModel.GetWordInfo(GameModel.GetBoard().FindRow(Cells[0]), Cells[0].GetXCoordinate()).Item2;
 				StartCell = GameModel.GetBoard().GetCell(StartIndex, Cells[0].GetYCoordinate());
 			}
@@ -121,7 +121,7 @@ namespace ScrabbleSolver.Model.Player
 			Rack.Clear();
 			Rack.AddRange(MoveEvent.GetPlayerTiles()); //Aktualizacja tabliczki
 			GetNewTiles();
-
+			GameModel.GetBoard().SetEmpty(false);
 			return true;
 		}
 

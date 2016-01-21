@@ -75,7 +75,7 @@ namespace ScrabbleSolver.Controller
 
 						if(EventStrategy != null)
 						{
-							if(EventStrategy.Execute(Event)) //Jesli ruch odbyl sie zgodnie z zasadami to przechodzimy do nastepnego gracza, jesli nie to powtarzamy ture
+							if(EventStrategy.Execute(Event) && Event.GetType() != typeof(NewGameEvent)) //Jesli ruch odbyl sie zgodnie z zasadami to przechodzimy do nastepnego gracza, jesli nie to powtarzamy ture
 							{
 								++PlayerIndex;
 							}
