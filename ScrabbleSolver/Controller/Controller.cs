@@ -218,6 +218,7 @@ namespace ScrabbleSolver.Controller
 					}
 				}
 
+				Parent.UpdateView();
 				return true;
 			}
 		}
