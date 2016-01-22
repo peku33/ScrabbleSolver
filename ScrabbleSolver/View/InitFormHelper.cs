@@ -86,6 +86,13 @@ namespace ScrabbleSolver
 		public static void UpdateGameInfoBoard(DataGridView gameInfoDataGrid,
 			Dictionary<PlayerIdEnum, Dictionary<GameInfoTypeEnum, string>> GameInfo)
 		{
+			int rowCount = gameInfoDataGrid.RowCount;
+
+			for (int rowIterator = 0; rowIterator < rowCount; ++rowIterator)
+			{
+				gameInfoDataGrid[FIRST_INDEX, rowIterator].Value = "";
+			}
+
 			int GameInfoDataGridRowIndex = FIRST_INDEX;
 			if (GameInfo != null)
 			{

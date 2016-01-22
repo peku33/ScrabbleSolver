@@ -461,6 +461,7 @@ namespace ScrabbleSolver
 				SecondHeldCharactersDataGrid[i+8, FIRST_INDEX].Value = "";
 			}
 
+			_GameInfo.Clear();
 			 _GameInfo = UpdateViewEvent.GameInfo;
 			heldCharacters = UpdateViewEvent.HeldCharacters;
 			_CurrentPlayer = UpdateViewEvent.CurrentPlayer;
