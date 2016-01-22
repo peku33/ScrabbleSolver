@@ -362,7 +362,7 @@ namespace ScrabbleSolver
 				}
 
 				Coordinates Coordinates = new Coordinates(CurrentCell.ColumnIndex, CurrentCell.RowIndex);
-				UpdateLetter(Coordinates, IsBlank);
+				UpdateLetter(Coordinates, IsBlank, CurrentCell.Value.ToString().ToLower());
 
 				TemporaryCopingCharacter = null;
 			}
@@ -384,19 +384,19 @@ namespace ScrabbleSolver
 		/// <summary>
 		/// Metoda aktualizuje litere na danej komórce, lub jeśli nie istnieje komórka o danych współrzędnych - dodaje nową.
 		/// </summary>
-		private void UpdateLetter(Coordinates Coordinates, bool isBlank)
+		private void UpdateLetter(Coordinates Coordinates, bool isBlank, string blankValue)
 		{
 			if (CellValues.ContainsKey(Coordinates)) //TODO bug: if we comprare two object with the same coordinates we get false....
 			{
 				if (CellValues[Coordinates].GetTile() != null)
 				{
 					CellValues[Coordinates].GetTile()
-						.SetLetter(TemporaryCopingCharacter.ToCharArray()[FIRST_INDEX]);
+						.SetLetter(blankValue.ToCharArray()[FIRST_INDEX]);
 					CellValues[Coordinates].GetTile().SetIsBlank(isBlank);
 				}
 				else
 				{
-					CellValues[Coordinates].SetTile(new Tile(TemporaryCopingCharacter.ToCharArray()[FIRST_INDEX], isBlank));
+					CellValues[Coordinates].SetTile(new Tile(blankValue.ToCharArray()[FIRST_INDEX], isBlank));
 				}
 
 			}
