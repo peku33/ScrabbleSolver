@@ -34,7 +34,7 @@ namespace ScrabbleSolver.View
 
 		private void button1_Click(object sender, EventArgs e)
 		{
-			viewEvents.Add(new ReplaceTileEvent(richTextBox1.Text));
+			viewEvents.Add(new ReplaceTileEvent(richTextBox1.Text.ToLower()));
 			Close();
 		}
 

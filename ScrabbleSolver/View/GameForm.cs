@@ -222,6 +222,7 @@ namespace ScrabbleSolver
 					Font f = new Font(e.CellStyle.Font.FontFamily, 7);
 
 					string StringToPrint = "";
+
 					if (CellValue.GetLetterMultiplier() != 1 && CellValue.GetLetterMultiplier() != FIRST_INDEX)
 					{
 						StringToPrint += "L " + CellValue.GetLetterMultiplier().ToString() + " ";
@@ -450,6 +451,15 @@ namespace ScrabbleSolver
 				}
 			}
 
+
+			for (int i = 0; i < 7; ++i)
+			{
+				FirstHeldCharactersDataGrid[i, FIRST_INDEX].Value = "";
+				SecondHeldCharactersDataGrid[i, FIRST_INDEX].Value = "";
+
+				FirstHeldCharactersDataGrid[i +8, FIRST_INDEX].Value = "";
+				SecondHeldCharactersDataGrid[i+8, FIRST_INDEX].Value = "";
+			}
 
 			 _GameInfo = UpdateViewEvent.GameInfo;
 			heldCharacters = UpdateViewEvent.HeldCharacters;
